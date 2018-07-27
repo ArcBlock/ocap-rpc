@@ -1,4 +1,4 @@
-defmodule BlockchainRpc.Internal.BtcRpc do
+defmodule OcapRpc.Internal.BtcRpc do
   @moduledoc """
   RPC request to bitcoin server
   """

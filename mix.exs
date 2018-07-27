@@ -1,4 +1,4 @@
-defmodule BlockchainRpc.MixProject do
+defmodule OcapRpc.MixProject do
   use Mix.Project
 
   @version File.cwd!() |> Path.join("version") |> File.read!() |> String.trim()
@@ -11,7 +11,7 @@ defmodule BlockchainRpc.MixProject do
 
   def project do
     [
-      app: :blockchain_rpc,
+      app: :ocap_rpc,
       version: @version,
       elixir: @elixir_version,
       start_permanent: Mix.env() == :prod,
@@ -23,7 +23,7 @@ defmodule BlockchainRpc.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {BlockchainRpc.Application, []}
+      mod: {OcapRpc.Application, []}
     ]
   end
 

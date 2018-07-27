@@ -1,9 +1,9 @@
-defmodule BlockchainRpc.Internal.Erc20 do
+defmodule OcapRpc.Internal.Erc20 do
   @moduledoc """
   Contract method for ABT.
   """
-  alias BlockchainRpc.Eth.Chain
-  alias BlockchainRpc.Internal.Utils
+  alias OcapRpc.Eth.Chain
+  alias OcapRpc.Internal.Utils
 
   @contract_addrs %{
     abt: "0xB98d4C97425d9908E66E53A6fDf673ACcA0BE986",

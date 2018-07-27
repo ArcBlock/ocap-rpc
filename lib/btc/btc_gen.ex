@@ -1,8 +1,8 @@
-defmodule BlockchainRpc.Internal.BtcCodeGen do
+defmodule OcapRpc.Internal.BtcCodeGen do
   @moduledoc """
   Ethereum specific code generator
   """
-  alias BlockchainRpc.Internal.{BtcRpc, Extractor, Parser}
+  alias OcapRpc.Internal.{BtcRpc, Extractor, Parser}
 
   def gen_method(name, method, args, result, doc) do
     quote_rpc_call(name, args, method, result, doc)

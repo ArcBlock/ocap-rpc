@@ -1,4 +1,4 @@
-defmodule BlockchainRpc.Internal.EthRpc do
+defmodule OcapRpc.Internal.EthRpc do
   @moduledoc """
   RPC request to ethereum parity server
   """
@@ -9,7 +9,7 @@ defmodule BlockchainRpc.Internal.EthRpc do
   }
 
   def request(method, args) do
-    config = Application.get_env(:blockchain_rpc, :eth)
+    config = Application.get_env(:ocap_rpc, :eth)
     %{hostname: hostname, port: port} = Keyword.get(config, :conn)
 
     body = get_body(method, args)

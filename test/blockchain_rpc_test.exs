@@ -1,3 +1,3 @@
-defmodule BlockchainRpcTest do
+defmodule OcapRpcTest do
   use ExUnit.Case
 end

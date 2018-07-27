@@ -1,3 +1,6 @@
+## 0.4.0 (July 27, 2018)
+  - rename blockchain rpc to ocap rpc
+
 ## 0.3.0 (July 27, 2018)
   - support contract transactions
 

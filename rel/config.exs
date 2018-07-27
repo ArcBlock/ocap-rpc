@@ -1,5 +1,5 @@
-version = BlockchainRpc.MixProject.get_version()
-otp_version = BlockchainRpc.MixProject.get_otp_version()
+version = OcapRpc.MixProject.get_version()
+otp_version = OcapRpc.MixProject.get_otp_version()
 
 ["rel", "plugins", "*.exs"]
 |> Path.join()
@@ -28,7 +28,7 @@ environment :prod do
   set(cookie: :"&CKitUm*!T%K}XTR6tBo3A:Z/XcX5k<n7dNju?4%(Q/Umfn872[*kr}):b$%y*:d")
 end
 
-release :blockchain do
+release :ocap_rpc do
   set(version: version)
 
   set(
@@ -38,7 +38,7 @@ release :blockchain do
       parse_trans: :permanent,
       recon: :permanent,
       recon_ex: :permanent,
-      blockchain_rpc: :permanent
+      ocap_rpc: :permanent
     ]
   )
 end

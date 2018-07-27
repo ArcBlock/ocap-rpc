@@ -1,11 +1,11 @@
-defmodule BlockchainRpc.Application do
+defmodule OcapRpc.Application do
   @moduledoc false
 
   use Application
 
   def start(_type, _args) do
     children = []
-    opts = [strategy: :one_for_one, name: BlockchainRpc.Supervisor]
+    opts = [strategy: :one_for_one, name: OcapRpc.Supervisor]
 
     update_config()
 
@@ -13,7 +13,7 @@ defmodule BlockchainRpc.Application do
   end
 
   defp update_config do
-    app = :blockchain_rpc
+    app = :ocap_rpc
     update_conn(app, :btc)
     update_conn(app, :eth)
   end

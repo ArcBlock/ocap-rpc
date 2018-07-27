@@ -9,14 +9,14 @@ config :logger, :console,
   format: "$date $time [$level] $levelpad$message\n",
   colors: [info: :green]
 
-config :blockchain_rpc, :eth,
+config :ocap_rpc, :eth,
   conn: %{
     hostname: "localhost",
     port: 8545
   },
   chunk_size: 1000
 
-config :blockchain_rpc, :btc,
+config :ocap_rpc, :btc,
   conn: %{
     hostname: "localhost",
     port: 8332

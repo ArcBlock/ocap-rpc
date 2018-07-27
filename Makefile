@@ -2,14 +2,14 @@ TOP_DIR=.
 OUTPUT_DIR=$(TOP_DIR)/output
 README=$(TOP_DIR)/README.md
 
-BUILD_NAME=blockchain
+BUILD_NAME=ocap_rpc
 VERSION=$(strip $(shell cat version))
 ELIXIR_VERSION=$(strip $(shell cat .elixir_version))
 OTP_VERSION=$(strip $(shell cat .otp_version))
 
 build:
 	@echo "Building the software..."
-	@rm -rf _build/dev/lib/blockchain_rpc
+	@rm -rf _build/dev/lib/ocap_rpc
 	@make format
 
 format:
