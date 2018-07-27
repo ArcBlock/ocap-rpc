@@ -1,30 +1,25 @@
 language: elixir
 elixir:
-  - 1.6
+- 1.6
 otp_release:
-  - 20.1
+- 21.0
 branches:
   only:
-    - master
+  - master
 install:
-  - epmd -daemon
-  - mix local.hex --force
-  - mix local.rebar --force
-  - mix deps.get
-script:
-  - mix test_all
-env:
-  - MIX_ENV=test
-before_script:
-  - make travis-init
-  - mix compile
+- epmd -daemon
+- mix local.hex --force
+- mix local.rebar --force
 script: make travis
+env:
+- MIX_ENV=test
+before_script: make travis-init
 before_deploy: make travis-deploy
 deploy:
   provider: releases
   skip_cleanup: true
   api_key:
-    secure:
+    secure: iCyt8eoQYrHlLFLcrnyJIC1qupUdyLsPWSDclDuEbjMM56P4SgxUW9foskDbu8tUNhbbXaI2XDzd8a2XHNR5Sw2Qmx4wNzFJeIDuwukvvhJ78DkKpGKw7NmFy9JdWnDCgs3nJVDYAxOPes3f5oOVMfp7KvjhWDD/tWYTTgNJUN1P42a8QReLBpUGlxXIRzugHPdOhqrt5yMas798AGSreHLsC39xD09WILZB3RTWLSFm0dR0kLPIH9wo1x3DfTxJQ1qlXKUEz384NE52w/TY+5SJJa8vsRpfDqjUHXHU6Ok8yjth1u988EPz3WrFrVhU7J0V8wtDKSYjpJUV5QMID9I+3xxkyusvib6v6HWbx9hB6k27nTYvi1Lakp79XMmW+JcP5tM+Gk3RBDAvtND5GaEpe3imVIzVJE5q6PExxBQLULATWBOMRV7fZP44ekC0TH0m+r+lmFmUIftscapCoRyXakbTGwdRmE6E810gFVtZpHs6H5P6WMG2gI3+ycNPmUmPHyNV+hHyNm2VFerAyrXx5Ikc0ei4LxSHVP2y07EPh3eENSg/VN8Vgb273D9Qp1cc2ZFkmhEIvKtu13TMQzzwLeE6eGAQ6u/VfvhW5vgqDnxiTUy1LdvrvpxcagMwnbMD4VQAZ8iSQkPHXDdq3UaW/m3rjXBrzmXR46Apmcg=
   on:
     repo: ArcBlock/blockchain-rpc
     branch: master

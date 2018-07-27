@@ -1,0 +1,24 @@
+---
+api:
+  name: Account
+  desc: Ethereum account related RPC
+  public:
+    - name: balance
+      desc: get balance of an address
+      method: eth_getBalance
+      args: ["address"]
+      result: "&to_ether(_)"
+    - name: get_code
+      desc: Returns code at a given address.
+      method: eth_getCode
+      args: ["address", "block_number"]
+      result: "&to_code(_)"
+    - name: num_tx_sent
+      desc: Returns the number of transactions sent from an address.
+      method: eth_getTransactionCount
+      args: ["address"]
+      result: "&to_int(_)"
+    - name: sign
+      desc: calculates an Ethereum specific signature.
+      method: eth_sign
+      args: ["address", "data"]

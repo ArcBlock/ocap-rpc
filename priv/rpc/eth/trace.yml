@@ -1,0 +1,20 @@
+---
+api:
+  desc: Trace a TX for more runtime generated information
+  name: Trace
+  public:
+    - name: trace
+      desc: trace a transaction by its hash
+      method: trace_transaction
+      args: ["hash"]
+      result:
+        call_type: action.callType
+        from: action.from
+        gas_left: "&to_int(action.gas)"
+        input: action.input
+        to: action.to
+        value: "&to_ether(action.value)"
+        output: result.output
+        gas_used: "&to_int(result.gasUsed)"
+        trace_address: _
+        error: _
