@@ -8,7 +8,7 @@ defmodule BlockchainRpc.Internal.Utils do
   end
 
   def call_data(method, value) do
-    value = value |> String.replace_leading("0x", "") |> String.pad_leading(64, ["0"])
+    value = value |> String.replace_leading("0x", "") |> padding()
     method_sig = method |> sha3() |> String.slice(0, 8)
     "0x#{method_sig}#{value}"
   end
@@ -19,5 +19,15 @@ defmodule BlockchainRpc.Internal.Utils do
 
   def sig_total_supply do
     call_data("totalSupply()", "")
+  end
+
+  def padding(str), do: String.pad_leading(str, 64, ["0"])
+
+  def addr_to_topic(addr) do
+    case addr do
+      nil -> nil
+      "0x" <> addr -> "0x#{padding(addr)}"
+      _ -> "0x#{padding(addr)}"
+    end
   end
 end
