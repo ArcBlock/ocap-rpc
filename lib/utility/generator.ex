@@ -1,8 +1,8 @@
-defmodule BlockchainRpc.Internal.CodeGen do
+defmodule OcapRpc.Internal.CodeGen do
   @moduledoc """
   Generate RPC code based on priv/rpc/*.yml.
   """
-  alias BlockchainRpc.Internal.{BtcCodeGen, EthCodeGen}
+  alias OcapRpc.Internal.{BtcCodeGen, EthCodeGen}
   alias UtilityBelt.CodeGen.DynamicModule
   require DynamicModule
 
@@ -11,7 +11,7 @@ defmodule BlockchainRpc.Internal.CodeGen do
     result = Map.get(data, "result", nil)
 
     type_name = type |> Atom.to_string() |> Recase.to_pascal()
-    mod_name = DynamicModule.gen_module_name(:blockchain_rpc, type_name, Map.get(api, "name"))
+    mod_name = DynamicModule.gen_module_name(:ocap_rpc, type_name, Map.get(api, "name"))
 
     code_gen =
       case type do

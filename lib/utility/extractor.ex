@@ -1,9 +1,9 @@
-defmodule BlockchainRpc.Internal.Extractor do
+defmodule OcapRpc.Internal.Extractor do
   @moduledoc """
   Extract information based on DSL definition
   """
   require Logger
-  alias BlockchainRpc.Internal.DSLUtils
+  alias OcapRpc.Internal.DSLUtils
 
   @doc """
   Process the response data with predefined mapping

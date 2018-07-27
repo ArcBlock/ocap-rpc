@@ -1,4 +1,4 @@
-defmodule BlockchainRpc.Internal.Utils do
+defmodule OcapRpc.Internal.Utils do
   @moduledoc """
   Utility functions
   """

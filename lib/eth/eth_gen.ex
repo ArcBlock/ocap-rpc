@@ -1,8 +1,8 @@
-defmodule BlockchainRpc.Internal.EthCodeGen do
+defmodule OcapRpc.Internal.EthCodeGen do
   @moduledoc """
   Ethereum specific code generator
   """
-  alias BlockchainRpc.Internal.{Erc20, EthRpc, Extractor, Parser}
+  alias OcapRpc.Internal.{Erc20, EthRpc, Extractor, Parser}
 
   @erc20_contract "eth_erc20_"
 

@@ -1,8 +1,8 @@
-defmodule BlockchainRpc.Internal.DSLUtils do
+defmodule OcapRpc.Internal.DSLUtils do
   @moduledoc """
   Utility functions for the little DSL
   """
-  alias BlockchainRpc.Eth.Trace, as: EthTtrace
+  alias OcapRpc.Eth.Trace, as: EthTtrace
 
   @gwei 1_000_000_000
   @ether @gwei * @gwei

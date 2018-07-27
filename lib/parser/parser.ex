@@ -1,4 +1,4 @@
-defmodule BlockchainRpc.Internal.Parser do
+defmodule OcapRpc.Internal.Parser do
   @moduledoc """
   Private utility for generator
   """
@@ -6,7 +6,7 @@ defmodule BlockchainRpc.Internal.Parser do
   @doc """
   get the directory of priv/rpc
   """
-  def get_dir(type), do: Application.app_dir(:blockchain_rpc, "priv/rpc/#{type}")
+  def get_dir(type), do: Application.app_dir(:ocap_rpc, "priv/rpc/#{type}")
 
   @doc """
   Retrieve data from ``priv/rpc`` and return as a list

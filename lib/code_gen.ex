@@ -1,8 +1,8 @@
-defmodule BlockchainRpc.Internal do
+defmodule OcapRpc.Internal do
   @moduledoc """
   Generate the code for RPC library.
   """
-  alias BlockchainRpc.Internal.{CodeGen, Parser}
+  alias OcapRpc.Internal.{CodeGen, Parser}
   path = Path.join(File.cwd!(), "priv/gen")
 
   [:btc, :eth]
