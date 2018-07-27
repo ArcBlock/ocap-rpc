@@ -40,8 +40,8 @@ defmodule BlockchainRpc.MixProject do
       {:sentry, "~> 6.4.0"},
 
       # utility belt
-      {:utility_belt, path: "/Users/tchen/projects/mycode/utility_belt"},
-      # {:utility_belt, "> 0.0.0"},
+      # {:utility_belt, path: "/Users/tchen/projects/mycode/utility_belt"},
+      {:utility_belt, "> 0.0.0"},
 
       # deployment
       {:distillery, "~> 1.5", runtime: false},
