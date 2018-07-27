@@ -43,6 +43,7 @@
   "poison": {:hex, :poison, "3.1.0", "d9eb636610e096f86f25d9a46f35a9facac35609a7591b3be3326e99a0484665", [:mix], [], "hexpm"},
   "poolboy": {:hex, :poolboy, "1.5.1", "6b46163901cfd0a1b43d692657ed9d7e599853b3b21b95ae5ae0a777cf9b6ca8", [:rebar], [], "hexpm"},
   "pre_commit_hook": {:hex, :pre_commit_hook, "1.2.0", "cdd3448dfe05df5ceac3427c9784af2cb2bbff05876e0e3a6e002c5163eb5f7a", [:mix], [], "hexpm"},
+  "proper_case": {:hex, :proper_case, "1.2.0", "31e5b4c9f73b831a8e463b6ba514330a72850e083ee329f4c215bee3d81fb2cc", [:mix], [], "hexpm"},
   "recase": {:hex, :recase, "0.3.0", "a3a6b2bfc9a1c3047b6f37d49ea52027ea59fd256505254b8e9d63c68d09ab89", [:mix], [], "hexpm"},
   "recon": {:hex, :recon, "2.3.6", "2bcad0cf621fb277cabbb6413159cd3aa30265c2dee42c968697988b30108604", [:rebar3], [], "hexpm"},
   "recon_ex": {:hex, :recon_ex, "0.9.1", "51558b6eb347753dcf9c884ba68d49dbbec607fc4296815b72a0c8995d5d3203", [:mix], [{:recon, "~> 2.3.1", [hex: :recon, repo: "hexpm", optional: false]}], "hexpm"},

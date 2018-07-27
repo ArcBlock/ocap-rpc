@@ -1,3 +1,6 @@
+## 0.3.0 (July 27, 2018)
+  - support contract transactions
+
 ## 0.2.1 (July 27, 2018)
 
 

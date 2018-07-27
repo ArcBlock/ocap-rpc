@@ -30,3 +30,7 @@ api:
       desc: Executes a new message call immediately without creating a transaction on the block chain.
       method: "eth_call"
       args: ["obj"]
+    - name: get_logs
+      desc: Returns an array of all logs matching a given filter object.
+      method: "eth_getLogs"
+      args: ["filter_obj"]

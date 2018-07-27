@@ -1,11 +1,14 @@
-defmodule BlockchainRpc.Internal.CodeGen do
+defmodule BlockchainRpc.Internal do
   @moduledoc """
   Generate the code for RPC library.
   """
-  alias BlockchainRpc.Internal.{EthCode, Parser}
+  alias BlockchainRpc.Internal.{CodeGen, Parser}
   path = Path.join(File.cwd!(), "priv/gen")
 
-  :eth
-  |> Parser.get_data()
-  |> Enum.map(&EthCode.gen(&1, :eth, path: Path.join(path, "rpc")))
+  [:btc, :eth]
+  |> Enum.map(fn token ->
+    token
+    |> Parser.get_data()
+    |> Enum.map(&CodeGen.gen(&1, :eth, path: Path.join(path, "rpc")))
+  end)
 end

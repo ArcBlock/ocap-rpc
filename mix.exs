@@ -35,6 +35,7 @@ defmodule BlockchainRpc.MixProject do
       {:httpoison, "~> 0.13"},
       {:jason, "~> 1.1"},
       {:keccakf1600, "~> 2.0", hex: :keccakf1600_orig, override: true},
+      {:proper_case, "~> 1.2.0"},
       {:recase, "~> 0.3.0"},
       {:yaml_elixir, "~> 2.0.0"},
 

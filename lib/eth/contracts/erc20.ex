@@ -19,7 +19,7 @@ defmodule BlockchainRpc.Internal.Erc20 do
       data: Utils.sig_balance_of(from)
     }
 
-    Chain.call(obj)
+    obj |> ProperCase.to_camel_case() |> Chain.call()
   end
 
   def total_supply(token) do
@@ -28,6 +28,22 @@ defmodule BlockchainRpc.Internal.Erc20 do
       data: Utils.sig_total_supply()
     }
 
-    Chain.call(obj)
+    obj |> ProperCase.to_camel_case() |> Chain.call()
+  end
+
+  def get_transactions(token, from, to, num_blocks) do
+    from_block = Integer.to_string(Chain.current_block() - num_blocks, 16)
+
+    from = Utils.addr_to_topic(from)
+    to = Utils.addr_to_topic(to)
+
+    obj = %{
+      from_block: "0x#{from_block}",
+      to_block: "latest",
+      topics: [nil, from, to],
+      address: Map.get(@contract_addrs, token)
+    }
+
+    obj |> ProperCase.to_camel_case() |> Chain.get_logs()
   end
 end
