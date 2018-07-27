@@ -1,23 +1,23 @@
 BUILD_VERSION=v$(VERSION)
-RELEASE_DIR=$(TOP_DIR)/src/_build/releases
+RELEASE_DIR=$(TOP_DIR)/_build/releases
 
 TMP_OTP_PATH=/tmp/esl_otp_$(OTP_VERSION)
 TMP_OTP_FILE=$(TMP_OTP_PATH)/otp_$(OTP_VERSION).rpm
 
 build-dev:
 	@echo "Building the dev release..."
-	@cd src; mix deps.get; mix compile; mix release;
-	@cp src/_build/dev/rel/$(BUILD_NAME)/releases/$(VERSION)/$(BUILD_NAME).tar.gz $(RELEASE_DIR)/$(BUILD_NAME)_dev.tgz
+	@mix deps.get; mix compile; mix release;
+	@cp _build/dev/rel/$(BUILD_NAME)/releases/$(VERSION)/$(BUILD_NAME).tar.gz $(RELEASE_DIR)/$(BUILD_NAME)_dev.tgz
 
 build-staging:
 	@echo "Building the staging release..."
-	@cd src; mix deps.get; MIX_ENV=staging mix compile; MIX_ENV=staging mix release --env=staging;
-	@cp src/_build/staging/rel/$(BUILD_NAME)/releases/$(VERSION)/$(BUILD_NAME).tar.gz $(RELEASE_DIR)/$(BUILD_NAME)_staging.tgz
+	@mix deps.get; MIX_ENV=staging mix compile; MIX_ENV=staging mix release --env=staging;
+	@cp _build/staging/rel/$(BUILD_NAME)/releases/$(VERSION)/$(BUILD_NAME).tar.gz $(RELEASE_DIR)/$(BUILD_NAME)_staging.tgz
 
 build-prod:
 	@echo "Building the production release..."
-	@cd src; mix deps.get; MIX_ENV=prod mix compile; MIX_ENV=prod mix release --env=prod;
-	@cp src/_build/prod/rel/$(BUILD_NAME)/releases/$(VERSION)/$(BUILD_NAME).tar.gz $(RELEASE_DIR)/$(BUILD_NAME)_prod.tgz
+	@mix deps.get; MIX_ENV=prod mix compile; MIX_ENV=prod mix release --env=prod;
+	@cp _build/prod/rel/$(BUILD_NAME)/releases/$(VERSION)/$(BUILD_NAME).tar.gz $(RELEASE_DIR)/$(BUILD_NAME)_prod.tgz
 
 build-version-file:
 	@echo "$(BUILD_VERSION)" > $(RELEASE_DIR)/$(BUILD_VERSION)

@@ -1,0 +1,15 @@
+---
+api:
+  name: Contract
+  desc: Ethereum contract related RPC
+  public:
+    - name: balance
+      desc: get balance of an address for a specific contract
+      method: eth_contract_erc20_balance_of
+      args: ["_token", "address"]
+      result: "&to_ether(_)"
+    - name: total_supply
+      desc: get total supply for a specific contract
+      method: eth_contract_erc20_total_supply
+      args: ["token"]
+      result: "&to_ether(_)"

@@ -1,8 +1,8 @@
 language: elixir
 elixir:
-  - 1.6
+  - 1.7
 otp_release:
-  - 20.1
+  - 21.0
 branches:
   only:
     - master
@@ -10,14 +10,10 @@ install:
   - epmd -daemon
   - mix local.hex --force
   - mix local.rebar --force
-  - mix deps.get
-script:
-  - mix test_all
+script: make travis
 env:
   - MIX_ENV=test
-before_script:
-  - make travis-init
-  - mix compile
+before_script: make travis-init
 script: make travis
 before_deploy: make travis-deploy
 deploy:
