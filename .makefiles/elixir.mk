@@ -25,7 +25,7 @@ build-version-file:
 $(RELEASE_DIR):
 	@mkdir -p $@
 
-build-release: $(RELEASE_DIR) download-esl-otp copy-docs build-staging build-prod build-version-file
+build-release: $(RELEASE_DIR) download-esl-otp build-staging build-prod build-version-file
 
 download-esl-otp: $(TMP_OTP_PATH)
 	@curl -o $(TMP_OTP_FILE) "https://packages.erlang-solutions.com/erlang/esl-erlang/FLAVOUR_1_general/esl-erlang_$(OTP_VERSION)-1~centos~7_amd64.rpm"
