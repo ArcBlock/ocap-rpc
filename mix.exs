@@ -3,6 +3,11 @@ defmodule BlockchainRpc.MixProject do
 
   @version File.cwd!() |> Path.join("version") |> File.read!() |> String.trim()
   @elixir_version File.cwd!() |> Path.join(".elixir_version") |> File.read!() |> String.trim()
+  @otp_version File.cwd!() |> Path.join(".otp_version") |> File.read!() |> String.trim()
+
+  def get_version, do: @version
+  def get_elixir_version, do: @elixir_version
+  def get_otp_version, do: @otp_version
 
   def project do
     [
