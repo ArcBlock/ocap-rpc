@@ -3,24 +3,24 @@ elixir: 1.6
 otp_release: 21.0
 branches:
   only:
-    - master
+  - master
 before_install:
-  - sudo apt-get install -y rpm2cpio wget
-  - nvm install 10
+- sudo apt-get install -y rpm2cpio wget
+- nvm install 10
 install:
-  - epmd -daemon
-  - mix local.hex --force
-  - mix local.rebar --force
+- epmd -daemon
+- mix local.hex --force
+- mix local.rebar --force
 script: make travis
 env:
-  - MIX_ENV=test
+- MIX_ENV=test
 before_script: make travis-init
 before_deploy: make travis-deploy
 deploy:
   provider: releases
   skip_cleanup: true
   api_key:
-    secure: iCyt8eoQYrHlLFLcrnyJIC1qupUdyLsPWSDclDuEbjMM56P4SgxUW9foskDbu8tUNhbbXaI2XDzd8a2XHNR5Sw2Qmx4wNzFJeIDuwukvvhJ78DkKpGKw7NmFy9JdWnDCgs3nJVDYAxOPes3f5oOVMfp7KvjhWDD/tWYTTgNJUN1P42a8QReLBpUGlxXIRzugHPdOhqrt5yMas798AGSreHLsC39xD09WILZB3RTWLSFm0dR0kLPIH9wo1x3DfTxJQ1qlXKUEz384NE52w/TY+5SJJa8vsRpfDqjUHXHU6Ok8yjth1u988EPz3WrFrVhU7J0V8wtDKSYjpJUV5QMID9I+3xxkyusvib6v6HWbx9hB6k27nTYvi1Lakp79XMmW+JcP5tM+Gk3RBDAvtND5GaEpe3imVIzVJE5q6PExxBQLULATWBOMRV7fZP44ekC0TH0m+r+lmFmUIftscapCoRyXakbTGwdRmE6E810gFVtZpHs6H5P6WMG2gI3+ycNPmUmPHyNV+hHyNm2VFerAyrXx5Ikc0ei4LxSHVP2y07EPh3eENSg/VN8Vgb273D9Qp1cc2ZFkmhEIvKtu13TMQzzwLeE6eGAQ6u/VfvhW5vgqDnxiTUy1LdvrvpxcagMwnbMD4VQAZ8iSQkPHXDdq3UaW/m3rjXBrzmXR46Apmcg=
+    secure: pycE4bQ/Tp90qZEpkv/ffOVH/hNXFqbhEMpxuv8anfKO6FNleueDPeCVEVeEZCDBVtW1TeOu+nOIUrkSCGrBuInl8+Ql9+6kTTiSjToHD9pBw8eS3hv+j1IBCc7LjlGbX8QbO6Vn6FZRT6xnzePW3VguLl+XswqKTRB1322eTOqFzGI4WPrf+NGU9hIFRAbg+Jpe/TuCb8MlyN539bohik/rSBNmOZb6yPrUr2sGJ6Y1cOisXBAbUYosNHYTJ5qCrRlYeU1gkhz+g0ShVC1hnLSXboAm96lasEICt/BkOOsBQruD5yRxETzx/ifZ8+PcCvzg7xPYkjPxxQz5bZXvmAV1ar4zhVNqy5dVDHnWF0nt0d87X7doXinLwy5ccmVv7juCt5Qag5z5hTiwjR9RKsQPySQ+AalvvWO00gm1R5S4nIL81Rwr25zL/GSyyb18ewJ9cCojFB2U4XyLfIdNC8SlyvYyKJDof1qT9rGxduIXEvwoSMqdry+w6f0YYVXvo31z7pvzhAmuCWL9lcFVn9BhkML/6zkZzNliU3+UK6t4Yva6dfPenqdfXZrH322PFYJZXaT3t03K6gjvhKBnYlurGbKtEz/aKLXM2RKON8nIXm+b6edwtQN/x+pGIq0zVnUVPP1c+DtEapgwHUojFd1Kfi+S0mc8kaVNRg/2JLo=
   file_glob: true
   file: src/_build/releases/*
   on:
