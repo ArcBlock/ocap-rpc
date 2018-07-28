@@ -23,8 +23,7 @@ defmodule OcapRpc.Internal.EthAccount do
 
     %{
       from_block: Converter.to_hex(from_block),
-      to_block: Converter.to_hex(to_block),
-      count: 1
+      to_block: Converter.to_hex(to_block)
     }
     |> Map.merge(address_filter)
     |> Map.merge(extra_filter)

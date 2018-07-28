@@ -67,7 +67,7 @@ api:
 result:
   transaction:
     block_hash: _
-    block_number: "&to_int(_)"
+    block_height: "&to_int(block_number)"
     from: _
     to: _
     gas_limit: "&to_int(gas)"
