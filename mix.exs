@@ -30,6 +30,7 @@ defmodule OcapRpc.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:atomic_map, "> 0.0.0"},
       {:decimal, "~> 1.1"},
       {:hexate, ">= 0.6.0"},
       {:httpoison, "~> 0.13"},

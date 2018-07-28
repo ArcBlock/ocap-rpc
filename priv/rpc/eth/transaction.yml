@@ -53,19 +53,25 @@ result:
   transaction:
     block_hash: _
     block_number: "&to_int(_)"
-    chain_id: _
-    condition: _
-    creates: _
     from: _
     gas: "&to_int(_)"
     gas_price: "&to_gwei(_)"
     hash: _
-    input_data: input
+    input: _
     nonce: "&to_int(_)"
     public_key: _
     value: "&to_ether(_)"
-    dive: "&trace_rpc(hash)"
-    # "*": "&calc_gas(gas, gas_price, dive)"
+    index: "&to_int(transaction_index)"
+    size: "&get_size(raw)"
+    total: "&to_int(value)"
+    fees: "&get_fees(*)"
+    raw: _
+    r: _
+    v: _
+    standard_v: _
+    condition: _
+    creates: _
+    tx_type: "&get_type(*)"
   transaction_receipt:
     block_hash: _
     block_number: "&to_int(_)"
@@ -73,10 +79,10 @@ result:
     from: _
     to: _
     cumulative_gas_used: "&to_int(_)"
-    gas_used": "&to_int(_)"
+    gas_used: "&to_int(_)"
     logs: _
     logsBloom: _
     root: _
     status: "&to_int(_)"
     transaction_hash: _
-    transaction_index": "&to_int(_)"
+    transaction_index: "&to_int(_)"

@@ -43,6 +43,11 @@ api:
       method: eth_getUncleCountByBlockNumber
       args: ["number"]
       result: "&to_int(_)"
+    - name: trace
+      desc: Returns traces created at given block.
+      method: trace_block
+      args: ["number"]
+
 result:
   block:
     author: _
@@ -64,5 +69,24 @@ result:
     uncles: _
     size: "&to_int(_)"
     state_root: _
-    timestamp: "&to_date(_)"
+    time: "&to_date(timestamp)"
     total_difficulty: _
+    transactions_root: _
+    receipts_root: _
+    fees: "&to_int(gas_used)"
+    reward: "&to_int(gas_used)"
+    transactions:
+      block_hash: _
+      block_number: "&to_int(_)"
+      # chain_id: _
+      condition: _
+      creates: _
+      from: _
+      gas: "&to_int(_)"
+      gas_price: "&to_gwei(_)"
+      hash: _
+      input_data: input
+      nonce: "&to_int(_)"
+      public_key: _
+      value: "&to_ether(_)"
+      # dive: "&trace_rpc(hash)"
