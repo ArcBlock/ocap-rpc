@@ -35,7 +35,40 @@ defmodule OcapRpc.Internal.EthRpc do
     end
   end
 
-  def get_body(method, args) do
+  def resp_hook(resp, type \\ nil) do
+    case type do
+      :transaction -> get_tx_receipt(resp)
+      :block -> get_block_tx_receipt(resp)
+      _ -> resp
+    end
+  end
+
+  # private functions
+
+  defp get_tx_receipt(resp) do
+    receipt = request("eth_getTransactionReceipt", [resp["hash"]])
+    Map.merge(receipt, resp)
+  end
+
+  defp get_block_tx_receipt(resp) do
+    transactions =
+      resp
+      |> Map.get("transactions")
+      |> Enum.map(fn tx ->
+        case is_map(tx) do
+          true ->
+            receipt = request("eth_getTransactionReceipt", [tx["hash"]])
+            Map.merge(receipt, tx)
+
+          _ ->
+            tx
+        end
+      end)
+
+    Map.put(resp, "transactions", transactions)
+  end
+
+  defp get_body(method, args) do
     %{
       method: method,
       params: args,

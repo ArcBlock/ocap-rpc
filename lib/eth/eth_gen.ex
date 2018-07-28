@@ -7,6 +7,7 @@ defmodule OcapRpc.Internal.EthCodeGen do
   @erc20_contract "eth_erc20_"
   @account "eth_account_"
   @get_tx "eth_getTransactionBy"
+  @get_block "eth_getBlockBy"
 
   def gen_method(name, method, args, result, doc) do
     cond do
@@ -19,14 +20,17 @@ defmodule OcapRpc.Internal.EthCodeGen do
         quote_advance_call(name, args, EthAccount, method, result, doc)
 
       String.starts_with?(method, @get_tx) ->
-        quote_tx_call(name, args, method, result, doc)
+        quote_rpc_call(name, args, method, result, doc, :transaction)
+
+      String.starts_with?(method, @get_block) ->
+        quote_rpc_call(name, args, method, result, doc, :block)
 
       true ->
         quote_rpc_call(name, args, method, result, doc)
     end
   end
 
-  defp quote_rpc_call(name, args, method, result, doc) do
+  defp quote_rpc_call(name, args, method, result, doc, type \\ nil) do
     quote do
       @doc unquote(doc)
       def unquote(String.to_atom(name))(unquote_splicing(Parser.gen_args(args))) do
@@ -34,26 +38,7 @@ defmodule OcapRpc.Internal.EthCodeGen do
 
         unquote(method)
         |> EthRpc.request(values)
-        |> Extractor.process(unquote(Macro.escape(result)))
-      end
-    end
-  end
-
-  # TODO(tchen): this fun shall be merged with quote_rpc_call in future.
-  defp quote_tx_call(name, args, method, result, doc) do
-    quote do
-      @doc unquote(doc)
-      def unquote(String.to_atom(name))(unquote_splicing(Parser.gen_args(args))) do
-        values = Enum.map(unquote(args), fn k -> Keyword.get(binding(), k) end)
-
-        resp_hook = fn resp ->
-          receipt = EthRpc.request("eth_getTransactionReceipt", [resp["hash"]])
-          Map.merge(receipt, resp)
-        end
-
-        unquote(method)
-        |> EthRpc.request(values)
-        |> resp_hook.()
+        |> EthRpc.resp_hook(unquote(type))
         |> Extractor.process(unquote(Macro.escape(result)))
       end
     end

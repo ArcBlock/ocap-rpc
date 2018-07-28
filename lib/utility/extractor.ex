@@ -14,31 +14,34 @@ defmodule OcapRpc.Internal.Extractor do
     |> AtomicMap.convert(safe: false)
   end
 
-  def process_data(data, nil), do: data
+  defp process_data(data, nil), do: data
 
-  def process_data(data, mapping) when is_map(data) do
+  defp process_data(data, mapping) when is_map(data) do
     mapping
     |> Enum.reduce(%{}, fn {k, v}, acc ->
       try do
         Map.put(acc, k, transform(v, data, Recase.to_camel(k)))
       rescue
         e ->
-          Logger.error("error: #{inspect(e)}")
+          Logger.error("Error: #{Exception.message(e)}, trace; #{Exception.format(:error, e)}")
+
           acc
       end
     end)
   end
 
-  def process_data(data, mapping) when is_list(data) do
+  defp process_data(data, mapping) when is_list(data) do
     data
     |> Enum.map(&process_data(&1, mapping))
     |> Enum.reject(&is_nil/1)
   end
 
-  def process_data(data, mapping) do
+  defp process_data(data, mapping) when is_binary(mapping) do
     result = process_data(%{"result" => data}, %{"result" => mapping})
     Map.get(result, :result)
   end
+
+  defp process_data(data, _), do: data
 
   defp transform("_", data, key), do: Map.get(data, key)
   defp transform("*", data, _key), do: AtomicMap.convert(data, safe: false)

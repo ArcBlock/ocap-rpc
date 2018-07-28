@@ -80,7 +80,7 @@ defmodule OcapRpc.Converter do
   def get_type(data) do
     cond do
       data.creates != nil -> "contract_deployment"
-      String.length(data.input > 2) -> "contract_execution"
+      String.length(data.input) > 2 -> "contract_execution"
       true -> "normal"
     end
   end
