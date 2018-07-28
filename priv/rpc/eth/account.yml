@@ -22,3 +22,11 @@ api:
       desc: calculates an Ethereum specific signature.
       method: eth_sign
       args: ["address", "data"]
+    - name: tx_sent
+      desc: Return a list of transactions sent by this account
+      method: eth_account_tx_sent
+      args: ["address", "num_blocks", "block_offset"]
+    - name: tx_received
+      desc: Return a list of transactions received by this account
+      method: eth_account_tx_received
+      args: ["address", "num_blocks", "block_offset"]

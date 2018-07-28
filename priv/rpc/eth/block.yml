@@ -31,7 +31,7 @@ api:
     - name: get_uncle_by_number_and_index
       desc: Returns information about a uncle of a block by number and uncle index position.
       method: eth_getUncleByBlockNumberAndIndex
-      args: ["_number", "idx"]
+      args: ["number", "idx"]
       result: block
     - name: get_uncle_count_by_hash
       desc: Returns the number of uncles in a block from a block matching the given block hash.

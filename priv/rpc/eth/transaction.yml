@@ -49,12 +49,28 @@ api:
           gas: "&to_int(_)"
           gas_price: "&to_gwei(_)"
           input: _
+    - name: trace
+      desc: trace a transaction by its hash
+      method: trace_transaction
+      args: ["hash"]
+      result:
+        call_type: action.callType
+        from: action.from
+        gas_left: "&to_int(action.gas)"
+        input: action.input
+        to: action.to
+        value: "&to_ether(action.value)"
+        output: result.output
+        gas_used: "&to_int(result.gasUsed)"
+        trace_address: _
+        error: _
 result:
   transaction:
     block_hash: _
     block_number: "&to_int(_)"
     from: _
-    gas: "&to_int(_)"
+    to: _
+    gas_limit: "&to_int(gas)"
     gas_price: "&to_gwei(_)"
     hash: _
     input: _
@@ -72,10 +88,18 @@ result:
     condition: _
     creates: _
     tx_type: "&get_type(*)"
+    gas_used: "&to_int(_)"
+    contract_address: _
+    cumulative_gas_used: "&to_int(_)"
+    logs: _
+    logsBloom: _
+    root: _
+    status: "&to_recepit_status(_)"
+
   transaction_receipt:
     block_hash: _
     block_number: "&to_int(_)"
-    contractAddress: _
+    contract_address: _
     from: _
     to: _
     cumulative_gas_used: "&to_int(_)"
@@ -83,6 +107,6 @@ result:
     logs: _
     logsBloom: _
     root: _
-    status: "&to_int(_)"
+    status: "&to_recepit_status(_)"
     transaction_hash: _
     transaction_index: "&to_int(_)"

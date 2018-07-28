@@ -20,8 +20,7 @@ defmodule OcapRpc.Internal.Parser do
   end
 
   def gen_args(args) do
-    args
-    |> Enum.map(fn name -> Macro.var(String.to_atom(name), nil) end)
+    Enum.map(args, fn name -> Macro.var(name, nil) end)
   end
 
   # private functions

@@ -31,6 +31,7 @@ defmodule OcapRpc.Internal.CodeGen do
         doc = Map.get(public, "desc", "Need public interface doc")
         api_result = Map.get(public, "result", nil)
         result = merge_result(api_result, result)
+        args = Enum.map(args, fn arg -> String.to_atom(arg) end)
 
         apply(code_gen, :gen_method, [name, method, args, result, doc])
       end)

@@ -2,7 +2,6 @@ defmodule OcapRpc.Converter do
   @moduledoc """
   Utility functions for convert data
   """
-  alias OcapRpc.Eth.Trace, as: EthTtrace
   alias OcapRpc.Eth.Transaction, as: EthTx
 
   @gwei 1_000_000_000
@@ -43,7 +42,7 @@ defmodule OcapRpc.Converter do
   @doc """
   Call parity RPC trace function and return the result
   """
-  def trace_rpc(hash), do: EthTtrace.trace("0x#{hash}")
+  def trace_rpc(hash), do: EthTx.trace("0x#{hash}")
 
   @doc """
   Convert value to a value with gwei system
@@ -63,17 +62,26 @@ defmodule OcapRpc.Converter do
   def to_code(code), do: code
 
   @doc """
+  Convert receipt status to integer
+  """
+  def to_recepit_status(nil), do: 1
+  def to_recepit_status(status), do: to_int(status)
+
+  @doc """
   Get size of the raw data
   """
   def get_size("0x" <> data), do: get_size(data)
   def get_size(data), do: div(String.length(data), 2)
 
   def get_fees(data) do
-    gas_used = data.hash |> EthTx.get_receipt() |> Map.get(:gas_used)
-
-    gas_price = data.gas_price |> to_int()
-    gas_used * gas_price
+    to_int(data.gas_used) * to_int(data.gas_price)
   end
 
-  def get_type(_), do: "normal"
+  def get_type(data) do
+    cond do
+      data.creates != nil -> "contract_deployment"
+      String.length(data.input > 2) -> "contract_execution"
+      true -> "normal"
+    end
+  end
 end

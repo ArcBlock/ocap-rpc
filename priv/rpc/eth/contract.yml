@@ -6,7 +6,7 @@ api:
     - name: balance
       desc: get balance of an address for a specific contract
       method: eth_erc20_balance_of
-      args: ["_token", "address"]
+      args: ["token", "address"]
       result: "&to_ether(_)"
     - name: total_supply
       desc: get total supply for a specific contract
@@ -16,10 +16,11 @@ api:
     - name: get_transactions
       desc: get token transfer transactions
       method: eth_erc20_get_transactions
-      args: ["__token", "_from", "_to", "num_blocks"]
+      args: ["token", "from", "to", "num_blocks"]
       result:
         block_hash: _
         block_height: "&to_int(block_number)"
         transaction_hash: _
         transaction_index: "&to_int(_)"
         data: "&to_ether(data)"
+        topics: _

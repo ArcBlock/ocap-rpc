@@ -1,20 +1,9 @@
 ---
 api:
-  desc: Trace a TX for more runtime generated information
+  desc: These APIs allow you to get a full externality trace on any transaction executed throughout the Parity chain. Unlike the log filtering API, you are able to search and filter based only upon address information. Information returned includes the execution of all CREATEs, SUICIDEs and all variants of CALL together with input data, output data, gas usage, amount transferred and the success status of each individual action.
   name: Trace
   public:
-    - name: trace
-      desc: trace a transaction by its hash
-      method: trace_transaction
-      args: ["hash"]
-      result:
-        call_type: action.callType
-        from: action.from
-        gas_left: "&to_int(action.gas)"
-        input: action.input
-        to: action.to
-        value: "&to_ether(action.value)"
-        output: result.output
-        gas_used: "&to_int(result.gasUsed)"
-        trace_address: _
-        error: _
+    - name: filter
+      desc: Returns traces matching given filter
+      method: trace_filter
+      args: ["obj"]

@@ -9,12 +9,9 @@ defmodule OcapRpc.Internal.Extractor do
   Process the response data with predefined mapping
   """
   def process(data, mapping) do
-    result = process_data(data, mapping)
-
-    case is_map(result) do
-      true -> AtomicMap.convert(result, safe: false)
-      _ -> result
-    end
+    data
+    |> process_data(mapping)
+    |> AtomicMap.convert(safe: false)
   end
 
   def process_data(data, nil), do: data
@@ -39,7 +36,7 @@ defmodule OcapRpc.Internal.Extractor do
   end
 
   def process_data(data, mapping) do
-    result = process(%{"result" => data}, %{"result" => mapping})
+    result = process_data(%{"result" => data}, %{"result" => mapping})
     Map.get(result, :result)
   end
 

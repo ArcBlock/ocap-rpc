@@ -13,22 +13,22 @@ defmodule OcapRpc.Internal.Erc20 do
   }
 
   def balance_of(token, from) do
-    obj = %{
+    %{
       from: from,
       to: Map.get(@contract_addrs, token),
       data: Utils.sig_balance_of(from)
     }
-
-    obj |> ProperCase.to_camel_case() |> Chain.call()
+    |> ProperCase.to_camel_case()
+    |> Chain.call()
   end
 
   def total_supply(token) do
-    obj = %{
+    %{
       to: Map.get(@contract_addrs, token),
       data: Utils.sig_total_supply()
     }
-
-    obj |> ProperCase.to_camel_case() |> Chain.call()
+    |> ProperCase.to_camel_case()
+    |> Chain.call()
   end
 
   def get_transactions(token, from, to, num_blocks) do
@@ -37,13 +37,13 @@ defmodule OcapRpc.Internal.Erc20 do
     from = Utils.addr_to_topic(from)
     to = Utils.addr_to_topic(to)
 
-    obj = %{
+    %{
       from_block: "0x#{from_block}",
       to_block: "latest",
       topics: [nil, from, to],
       address: Map.get(@contract_addrs, token)
     }
-
-    obj |> ProperCase.to_camel_case() |> Chain.get_logs()
+    |> ProperCase.to_camel_case()
+    |> Chain.get_logs()
   end
 end
