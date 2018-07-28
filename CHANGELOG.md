@@ -1,3 +1,6 @@
+## 0.5.0 (July 28, 2018)
+  - update the code to support more functionalities
+
 ## 0.4.0 (July 27, 2018)
   - rename blockchain rpc to ocap rpc
 
