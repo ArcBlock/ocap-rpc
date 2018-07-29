@@ -1,0 +1,115 @@
+defmodule OcapRpcTest.TestUtils do
+  @moduledoc false
+
+  @user_account "0x0b078896a3D9166da5C37AE52a5809aCa48630d4"
+  @contract_account "0xb98d4c97425d9908e66e53a6fdf673acca0be986"
+
+  @sample_block %{
+    "author" => "0xea674fdde714fd979de3edf0f56aa9716b898ec8",
+    "difficulty" => "0xcdc2c7fbcfa40",
+    "extraData" => "0x65746865726d696e652d61736961312d34",
+    "gasLimit" => "0x7a11f8",
+    "gasUsed" => "0x55b14b",
+    "hash" => "0xf1070c1252a9629c5f95728b44d5cb48869d33b69e05180c9eb74d551f6e8a28",
+    "logsBloom" =>
+      "0x00120000025050082011010002101002100001000801061000384209000c0168000102c0480048004000010001011009230001020820061210080805780420000004204a0329101188e04c0c00e024003208000084048020c021090310900020002000000640200401408048000228400050202000143004241300111480000400000e014000003400108482008c404a48420003000081460402648900012d000a0501004040020400400004c108c420100004000204802612000000181200000180080222246001042840410400284c00208024a2080800221c02000042640914006180a0c0002020060080d408e484410700b08013210d0004008080480880",
+    "miner" => "0xea674fdde714fd979de3edf0f56aa9716b898ec8",
+    "mixHash" => "0x03f96602ab2e9f6f5dc476413723684a166a2740b4ef551c016457b3ef9d3196",
+    "nonce" => "0x0196b9800479e0db",
+    "number" => "0x5c5bd1",
+    "parentHash" => "0xec42f2e608f2491e1db0474e03073b2ebbe02a4672727cba309140c8394b448a",
+    "receiptsRoot" => "0x206dddfaab2c3d7fd79b9df4e31ac6821f1593afa2dedc12a4424cf0e4905679",
+    "sealFields" => [
+      "0xa003f96602ab2e9f6f5dc476413723684a166a2740b4ef551c016457b3ef9d3196",
+      "0x880196b9800479e0db"
+    ],
+    "sha3Uncles" => "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+    "size" => "0x5cca",
+    "stateRoot" => "0x1f5fef327771b488d5991154f107cd94db5b5b89b09912aa077a94336859a847",
+    "timestamp" => "0x5b5e0c67",
+    "totalDifficulty" => "0x13334dadbed2cfbf5b5",
+    "transactions" => [
+      "0x735975a1b3d79624c81a1c2c97a4d3cead388b8b1a9bba4da07bb0032dd862e4"
+    ],
+    "transactionsRoot" => "0xc3a6a6eccbe86cf213678d2145197b46b7abe0ec131c0a21e6c8792f4129b643",
+    "uncles" => []
+  }
+
+  @sample_tx %{
+    "blockHash" => "0xf1070c1252a9629c5f95728b44d5cb48869d33b69e05180c9eb74d551f6e8a28",
+    "blockNumber" => "0x5c5bd1",
+    "chainId" => "0x1",
+    "condition" => nil,
+    "creates" => nil,
+    "from" => "0x38871c5663bf192e32abd98ca558ac91ae101a72",
+    "gas" => "0x5208",
+    "gasPrice" => "0x12a05f2000",
+    "hash" => "0x735975a1b3d79624c81a1c2c97a4d3cead388b8b1a9bba4da07bb0032dd862e4",
+    "input" => "0x",
+    "nonce" => "0xc",
+    "publicKey" =>
+      "0xbb0e15a02428bda78ad3dc4f926d4e87149e9f0c9c7a685b9a357a915e7066501899fb4dd6dd1bde6b2eb9cbdc14596da44b0f7df086e1ce44933033c07c37fe",
+    "r" => "0xdb2b10a37a6cdb812f2c021a25857a3a3f45acb1a638bbda1552c773b9d5e80f",
+    "raw" =>
+      "0xf86c0c8512a05f200082520894b9ee1e551f538a464e8f8c41e9904498505b49b088046ae65a7ce700008026a0db2b10a37a6cdb812f2c021a25857a3a3f45acb1a638bbda1552c773b9d5e80fa02f9b0a68907f0d98a940aa14802df423ee0fd2c70064ec57e59d7d739610e20b",
+    "s" => "0x2f9b0a68907f0d98a940aa14802df423ee0fd2c70064ec57e59d7d739610e20b",
+    "standardV" => "0x1",
+    "to" => "0xb9ee1e551f538a464e8f8c41e9904498505b49b0",
+    "transactionIndex" => "0x0",
+    "v" => "0x26",
+    "value" => "0x46ae65a7ce70000"
+  }
+
+  @sample_tx_receipt %{
+    "blockHash" => "0xf1070c1252a9629c5f95728b44d5cb48869d33b69e05180c9eb74d551f6e8a28",
+    "blockNumber" => "0x5c5bd1",
+    "contractAddress" => nil,
+    "cumulativeGasUsed" => "0x5208",
+    "gasUsed" => "0x5208",
+    "logs" => [],
+    "logsBloom" =>
+      "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "root" => nil,
+    "status" => "0x1",
+    "transactionHash" => "0x735975a1b3d79624c81a1c2c97a4d3cead388b8b1a9bba4da07bb0032dd862e4",
+    "transactionIndex" => "0x0"
+  }
+
+  @contract_tx %{
+    "address" => "0xb98d4c97425d9908e66e53a6fdf673acca0be986",
+    "blockHash" => "0x8259f329c890928af5f80841bcbe1b3f4f93726e2ced6bbfe7e8fb9b016799c3",
+    "blockNumber" => "0x5c5dc3",
+    "data" => "0x00000000000000000000000000000000000000000000000c0f415310c1754000",
+    "logIndex" => "0xa",
+    "topics" => [
+      "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+      "0x000000000000000000000000adb2b42f6bd96f5c65920b9ac88619dce4166f94",
+      "0x0000000000000000000000002cdf1c14e492595e0c392cd13110b8667ebf6363"
+    ],
+    "transactionHash" => "0x90bb15aebdaee782ff966ceab40dca78648b04f2bb3eccb711102f11b1ddbbb0",
+    "transactionIndex" => "0x13",
+    "transactionLogIndex" => "0x0",
+    "type" => "mined"
+  }
+
+  def user_account, do: @user_account
+  def user_balance, do: 1049.1876721330364
+
+  def contract_account, do: @contract_account
+  def contract_code, do: "0xdeadbeef"
+
+  def block, do: @sample_block
+  def block_hash, do: Map.get(@sample_block, "hash")
+  def block_height, do: Map.get(@sample_block, "number")
+
+  def tx, do: @sample_tx
+  def tx_hash, do: Map.get(@sample_tx, "hash")
+
+  def tx_receipt, do: @sample_tx_receipt
+
+  def gas_price, do: Map.get(@sample_tx, "gasPrice")
+
+  def contract_tx, do: @contract_tx
+
+  def abt_supply, do: "0x00000000000000000000000000000000000000000099db083440e4a6fa000000"
+end
