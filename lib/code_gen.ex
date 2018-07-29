@@ -6,7 +6,7 @@ defmodule OcapRpc.Internal do
   path = Path.join(File.cwd!(), "priv/gen")
 
   [:btc, :eth]
-  |> Enum.map(fn token ->
+  |> Enum.flat_map(fn token ->
     token
     |> Parser.get_data()
     |> Enum.map(&CodeGen.gen(&1, :eth, path: Path.join(path, "rpc")))

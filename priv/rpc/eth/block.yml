@@ -31,7 +31,7 @@ api:
     - name: get_uncle_by_number_and_index
       desc: Returns information about a uncle of a block by number and uncle index position.
       method: eth_getUncleByBlockNumberAndIndex
-      args: ["_number", "idx"]
+      args: ["number", "idx"]
       result: block
     - name: get_uncle_count_by_hash
       desc: Returns the number of uncles in a block from a block matching the given block hash.
@@ -43,6 +43,11 @@ api:
       method: eth_getUncleCountByBlockNumber
       args: ["number"]
       result: "&to_int(_)"
+    - name: trace
+      desc: Returns traces created at given block.
+      method: trace_block
+      args: ["number"]
+
 result:
   block:
     author: _
@@ -53,6 +58,7 @@ result:
     gas_limit: "&to_int(_)"
     gas_used: "&to_int(_)"
     hash: _
+    pre_hash: parent_hash
     logs_bloom: _
     mix_hash: _
     nonce: _
@@ -64,5 +70,38 @@ result:
     uncles: _
     size: "&to_int(_)"
     state_root: _
-    timestamp: "&to_date(_)"
+    time: "&to_date(timestamp)"
     total_difficulty: _
+    transactions_root: _
+    receipts_root: _
+    fees: "&calc_block_fees(*)"
+    reward: "&calc_block_reward(*)"
+    transactions:
+      block_hash: _
+      block_height: "&to_int(block_number)"
+      from: _
+      to: _
+      gas_limit: "&to_int(gas)"
+      gas_price: "&to_gwei(_)"
+      hash: _
+      input: _
+      nonce: "&to_int(_)"
+      public_key: _
+      value: "&to_ether(_)"
+      index: "&to_int(transaction_index)"
+      size: "&get_size(raw)"
+      total: "&to_int(value)"
+      fees: "&get_fees(*)"
+      raw: _
+      r: _
+      v: _
+      standard_v: "&to_int(_)"
+      condition: _
+      creates: _
+      tx_type: "&get_tx_type(*)"
+      gas_used: "&to_int(_)"
+      cumulative_gas_used: "&to_int(_)"
+      logs: _
+      logsBloom: _
+      root: _
+      status: "&to_recepit_status(_)"

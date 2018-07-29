@@ -30,4 +30,6 @@ defmodule OcapRpc.Internal.Utils do
       _ -> "0x#{padding(addr)}"
     end
   end
+
+  def int_to_hex(int), do: "0x" <> (int |> Integer.to_string(16) |> padding())
 end

@@ -5,7 +5,8 @@ defmodule OcapRpc.Internal.BtcCodeGen do
   alias OcapRpc.Internal.{BtcRpc, Extractor, Parser}
 
   def gen_method(name, method, args, result, doc) do
-    quote_rpc_call(name, args, method, result, doc)
+    data = quote_rpc_call(name, args, method, result, doc)
+    AtomicMap.convert(data, safe: false)
   end
 
   defp quote_rpc_call(name, args, method, result, doc) do

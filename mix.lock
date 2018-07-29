@@ -1,5 +1,6 @@
 %{
   "argon2_elixir": {:hex, :argon2_elixir, "1.3.1", "02a3d55a2670d25df25d75adcef2d74662c72bbc85aba17ca0ea585764b59ef4", [:make, :mix], [{:elixir_make, "~> 0.4", [hex: :elixir_make, repo: "hexpm", optional: false]}], "hexpm"},
+  "atomic_map": {:hex, :atomic_map, "0.9.3", "3c7f1302e0590164732d08ca999708efbb2cd768abf2911cf140280ce2dc499d", [:mix], [], "hexpm"},
   "base64url": {:hex, :base64url, "0.0.1", "36a90125f5948e3afd7be97662a1504b934dd5dac78451ca6e9abf85a10286be", [:rebar], [], "hexpm"},
   "bcrypt_elixir": {:hex, :bcrypt_elixir, "1.0.8", "940ce8156519574142a3c6e925e7a0eea7367c55b2817b3bd18806b0bbd4254e", [:make, :mix], [{:elixir_make, "~> 0.4", [hex: :elixir_make, repo: "hexpm", optional: false]}], "hexpm"},
   "benchee": {:hex, :benchee, "0.13.1", "bd93ca05be78bcb6159c7176230efeda2f724f7ffd485515175ca411dff4893e", [:mix], [{:deep_merge, "~> 0.1", [hex: :deep_merge, repo: "hexpm", optional: false]}], "hexpm"},
