@@ -7,7 +7,7 @@ defmodule OcapRpc.Internal.EthCodeGen do
   @erc20_contract "eth_erc20_"
   @account "eth_account_"
   @get_tx "eth_getTransactionBy"
-  @get_block "eth_getBlockBy"
+  @get_block "_eth_getBlockBy"
 
   def gen_method(name, method, args, result, doc) do
     cond do

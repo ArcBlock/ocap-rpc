@@ -23,8 +23,14 @@ defmodule OcapRpc.Internal.Erc20 do
   end
 
   def total_supply(token) do
+    to =
+      case is_atom(token) do
+        true -> Map.get(@contract_addrs, token)
+        _ -> token
+      end
+
     %{
-      to: Map.get(@contract_addrs, token),
+      to: to,
       data: Utils.sig_total_supply()
     }
     |> ProperCase.to_camel_case()

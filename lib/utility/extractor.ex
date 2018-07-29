@@ -37,7 +37,8 @@ defmodule OcapRpc.Internal.Extractor do
   end
 
   defp process_data(data, mapping) when is_binary(mapping) do
-    result = process_data(%{"result" => data}, %{"result" => mapping})
+    # this is to make sure we go back and do AtomicMap
+    result = process(%{"result" => data}, %{"result" => mapping})
     Map.get(result, :result)
   end
 

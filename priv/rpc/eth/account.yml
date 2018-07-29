@@ -30,3 +30,7 @@ api:
       desc: Return a list of transactions received by this account
       method: eth_account_tx_received
       args: ["address", "num_blocks", "block_offset"]
+    - name: get_by_address
+      desc: get account details by address
+      method: eth_account_get_by_address
+      args: ["address"]

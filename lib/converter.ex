@@ -31,6 +31,7 @@ defmodule OcapRpc.Converter do
   @doc """
   Convert hex string to integer
   """
+  def to_int(nil), do: -1
   def to_int("0x" <> hex), do: to_int(hex)
   def to_int(hex), do: Hexate.to_integer(hex)
 
@@ -54,6 +55,10 @@ defmodule OcapRpc.Converter do
   """
   def to_ether(value), do: to_int(value) / @ether
 
+  def to_supply_amount(""), do: -1
+  def to_supply_amount(nil), do: -1
+  def to_supply_amount(total), do: to_ether(total)
+
   @doc """
   Convert code to readable data. TODO: (tchen)
   """
@@ -74,14 +79,25 @@ defmodule OcapRpc.Converter do
   def get_size(data), do: div(String.length(data), 2)
 
   def get_fees(data) do
-    to_int(data.gas_used) * to_int(data.gas_price)
+    case Map.get(data, :gas_used) do
+      nil -> nil
+      gas_used -> to_int(gas_used) * to_int(data.gas_price)
+    end
   end
 
-  def get_type(data) do
+  def get_tx_type(data) do
     cond do
       data.creates != nil -> "contract_deployment"
       String.length(data.input) > 2 -> "contract_execution"
       true -> "normal"
     end
+  end
+
+  def calc_block_fees(_data) do
+    -1
+  end
+
+  def calc_block_reward(_data) do
+    -1
   end
 end

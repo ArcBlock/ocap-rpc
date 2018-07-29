@@ -12,7 +12,7 @@ api:
       desc: get total supply for a specific contract
       method: eth_erc20_total_supply
       args: ["token"]
-      result: "&to_ether(_)"
+      result: "&to_supply_amount(_)"
     - name: get_transactions
       desc: get token transfer transactions
       method: eth_erc20_get_transactions
