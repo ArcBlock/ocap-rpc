@@ -20,7 +20,29 @@ api:
       result:
         block_hash: _
         block_height: "&to_int(block_number)"
-        transaction_hash: _
-        transaction_index: "&to_int(_)"
-        data: "&to_ether(data)"
-        topics: _
+        from: _
+        to: _
+        gas_limit: "&to_int(gas)"
+        gas_price: "&to_gwei(_)"
+        hash: _
+        input: _
+        nonce: "&to_int(_)"
+        public_key: _
+        value: "&to_ether(_)"
+        index: "&to_int(transaction_index)"
+        size: "&get_size(raw)"
+        total: "&to_int(value)"
+        fees: "&get_fees(*)"
+        raw: _
+        r: _
+        v: _
+        standard_v: "&to_int(_)"
+        condition: _
+        creates: _
+        tx_type: "&get_tx_type(*)"
+        gas_used: "&to_int(_)"
+        cumulative_gas_used: "&to_int(_)"
+        logs: _
+        logsBloom: _
+        root: _
+        status: "&to_recepit_status(_)"

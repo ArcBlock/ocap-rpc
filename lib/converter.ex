@@ -7,6 +7,9 @@ defmodule OcapRpc.Converter do
   @gwei 1_000_000_000
   @ether @gwei * @gwei
 
+  def gwei, do: @gwei
+  def ether, do: @ether
+
   @doc """
   Decode the hext into something readable, if possible
   """
@@ -38,7 +41,7 @@ defmodule OcapRpc.Converter do
   @doc """
   Convert integer to hex string
   """
-  def to_hex(int), do: "0x" <> (int |> Integer.to_string(16))
+  def to_hex(data), do: "0x" <> (data |> Hexate.encode())
 
   @doc """
   Call parity RPC trace function and return the result

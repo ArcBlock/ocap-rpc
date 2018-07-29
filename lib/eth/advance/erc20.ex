@@ -3,7 +3,7 @@ defmodule OcapRpc.Internal.Erc20 do
   Contract method for ABT.
   """
   alias OcapRpc.Eth.Chain
-  alias OcapRpc.Internal.Utils
+  alias OcapRpc.Internal.{EthRpc, Utils}
 
   @contract_addrs %{
     abt: "0xB98d4C97425d9908E66E53A6fDf673ACcA0BE986",
@@ -19,7 +19,7 @@ defmodule OcapRpc.Internal.Erc20 do
       data: Utils.sig_balance_of(from)
     }
     |> ProperCase.to_camel_case()
-    |> Chain.call()
+    |> call()
   end
 
   def total_supply(token) do
@@ -34,7 +34,7 @@ defmodule OcapRpc.Internal.Erc20 do
       data: Utils.sig_total_supply()
     }
     |> ProperCase.to_camel_case()
-    |> Chain.call()
+    |> call()
   end
 
   def get_transactions(token, from, to, num_blocks) do
@@ -50,6 +50,11 @@ defmodule OcapRpc.Internal.Erc20 do
       address: Map.get(@contract_addrs, token)
     }
     |> ProperCase.to_camel_case()
-    |> Chain.get_logs()
+    |> get_logs()
+    |> Enum.map(fn item -> get_tx(item["transactionHash"]) end)
   end
+
+  defp get_tx(hash), do: EthRpc.request("eth_getTransactionByHash", [hash])
+  defp call(data), do: EthRpc.request("eth_call", [data])
+  defp get_logs(data), do: EthRpc.request("eth_getLogs", [data])
 end

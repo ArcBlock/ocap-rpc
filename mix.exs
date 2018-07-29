@@ -14,6 +14,8 @@ defmodule OcapRpc.MixProject do
       app: :ocap_rpc,
       version: @version,
       elixir: @elixir_version,
+      elixirc_paths: elixirc_paths(Mix.env()),
+      compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -26,6 +28,10 @@ defmodule OcapRpc.MixProject do
       mod: {OcapRpc.Application, []}
     ]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(:dev), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do

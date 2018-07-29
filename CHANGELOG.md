@@ -1,3 +1,6 @@
+## 0.6.0 (July 29, 2018)
+  - add basic test suites
+
 ## 0.5.0 (July 28, 2018)
   - update the code to support more functionalities
 
