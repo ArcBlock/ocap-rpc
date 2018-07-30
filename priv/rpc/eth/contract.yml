@@ -16,7 +16,7 @@ api:
     - name: get_transactions
       desc: get token transfer transactions
       method: eth_erc20_get_transactions
-      args: ["token", "from", "to", "num_blocks"]
+      args: ["token", "from", "to", "num_blocks", "block_offset"]
       result:
         block_hash: _
         block_height: "&to_int(block_number)"
@@ -46,3 +46,7 @@ api:
         logsBloom: _
         root: _
         status: "&to_recepit_status(_)"
+        contract_from: _
+        contract_to: _
+        contract_value: "&to_ether(_)"
+        input_plain: _
