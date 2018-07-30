@@ -28,10 +28,10 @@ api:
         input: _
         nonce: "&to_int(_)"
         public_key: _
-        value: "&to_ether(_)"
+        value: _
         index: "&to_int(transaction_index)"
         size: "&get_size(raw)"
-        total: "&to_int(value)"
+        total: "&to_ether(value)"
         fees: "&get_fees(*)"
         raw: _
         r: _

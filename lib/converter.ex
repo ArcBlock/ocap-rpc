@@ -60,7 +60,7 @@ defmodule OcapRpc.Converter do
 
   def to_supply_amount(""), do: -1
   def to_supply_amount(nil), do: -1
-  def to_supply_amount(total), do: to_ether(total)
+  def to_supply_amount(total), do: div(to_int(total), @ether)
 
   @doc """
   Convert code to readable data. TODO: (tchen)
