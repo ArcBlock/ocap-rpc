@@ -1,3 +1,6 @@
+## 0.7.2 (July 30, 2018)
+
+
 ## 0.7.0 (July 29, 2018)
   - support decode to erc20
 
