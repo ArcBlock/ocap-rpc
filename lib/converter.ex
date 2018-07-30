@@ -83,7 +83,7 @@ defmodule OcapRpc.Converter do
 
   def get_fees(data) do
     case Map.get(data, :gas_used) do
-      nil -> nil
+      nil -> -1
       gas_used -> to_int(gas_used) * to_int(data.gas_price)
     end
   end

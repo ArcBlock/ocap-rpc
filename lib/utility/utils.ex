@@ -9,9 +9,11 @@ defmodule OcapRpc.Internal.Utils do
 
   def call_data(method, value) do
     value = value |> String.replace_leading("0x", "") |> padding()
-    method_sig = method |> sha3() |> String.slice(0, 8)
+    method_sig = get_method_sig(method)
     "0x#{method_sig}#{value}"
   end
+
+  def get_method_sig(method), do: method |> sha3() |> String.slice(0, 8)
 
   def sig_balance_of(from) do
     call_data("balanceOf(address)", from)
