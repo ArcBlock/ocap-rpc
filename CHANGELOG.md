@@ -1,3 +1,6 @@
+## 0.7.0 (July 29, 2018)
+  - support decode to erc20
+
 ## 0.6.0 (July 29, 2018)
   - add basic test suites
 
