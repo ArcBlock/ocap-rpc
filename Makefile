@@ -44,7 +44,7 @@ test:
 
 lint:
 	@echo "Linting the software..."
-	@yamllint -c $(TOP_DIR)/.yamllint priv/rpc/**/*.yml
+	@yamllint -c $(TOP_DIR)/.yamllint priv/rpc/eth/**/*.yml
 
 doc:
 	@echo "Building the documentation..."
