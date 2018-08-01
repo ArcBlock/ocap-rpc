@@ -1,0 +1,48 @@
+---
+name: Block
+desc: Ethereum block related RPC
+public:
+  - name: get_by_number
+    desc: get a block by block height
+    method: eth_getBlockByNumber
+    args: ["number", "with_tx?"]
+    result: block
+  - name: get_by_hash
+    desc: get a block by block hash, prefixed with "0x"
+    method: eth_getBlockByHash
+    args: ["hash", "with_tx?"]
+    result: block
+  - name: get_tx_count_by_hash
+    desc: Returns the number of transactions in a block from a block matching the given block hash.
+    method: eth_getBlockTransactionCountByHash
+    args: ["hash"]
+    result: "&to_int(_)"
+  - name: get_tx_count_by_number
+    desc: Returns the number of transactions in a block from a block matching the given block number.
+    method: eth_getBlockTransactionCountByNumber
+    args: ["number"]
+    result: "&to_int(_)"
+  - name: get_uncle_by_hash_and_index
+    desc: Returns information about a uncle of a block by hash and uncle index position.
+    method: eth_getUncleByBlockHashAndIndex
+    args: ["hash", "idx"]
+    result: block
+  - name: get_uncle_by_number_and_index
+    desc: Returns information about a uncle of a block by number and uncle index position.
+    method: eth_getUncleByBlockNumberAndIndex
+    args: ["number", "idx"]
+    result: block
+  - name: get_uncle_count_by_hash
+    desc: Returns the number of uncles in a block from a block matching the given block hash.
+    method: eth_getUncleCountByBlockHash
+    args: ["hash"]
+    result: "&to_int(_)"
+  - name: get_uncle_count_by_number
+    desc: Returns the number of uncles in a block from a block matching the given block number.
+    method: eth_getUncleCountByBlockNumber
+    args: ["number"]
+    result: "&to_int(_)"
+  - name: trace
+    desc: Returns traces created at given block.
+    method: trace_block
+    args: ["number"]

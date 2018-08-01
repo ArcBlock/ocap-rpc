@@ -7,8 +7,9 @@ defmodule OcapRpc.Internal do
 
   [:btc, :eth]
   |> Enum.flat_map(fn token ->
-    token
-    |> Parser.get_data()
-    |> Enum.map(&CodeGen.gen(&1, :eth, path: Path.join(path, "rpc")))
+    data = Parser.read_main(token)
+
+    data["rpc"]
+    |> Enum.map(&CodeGen.gen(&1, data["result"], token, path: Path.join(path, "rpc")))
   end)
 end

@@ -1,0 +1,16 @@
+---
+name: Net
+desc: Ethereum network related RPC
+public:
+  - name: is_listening
+    desc: Returns true if client is actively listening for network connections.
+    method: net_listening
+    args: []
+  - name: version
+    desc: Returns the current network protocol version.
+    method: net_version
+    args: []
+  - name: peer_count
+    desc: Returns number of peers currenly connected to the client.
+    method: net_peerCount
+    args: []

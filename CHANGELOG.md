@@ -1,3 +1,7 @@
+## 0.8.0 (August 01, 2018)
+  - refactor the data type
+  - refactor the yaml files
+
 ## 0.7.2 (July 30, 2018)
 
 
