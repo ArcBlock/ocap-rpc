@@ -1,9 +1,8 @@
 ---
-api:
-  desc: These APIs allow you to get a full externality trace on any transaction executed throughout the Parity chain. Unlike the log filtering API, you are able to search and filter based only upon address information. Information returned includes the execution of all CREATEs, SUICIDEs and all variants of CALL together with input data, output data, gas usage, amount transferred and the success status of each individual action.
-  name: Trace
-  public:
-    - name: filter
-      desc: Returns traces matching given filter
-      method: trace_filter
-      args: ["obj"]
+desc: These APIs allow you to get a full externality trace on any transaction executed throughout the Parity chain. Unlike the log filtering API, you are able to search and filter based only upon address information. Information returned includes the execution of all CREATEs, SUICIDEs and all variants of CALL together with input data, output data, gas usage, amount transferred and the success status of each individual action.
+name: Trace
+public:
+  - name: filter
+    desc: Returns traces matching given filter
+    method: trace_filter
+    args: ["obj"]

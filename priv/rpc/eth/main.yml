@@ -1,13 +1,13 @@
 ---
-- name: ethereum
-  doc: ethereum RPC and enhanced functionalities
-  type:
-    - type.yml
-  rpc:
-    - rpc/account.yml
-    - rpc/block.yml
-    - rpc/chain.yml
-    - rpc/contract.yml
-    - rpc/net.yml
-    - rpc/trace.yml
-    - rpc/transaction.yml
+name: ethereum
+doc: ethereum RPC and enhanced functionalities
+result:
+  - result/type.yml
+rpc:
+  - rpc/account.yml
+  - rpc/block.yml
+  - rpc/chain.yml
+  - rpc/contract.yml
+  - rpc/net.yml
+  - rpc/trace.yml
+  - rpc/transaction.yml

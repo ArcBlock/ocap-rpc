@@ -1,44 +1,43 @@
 ---
-api:
-  name: Transaction
-  desc: Ethereum transaction related RPC
-  public:
-    - name: get_by_block_hash_and_index
-      desc: Returns information about a transaction by block hash and transaction index position.
-      method: eth_getTransactionByBlockHashAndIndex
-      args: ["block_hash", "idx"]
-      result: transaction
-    - name: get_by_block_number_and_index
-      desc: Returns information about a transaction by block number and transaction index position.
-      method: eth_getTransactionByBlockNumberAndIndex
-      args: ["block_number", "idx"]
-      result: transaction
-    - name: get_by_hash
-      desc: Returns the information about a transaction requested by transaction hash.
-      method: eth_getTransactionByHash
-      args: ["hash"]
-      result: transaction
-    - name: get_receipt
-      desc: Returns the receipt of a transaction by transaction hash. That the receipt is available even for pending transactions.
-      method: eth_getTransactionReceipt
-      args: ["hash"]
-      result: transaction_receipt
-    - name: send_raw
-      desc: Creates new message call transaction or a contract creation for signed transactions. Return the tx hash or zero hahs is tx is not yet available.
-      method: eth_sendRawTransaction
-      args: ["raw_tx"]
-    - name: send
-      desc: Creates new message call transaction or a contract creation, if the data field contains code. The input is an object, see https://wiki.parity.io/JSONRPC-eth-module.html#eth_sendtransaction
-      method: eth_sendTransaction
-      args: ["tx_obj"]
-    - name: sign
-      desc: Signs transactions without dispatching it to the network. It can be later submitted using eth_sendRawTransaction. The input is an object, see https://wiki.parity.io/JSONRPC-eth-module.html#eth_sendtransaction
-      method: eth_signTransaction
-      args: ["tx_obj"]
-      result: sign_result
+name: Transaction
+desc: Ethereum transaction related RPC
+public:
+  - name: get_by_block_hash_and_index
+    desc: Returns information about a transaction by block hash and transaction index position.
+    method: eth_getTransactionByBlockHashAndIndex
+    args: ["block_hash", "idx"]
+    result: transaction
+  - name: get_by_block_number_and_index
+    desc: Returns information about a transaction by block number and transaction index position.
+    method: eth_getTransactionByBlockNumberAndIndex
+    args: ["block_number", "idx"]
+    result: transaction
+  - name: get_by_hash
+    desc: Returns the information about a transaction requested by transaction hash.
+    method: eth_getTransactionByHash
+    args: ["hash"]
+    result: transaction
+  - name: get_receipt
+    desc: Returns the receipt of a transaction by transaction hash. That the receipt is available even for pending transactions.
+    method: eth_getTransactionReceipt
+    args: ["hash"]
+    result: transaction_receipt
+  - name: send_raw
+    desc: Creates new message call transaction or a contract creation for signed transactions. Return the tx hash or zero hahs is tx is not yet available.
+    method: eth_sendRawTransaction
+    args: ["raw_tx"]
+  - name: send
+    desc: Creates new message call transaction or a contract creation, if the data field contains code. The input is an object, see https://wiki.parity.io/JSONRPC-eth-module.html#eth_sendtransaction
+    method: eth_sendTransaction
+    args: ["tx_obj"]
+  - name: sign
+    desc: Signs transactions without dispatching it to the network. It can be later submitted using eth_sendRawTransaction. The input is an object, see https://wiki.parity.io/JSONRPC-eth-module.html#eth_sendtransaction
+    method: eth_signTransaction
+    args: ["tx_obj"]
+    result: sign_result
 
-    - name: trace
-      desc: trace a transaction by its hash
-      method: trace_transaction
-      args: ["hash"]
-      result: transaction_trace
+  - name: trace
+    desc: trace a transaction by its hash
+    method: trace_transaction
+    args: ["hash"]
+    result: transaction_trace

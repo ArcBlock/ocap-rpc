@@ -3,7 +3,6 @@ defmodule OcapRpcTest.EthTx do
   import Mock
   import OcapRpcTest.MockHttp
 
-  alias OcapRpc.Converter
   alias OcapRpc.Eth.Transaction
   alias OcapRpcTest.TestUtils
 

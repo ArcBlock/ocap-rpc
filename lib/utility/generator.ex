@@ -6,12 +6,9 @@ defmodule OcapRpc.Internal.CodeGen do
   alias UtilityBelt.CodeGen.DynamicModule
   require DynamicModule
 
-  def gen(data, type, opts \\ []) do
-    api = Map.get(data, "api")
-    result = Map.get(data, "result", nil)
-
+  def gen(rpc, result, type, opts \\ []) do
     type_name = type |> Atom.to_string() |> Recase.to_pascal()
-    mod_name = DynamicModule.gen_module_name(:ocap_rpc, type_name, Map.get(api, "name"))
+    mod_name = DynamicModule.gen_module_name(:ocap_rpc, type_name, Map.get(rpc, "name"))
 
     code_gen =
       case type do
@@ -25,12 +22,12 @@ defmodule OcapRpc.Internal.CodeGen do
       end
 
     contents =
-      api
+      rpc
       |> Map.get("public")
       |> Enum.map(fn %{"name" => name, "method" => method, "args" => args} = public ->
         doc = Map.get(public, "desc", "Need public interface doc")
-        api_result = Map.get(public, "result", nil)
-        result = merge_result(api_result, result)
+        rpc_result = Map.get(public, "result", nil)
+        result = merge_result(rpc_result, result)
         args = Enum.map(args, fn arg -> String.to_atom(arg) end)
 
         apply(code_gen, :gen_method, [name, method, args, result, doc])
@@ -40,7 +37,7 @@ defmodule OcapRpc.Internal.CodeGen do
       mod_name,
       preamble,
       contents,
-      [{:doc, Map.get(api, "desc", "Need module doc")} | opts]
+      [{:doc, Map.get(rpc, "desc", "Need module doc")} | opts]
     )
   end
 

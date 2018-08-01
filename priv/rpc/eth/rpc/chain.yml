@@ -1,36 +1,35 @@
 ---
-api:
-  name: Chain
-  desc: Ethereum blockchain related RPC
-  public:
-    - name: current_block
-      desc: get most recent block
-      method: eth_blockNumber
-      args: []
-      result: "&to_int(_)"
-    - name: gas_price
-      desc: return current gas price
-      method: eth_gasPrice
-      args: []
-      result: "&to_int(_)"
-    - name: get_work
-      desc: Returns the hash of the current block, the seedHash, and the boundary condition to be met (“target”).
-      method: eth_getWork
-      args: []
-    - name: hash_rate
-      desc: Returns the number of hashes per second that the node is mining with.
-      method: eth_hashrate
-      args: []
-      result: "&to_int(_)"
-    - name: version
-      desc: Returns the current ethereum protocol version.
-      method: eth_protocolVersion
-      args: []
-    - name: call
-      desc: Executes a new message call immediately without creating a transaction on the block chain.
-      method: "eth_call"
-      args: ["obj"]
-    - name: get_logs
-      desc: Returns an array of all logs matching a given filter object.
-      method: "eth_getLogs"
-      args: ["filter_obj"]
+name: Chain
+desc: Ethereum blockchain related RPC
+public:
+  - name: current_block
+    desc: get most recent block
+    method: eth_blockNumber
+    args: []
+    result: "&to_int(_)"
+  - name: gas_price
+    desc: return current gas price
+    method: eth_gasPrice
+    args: []
+    result: "&to_int(_)"
+  - name: get_work
+    desc: Returns the hash of the current block, the seedHash, and the boundary condition to be met (“target”).
+    method: eth_getWork
+    args: []
+  - name: hash_rate
+    desc: Returns the number of hashes per second that the node is mining with.
+    method: eth_hashrate
+    args: []
+    result: "&to_int(_)"
+  - name: version
+    desc: Returns the current ethereum protocol version.
+    method: eth_protocolVersion
+    args: []
+  - name: call
+    desc: Executes a new message call immediately without creating a transaction on the block chain.
+    method: "eth_call"
+    args: ["obj"]
+  - name: get_logs
+    desc: Returns an array of all logs matching a given filter object.
+    method: "eth_getLogs"
+    args: ["filter_obj"]

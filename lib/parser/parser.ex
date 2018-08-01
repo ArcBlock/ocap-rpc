@@ -13,18 +13,14 @@ defmodule OcapRpc.Internal.Parser do
     dir = get_dir(type)
     filename = Path.join(dir, "main.yml")
 
-    filename
-    |> read_one_file()
-    |> Enum.map(fn item ->
-      rpc = read_files(dir, item["rpc"])
-      type = read_files(dir, item["type"])
+    data = read_one_file(filename)
+    rpc = read_files(dir, data["rpc"])
+    result = read_files(dir, data["result"])
 
-      item
-      |> Map.put("rpc", rpc)
-      |> Map.put("type", type)
-      |> Map.take(["name", "doc", "rpc", "type"])
-    end)
-    |> List.flatten()
+    data
+    |> Map.put("rpc", rpc)
+    |> Map.put("result", merge_types(result))
+    |> Map.take(["name", "doc", "rpc", "result"])
   end
 
   def gen_args(args) do
@@ -43,8 +39,6 @@ defmodule OcapRpc.Internal.Parser do
   defp read_one_file(dir, name), do: read_one_file(Path.join(dir, name))
 
   defp read_one_file(filename) do
-    IO.inspect(filename)
-
     case YamlElixir.read_from_file(filename) do
       {:ok, data} ->
         data
@@ -53,5 +47,26 @@ defmodule OcapRpc.Internal.Parser do
         Logger.error("Error when parsing file: #{filename}")
         raise err
     end
+  end
+
+  defp merge_types(types) do
+    types = Enum.reduce(types, %{}, fn item, acc -> Map.merge(acc, item) end)
+    Enum.reduce(types, %{}, fn {k, v}, acc -> Map.put(acc, k, update_type(types, v)) end)
+  end
+
+  defp update_type(types, item) do
+    item
+    |> Enum.into(%{}, fn {k, v} ->
+      result =
+        case is_binary(v) and String.starts_with?(v, "@") do
+          true ->
+            Map.get(types, String.trim_leading(v, "@"))
+
+          _ ->
+            v
+        end
+
+      {k, result}
+    end)
   end
 end
