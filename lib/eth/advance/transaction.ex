@@ -2,6 +2,8 @@ defmodule OcapRpc.Internal.EthTransaction do
   @moduledoc """
   Parse transaction for further information
   """
+  require Logger
+
   alias OcapRpc.Converter
   alias OcapRpc.Internal.Utils
 
@@ -39,7 +41,7 @@ defmodule OcapRpc.Internal.EthTransaction do
 
     case method do
       "transfer" ->
-        [to, value] = args
+        [to, value | _] = args
 
         update_tx(data, data.from, to, value, input_plain)
 
@@ -50,6 +52,15 @@ defmodule OcapRpc.Internal.EthTransaction do
       _ ->
         data
     end
+  rescue
+    e ->
+      Logger.error(
+        "Cannot process input data. Error: #{Exception.message(e)}. Tx hash is #{data.hash}. Input: #{
+          data.input
+        }."
+      )
+
+      update_tx(data, nil, nil, nil, "")
   end
 
   defp update_tx(data, from, to, value, input) do

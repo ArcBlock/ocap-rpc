@@ -58,6 +58,7 @@ defmodule OcapRpc.Converter do
   @doc """
   Convert value to a value with ether system
   """
+  def to_ether(nil), do: 0
   def to_ether(value) when is_binary(value), do: to_int(value) / @ether
   def to_ether(value) when is_integer(value) or is_float(value), do: value / @ether
 
