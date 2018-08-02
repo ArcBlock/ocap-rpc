@@ -28,6 +28,7 @@
     - status: "&to_recepit_status(_)"
     - contract_from: _
     - contract_to: _
+    - contract_value: _
     - input_plain: _
     - fees: "&get_fees(*)"
     - contract_value: "&to_contract_value(*)"

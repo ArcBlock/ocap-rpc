@@ -23,6 +23,7 @@ defmodule OcapRpc.Internal.EthTransaction do
                end)
 
   def parse_input(%{input: "0x"}), do: nil
+  def parse_input(%{input: "0x00"}), do: nil
 
   def parse_input(data) when is_map(data) do
     <<sig::binary-10, rest::binary>> = data.input

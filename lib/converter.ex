@@ -36,6 +36,7 @@ defmodule OcapRpc.Converter do
   Convert hex string to integer
   """
   def to_int(nil), do: 0
+  def to_int(""), do: 0
   def to_int("0x" <> hex), do: to_int(hex)
   def to_int(hex), do: Hexate.to_integer(hex)
 
@@ -86,7 +87,7 @@ defmodule OcapRpc.Converter do
   def get_fees(data) do
     case Map.get(data, :gas_used) do
       nil -> 0
-      gas_used -> gas_used * data.gas_price
+      gas_used -> gas_used * data.gas_price / @gwei
     end
   end
 
@@ -109,7 +110,7 @@ defmodule OcapRpc.Converter do
 
   @block_reward 3.0
   def calc_block_reward(data) do
-    @block_reward + @block_reward * length(data.uncles) / 32 + to_ether(data.fees)
+    @block_reward + @block_reward * length(data.uncles) / 32 + data.fees
   end
 
   def to_contract_value(data), do: EthTransaction.parse_input(data)
