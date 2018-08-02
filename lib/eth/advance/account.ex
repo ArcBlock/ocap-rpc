@@ -15,7 +15,7 @@ defmodule OcapRpc.Internal.EthAccount do
     %{
       balance: Account.balance(address),
       address: address,
-      is_contract: Contract.total_supply(address) != -1
+      is_contract: Contract.total_supply(address) != 0
     }
   end
 

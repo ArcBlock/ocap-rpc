@@ -8,7 +8,14 @@ defmodule OcapRpcTest.MockHttp do
 
   def post(_, data, _, _) do
     data = Jason.decode!(data, keys: :atoms)
-    %{method: method, params: params} = data
+
+    batch? = is_list(data)
+
+    %{method: method, params: params} =
+      case batch? do
+        true -> List.first(data)
+        _ -> data
+      end
 
     data =
       case method do
@@ -27,7 +34,7 @@ defmodule OcapRpcTest.MockHttp do
         _ -> throw("error")
       end
 
-    encode_resp(data)
+    encode_resp(data, batch?)
   end
 
   defp get_block([_, false]), do: TestUtils.block()
@@ -50,7 +57,11 @@ defmodule OcapRpcTest.MockHttp do
 
   defp encode_ether(data), do: Converter.to_hex(data * Converter.ether())
 
-  defp encode_resp(data) do
+  defp encode_resp(data, false) do
     {:ok, %{status_code: 200, body: Jason.encode!(%{"id" => 1, "result" => data})}}
+  end
+
+  defp encode_resp(data, true) do
+    {:ok, %{status_code: 200, body: Jason.encode!([%{"id" => 1, "result" => data}])}}
   end
 end

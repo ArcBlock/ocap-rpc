@@ -1,3 +1,6 @@
+## 0.9.0 (August 01, 2018)
+  - allow fees and reward calculation.
+
 ## 0.8.0 (August 01, 2018)
   - refactor the data type
   - refactor the yaml files

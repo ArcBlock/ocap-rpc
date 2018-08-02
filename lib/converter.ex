@@ -3,6 +3,7 @@ defmodule OcapRpc.Converter do
   Utility functions for convert data
   """
   alias OcapRpc.Eth.Transaction, as: EthTx
+  alias OcapRpc.Internal.EthTransaction
 
   @gwei 1_000_000_000
   @ether @gwei * @gwei
@@ -34,7 +35,7 @@ defmodule OcapRpc.Converter do
   @doc """
   Convert hex string to integer
   """
-  def to_int(nil), do: -1
+  def to_int(nil), do: 0
   def to_int("0x" <> hex), do: to_int(hex)
   def to_int(hex), do: Hexate.to_integer(hex)
 
@@ -56,10 +57,11 @@ defmodule OcapRpc.Converter do
   @doc """
   Convert value to a value with ether system
   """
-  def to_ether(value), do: to_int(value) / @ether
+  def to_ether(value) when is_binary(value), do: to_int(value) / @ether
+  def to_ether(value) when is_integer(value) or is_float(value), do: value / @ether
 
-  def to_supply_amount(""), do: -1
-  def to_supply_amount(nil), do: -1
+  def to_supply_amount(""), do: 0
+  def to_supply_amount(nil), do: 0
   def to_supply_amount(total), do: div(to_int(total), @ether)
 
   @doc """
@@ -83,8 +85,8 @@ defmodule OcapRpc.Converter do
 
   def get_fees(data) do
     case Map.get(data, :gas_used) do
-      nil -> -1
-      gas_used -> to_int(gas_used) * to_int(data.gas_price)
+      nil -> 0
+      gas_used -> gas_used * data.gas_price
     end
   end
 
@@ -96,11 +98,19 @@ defmodule OcapRpc.Converter do
     end
   end
 
-  def calc_block_fees(_data) do
-    -1
+  def calc_block_fees(data) do
+    tx_list = data.transactions
+
+    case is_map(List.first(tx_list)) do
+      true -> Enum.reduce(data.transactions, 0, fn tx, acc -> acc + tx.fees end)
+      _ -> 0
+    end
   end
 
-  def calc_block_reward(_data) do
-    -1
+  @block_reward 3.0
+  def calc_block_reward(data) do
+    @block_reward + @block_reward * length(data.uncles) / 32 + to_ether(data.fees)
   end
+
+  def to_contract_value(data), do: EthTransaction.parse_input(data)
 end
