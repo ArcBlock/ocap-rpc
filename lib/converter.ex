@@ -58,7 +58,7 @@ defmodule OcapRpc.Converter do
   Convert value to a value with ether system
   """
   def to_ether(value) when is_binary(value), do: to_int(value) / @ether
-  def to_ether(value) when is_integer(value), do: value / @ether
+  def to_ether(value) when is_integer(value) or is_float(value), do: value / @ether
 
   def to_supply_amount(""), do: 0
   def to_supply_amount(nil), do: 0
@@ -86,7 +86,7 @@ defmodule OcapRpc.Converter do
   def get_fees(data) do
     case Map.get(data, :gas_used) do
       nil -> 0
-      gas_used -> to_int(gas_used) * to_int(data.gas_price)
+      gas_used -> gas_used * data.gas_price
     end
   end
 
@@ -104,7 +104,7 @@ defmodule OcapRpc.Converter do
     case is_map(List.first(tx_list)) do
       true ->
         Enum.reduce(data.transactions, 0, fn tx, acc ->
-          acc + to_int(tx.gas_used) * to_int(tx.gas_price)
+          acc + tx.fees
         end)
 
       _ ->

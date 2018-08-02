@@ -12,8 +12,6 @@ defmodule OcapRpc.Internal.Extractor do
     do: Enum.map(data, fn item -> process(item, mapping, type) end)
 
   def process(data, mapping, type) do
-    mapping = AtomicMap.convert(mapping, safe: false)
-
     result =
       data
       |> AtomicMap.convert(safe: false)
@@ -74,7 +72,7 @@ defmodule OcapRpc.Internal.Extractor do
     get_in(data, path)
   end
 
-  defp transform(v, data, key) when is_map(v) do
+  defp transform(v, data, key) do
     data
     |> Map.get(key)
     |> Enum.map(&process_data(&1, v))

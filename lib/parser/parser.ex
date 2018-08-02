@@ -50,13 +50,19 @@ defmodule OcapRpc.Internal.Parser do
   end
 
   defp merge_types(types) do
-    types = Enum.reduce(types, %{}, fn item, acc -> Map.merge(acc, item) end)
-    Enum.reduce(types, %{}, fn {k, v}, acc -> Map.put(acc, k, update_type(types, v)) end)
+    types = List.flatten(types)
+
+    Enum.reduce(types, %{}, fn item, acc ->
+      {k, v} = get_kv(item)
+      Map.put(acc, k, update_type(acc, v))
+    end)
   end
 
   defp update_type(types, item) do
     item
-    |> Enum.into(%{}, fn {k, v} ->
+    |> Enum.map(fn item ->
+      {k, v} = get_kv(item)
+
       result =
         case is_binary(v) and String.starts_with?(v, "@") do
           true ->
@@ -66,7 +72,10 @@ defmodule OcapRpc.Internal.Parser do
             v
         end
 
-      {k, result}
+      {String.to_atom(k), result}
     end)
   end
+
+  defp get_kv(map), do: {get_one(map, :keys), get_one(map, :values)}
+  defp get_one(map, type), do: List.first(apply(Map, type, [map]))
 end

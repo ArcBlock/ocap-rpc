@@ -56,7 +56,7 @@ defmodule OcapRpc.Internal.CodeGen do
 
     mod_name = DynamicModule.gen_module_name(:ocap_rpc, type_name, "Type", Recase.to_pascal(name))
 
-    fields = Enum.map(fields, fn {k, _} -> {String.to_atom(k), nil} end)
+    fields = Enum.map(fields, fn {k, _} -> {k, nil} end)
 
     contents =
       quote do

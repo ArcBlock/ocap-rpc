@@ -1,104 +1,107 @@
 ---
-block:
-  author: _
-  miner: _
-  difficulty: _
-  extra_data: _
-  extra_data_plain: "&decode(extra_data)"
-  gas_limit: "&to_int(_)"
-  gas_used: "&to_int(_)"
-  hash: _
-  pre_hash: parent_hash
-  logs_bloom: _
-  mix_hash: _
-  nonce: _
-  height: "&to_int(number)"
-  parent_hash: _
-  receipts_root: _
-  seal_fields: _
-  sha3_uncles: _
-  uncles: _
-  size: "&to_int(_)"
-  state_root: _
-  time: "&to_date(timestamp)"
-  total_difficulty: _
-  transactions_root: _
-  transactions: @transaction
-  fees: "&calc_block_fees(*)"
-  reward: "&calc_block_reward(*)"
+- transaction:
+    - block_hash: _
+    - block_height: "&to_int(block_number)"
+    - from: _
+    - to: _
+    - gas_limit: "&to_int(gas)"
+    - gas_price: "&to_gwei(_)"
+    - hash: _
+    - input: _
+    - nonce: "&to_int(_)"
+    - public_key: _
+    - value: _
+    - index: "&to_int(transaction_index)"
+    - size: "&get_size(raw)"
+    - total: "&to_ether(value)"
+    - raw: _
+    - r: _
+    - v: _
+    - standard_v: "&to_int(_)"
+    - condition: _
+    - creates: _
+    - gas_used: "&to_int(_)"
+    - cumulative_gas_used: "&to_int(_)"
+    - logs: _
+    - logs_bloom: _
+    - root: _
+    - status: "&to_recepit_status(_)"
+    - contract_from: _
+    - contract_to: _
+    - input_plain: _
+    - fees: "&get_fees(*)"
+    - contract_value: "&to_contract_value(*)"
+    - tx_type: "&get_tx_type(*)"
 
-transaction:
-  block_hash: _
-  block_height: "&to_int(block_number)"
-  from: _
-  to: _
-  gas_limit: "&to_int(gas)"
-  gas_price: "&to_gwei(_)"
-  hash: _
-  input: _
-  nonce: "&to_int(_)"
-  public_key: _
-  value: _
-  index: "&to_int(transaction_index)"
-  size: "&get_size(raw)"
-  total: "&to_ether(value)"
-  fees: "&get_fees(*)"
-  raw: _
-  r: _
-  v: _
-  standard_v: "&to_int(_)"
-  condition: _
-  creates: _
-  gas_used: "&to_int(_)"
-  cumulative_gas_used: "&to_int(_)"
-  logs: _
-  logs_bloom: _
-  root: _
-  status: "&to_recepit_status(_)"
-  contract_from: _
-  contract_to: _
-  input_plain: _
-  contract_value: "&to_contract_value(*)"
-  tx_type: "&get_tx_type(*)"
+- block:
+    - author: _
+    - miner: _
+    - difficulty: _
+    - extra_data: _
+    - extra_data_plain: "&decode(extra_data)"
+    - gas_limit: "&to_int(_)"
+    - gas_used: "&to_int(_)"
+    - hash: _
+    - pre_hash: parent_hash
+    - logs_bloom: _
+    - mix_hash: _
+    - nonce: _
+    - height: "&to_int(number)"
+    - parent_hash: _
+    - receipts_root: _
+    - seal_fields: _
+    - sha3_uncles: _
+    - uncles: _
+    - size: "&to_int(_)"
+    - state_root: _
+    - time: "&to_date(timestamp)"
+    - total_difficulty: _
+    - transactions_root: _
+    - transactions: @transaction
+    - fees: "&calc_block_fees(*)"
+    - reward: "&calc_block_reward(*)"
 
-transaction_receipt:
-  block_hash: _
-  block_number: "&to_int(_)"
-  contract_address: _
-  from: _
-  to: _
-  cumulative_gas_used: "&to_int(_)"
-  gas_used: "&to_int(_)"
-  logs: _
-  logsBloom: _
-  root: _
-  status: "&to_recepit_status(_)"
-  transaction_hash: _
-  transaction_index: "&to_int(_)"
+- transaction_receipt:
+    - block_hash: _
+    - block_number: "&to_int(_)"
+    - contract_address: _
+    - from: _
+    - to: _
+    - cumulative_gas_used: "&to_int(_)"
+    - gas_used: "&to_int(_)"
+    - logs: _
+    - logsBloom: _
+    - root: _
+    - status: "&to_recepit_status(_)"
+    - transaction_hash: _
+    - transaction_index: "&to_int(_)"
 
-sign_result:
-  raw: _
-  tx:
-    hash: _
-    nonce: _
-    block_hash: _
-    block_number: _
-    transaction_index: "&to_int(_)"
-    from: _
-    to: _
-    value: "&to_int(_)"
-    gas: "&to_int(_)"
-    gas_price: "&to_gwei(_)"
-    input: _
+- sign_result_tx:
+    - hash: _
+    - nonce: _
+    - block_hash: _
+    - block_number: _
+    - transaction_index: "&to_int(_)"
+    - from: _
+    - to: _
+    - value: "&to_int(_)"
+    - gas: "&to_int(_)"
+    - gas_price: "&to_gwei(_)"
+    - input: _
 
-transaction_trace:
-  call_type: action.callType
-  from: action.from
-  gas_left: "&to_int(action.gas)"
-  input: action.input
-  to: action.to
-  value: "&to_ether(action.value)"
-  output: result.output
-  gas_used: "&to_int(result.gasUsed)"
-  trace_address: _
-  error: _
+- sign_result:
+    - raw: _
+    - tx: @sign_result_tx
+
+
+- transaction_trace:
+    - call_type: action.callType
+    - from: action.from
+    - gas_left: "&to_int(action.gas)"
+    - input: action.input
+    - to: action.to
+    - value: "&to_ether(action.value)"
+    - output: result.output
+    - gas_used: "&to_int(result.gasUsed)"
+    - trace_address: _
+    - error: _
