@@ -102,13 +102,8 @@ defmodule OcapRpc.Converter do
     tx_list = data.transactions
 
     case is_map(List.first(tx_list)) do
-      true ->
-        Enum.reduce(data.transactions, 0, fn tx, acc ->
-          acc + tx.fees
-        end)
-
-      _ ->
-        0
+      true -> Enum.reduce(data.transactions, 0, fn tx, acc -> acc + tx.fees end)
+      _ -> 0
     end
   end
 
