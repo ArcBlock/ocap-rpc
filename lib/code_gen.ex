@@ -9,7 +9,10 @@ defmodule OcapRpc.Internal do
   |> Enum.flat_map(fn token ->
     data = Parser.read_main(token)
 
-    data["rpc"]
-    |> Enum.map(&CodeGen.gen(&1, data["result"], token, path: Path.join(path, "rpc")))
+    Enum.map(data["result"], fn {name, fields} ->
+      CodeGen.gen_type(name, fields, token, path: Path.join(path, "type"))
+    end)
+
+    Enum.map(data["rpc"], &CodeGen.gen(&1, data["result"], token, path: Path.join(path, "rpc")))
   end)
 end

@@ -30,7 +30,13 @@ defmodule OcapRpc.Internal.CodeGen do
         result = merge_result(rpc_result, result)
         args = Enum.map(args, fn arg -> String.to_atom(arg) end)
 
-        apply(code_gen, :gen_method, [name, method, args, result, doc])
+        type =
+          case result != rpc_result do
+            true -> rpc_result
+            false -> nil
+          end
+
+        apply(code_gen, :gen_method, [name, method, args, result, [doc: doc, type: type]])
       end)
 
     DynamicModule.gen(
@@ -41,10 +47,34 @@ defmodule OcapRpc.Internal.CodeGen do
     )
   end
 
-  defp merge_result(api_result, base_result) do
-    case base_result != nil and is_binary(api_result) do
-      true -> Map.get(base_result, api_result, api_result)
-      _ -> api_result
+  def gen_type(name, fields, type, opts \\ []) do
+    type_name = type |> Atom.to_string() |> Recase.to_pascal()
+
+    preamble =
+      quote do
+      end
+
+    mod_name = DynamicModule.gen_module_name(:ocap_rpc, type_name, "Type", Recase.to_pascal(name))
+
+    fields = Enum.map(fields, fn {k, _} -> {String.to_atom(k), nil} end)
+
+    contents =
+      quote do
+        defstruct unquote(fields)
+      end
+
+    DynamicModule.gen(
+      mod_name,
+      preamble,
+      contents,
+      [{:doc, false} | opts]
+    )
+  end
+
+  defp merge_result(rpc_result, base_result) do
+    case base_result != nil and is_binary(rpc_result) do
+      true -> Map.get(base_result, rpc_result, rpc_result)
+      _ -> rpc_result
     end
   end
 end

@@ -13,23 +13,6 @@ defmodule OcapRpc.Internal.Erc20 do
     ctxc: "0xea11755ae41d889ceec39a63e6ff75a02bc1c00d"
   }
 
-  @method_sigs [
-                 "approve(address,uint256)",
-                 "transferFrom(address,address,uint256)",
-                 "unpause()",
-                 "decreaseApproval(address,uint256)",
-                 "pause()",
-                 "transfer(address,uint256)",
-                 "increaseApproval(address,uint256)",
-                 "transferOwnership(address)"
-               ]
-               |> Enum.reduce(%{}, fn name, acc ->
-                 sig = "0x" <> Utils.get_method_sig(name)
-                 fn_name = name |> String.split("(") |> List.first()
-                 arity = name |> String.split(",") |> length()
-                 Map.put(acc, sig, {fn_name, arity, name})
-               end)
-
   def balance_of(nil, _), do: 0
 
   def balance_of(token, from) when is_atom(token) do
@@ -90,64 +73,9 @@ defmodule OcapRpc.Internal.Erc20 do
     |> ProperCase.to_camel_case()
     |> get_logs()
     |> Enum.map(fn item -> get_tx(item["transactionHash"]) end)
-    |> post_processing()
   end
 
   defp get_tx(hash), do: EthRpc.request("eth_getTransactionByHash", [hash])
   defp call(data), do: EthRpc.request("eth_call", [data])
   defp get_logs(data), do: EthRpc.request("eth_getLogs", [data])
-
-  defp post_processing(data) when is_list(data) do
-    data
-    |> Enum.reject(&is_nil/1)
-    |> Enum.map(&post_processing/1)
-  end
-
-  defp post_processing(%{"input" => "0x"} = data), do: data
-
-  defp post_processing(data) when is_map(data) do
-    <<sig::binary-10, rest::binary>> = data["input"]
-
-    {method, _arity, fn_sig} =
-      case Map.get(@method_sigs, sig) do
-        nil -> {"unknownMethod", 0, "n/a"}
-        v -> v
-      end
-
-    args = get_args(rest)
-    input_plain = get_input_plain(fn_sig, sig, args)
-
-    case method do
-      "transfer" ->
-        [to, value] = args
-
-        update_tx(data, data["from"], to, value, input_plain)
-
-      "transferFrom" ->
-        [from, to, value] = args
-        update_tx(data, from, to, value, input_plain)
-
-      _ ->
-        data
-    end
-  end
-
-  defp update_tx(data, from, to, value, input) do
-    data
-    |> Map.put("contractFrom", from)
-    |> Map.put("contractTo", to)
-    |> Map.put("contractValue", value)
-    |> Map.put("inputPlain", input)
-  end
-
-  defp get_input_plain(fn_sig, sig, args) do
-    args
-    |> Enum.with_index()
-    |> Enum.reduce("Function: #{fn_sig}\nMethodID: #{sig}", fn {item, idx}, acc ->
-      acc <> "\n[#{idx}]: #{item}"
-    end)
-  end
-
-  defp get_args(data),
-    do: for(<<arg::binary-64 <- data>>, do: "0x" <> (arg |> String.trim_leading("0")))
 end
