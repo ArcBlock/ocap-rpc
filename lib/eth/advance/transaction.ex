@@ -54,7 +54,7 @@ defmodule OcapRpc.Internal.EthTransaction do
     end
   rescue
     e ->
-      Logger.error(
+      Logger.warn(
         "Cannot process input data. Error: #{Exception.message(e)}. Tx hash is #{data.hash}. Input: #{
           data.input
         }."
