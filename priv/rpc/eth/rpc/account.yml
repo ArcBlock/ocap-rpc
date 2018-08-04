@@ -21,13 +21,13 @@ public:
     desc: calculates an Ethereum specific signature.
     method: eth_sign
     args: ["address", "data"]
-  - name: tx_sent
+  - name: txs_sent
     desc: Return a list of transactions sent by this account
-    method: eth_account_tx_sent
+    method: eth_account_txs_sent
     args: ["address", "num_blocks", "block_offset"]
-  - name: tx_received
+  - name: txs_received
     desc: Return a list of transactions received by this account
-    method: eth_account_tx_received
+    method: eth_account_txs_received
     args: ["address", "num_blocks", "block_offset"]
   - name: get_by_address
     desc: get account details by address
