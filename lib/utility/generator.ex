@@ -55,12 +55,22 @@ defmodule OcapRpc.Internal.CodeGen do
       end
 
     mod_name = DynamicModule.gen_module_name(:ocap_rpc, type_name, "Type", Recase.to_pascal(name))
+    mod_atom_name = String.to_atom("Elixir.#{mod_name}")
 
     fields = Enum.map(fields, fn {k, _} -> {k, nil} end)
 
     contents =
       quote do
+        @derive Jason.Encoder
         defstruct unquote(fields)
+
+        def encode(data) do
+          Jason.encode!(data)
+        end
+
+        def decode(data) do
+          struct(unquote(mod_atom_name), Jason.decode!(data, keys: :atoms))
+        end
       end
 
     DynamicModule.gen(
