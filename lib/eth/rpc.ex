@@ -63,7 +63,7 @@ defmodule OcapRpc.Internal.EthRpc do
           receipts = request("eth_getTransactionReceipt", [hashes])
 
           for {tx, receipt} <- Enum.zip(tx_list, receipts) do
-            Map.merge(receipt, tx)
+            Map.merge((is_nil(receipt) && %{}) || receipt, tx)
           end
 
         _ ->
