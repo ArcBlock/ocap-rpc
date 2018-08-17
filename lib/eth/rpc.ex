@@ -3,27 +3,25 @@ defmodule OcapRpc.Internal.EthRpc do
   RPC request to ethereum parity server
   """
   require Logger
+  use Tesla
 
-  @headers %{
-    "Content-Type" => "application/json"
-  }
+  @headers [{"content-type", "application/json"}]
+  plug(Tesla.Middleware.Headers, @headers)
+
+  @options [timeout: 30_000, recv_timeout: 20_000]
+  plug(Tesla.Middleware.Opts, @options)
 
   def request(method, args) do
-    config = Application.get_env(:ocap_rpc, :eth)
-    %{hostname: hostname, port: port} = Keyword.get(config, :conn)
+    %{hostname: hostname, port: port} =
+      :ocap_rpc |> Application.get_env(:eth) |> Keyword.get(:conn)
 
     body = get_body(method, args)
     # Logger.debug("Ethereum RPC request for: #{inspect(body)}}")
-
-    options = [timeout: 30_000, recv_timeout: 20_000]
-
-    case HTTPoison.post(
-           "http://#{hostname}:#{to_string(port)}/",
-           Poison.encode!(body),
-           @headers,
-           options
+    case post(
+           "http://#{hostname}:#{to_string(port)}",
+           Jason.encode!(body)
          ) do
-      {:ok, %{status_code: 200, body: body}} ->
+      {:ok, %{status: 200, body: body}} ->
         case Jason.decode!(body) do
           %{"id" => _, "result" => result} -> result
           [_ | _] = data -> process_batch_result(data)
@@ -63,7 +61,7 @@ defmodule OcapRpc.Internal.EthRpc do
           receipts = request("eth_getTransactionReceipt", [hashes])
 
           for {tx, receipt} <- Enum.zip(tx_list, receipts) do
-            Map.merge((is_nil(receipt) && %{}) || receipt, tx)
+            Map.merge(receipt || %{}, tx)
           end
 
         _ ->
