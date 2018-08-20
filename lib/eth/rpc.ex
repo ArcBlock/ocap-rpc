@@ -2,25 +2,32 @@ defmodule OcapRpc.Internal.EthRpc do
   @moduledoc """
   RPC request to ethereum parity server
   """
-  require Logger
   use Tesla
+  require Logger
+
+  plug(Tesla.Middleware.Retry, delay: 500, max_retries: 3)
 
   @headers [{"content-type", "application/json"}]
   plug(Tesla.Middleware.Headers, @headers)
 
-  @options [timeout: 30_000, recv_timeout: 20_000]
-  plug(Tesla.Middleware.Opts, @options)
+  # TODO(lei): when tesla not compatible issue solved: `https://github.com/teamon/tesla/issues/157`
+  if Application.get_env(:ocap_rpc, :env) not in [:test] do
+    plug(Tesla.Middleware.Timeout, timeout: 5_000)
+  end
 
-  def request(method, args) do
+  def rpc_request(method, args) do
     %{hostname: hostname, port: port} =
       :ocap_rpc |> Application.get_env(:eth) |> Keyword.get(:conn)
 
     body = get_body(method, args)
     # Logger.debug("Ethereum RPC request for: #{inspect(body)}}")
-    case post(
-           "http://#{hostname}:#{to_string(port)}",
-           Jason.encode!(body)
-         ) do
+    result =
+      post(
+        "http://#{hostname}:#{to_string(port)}",
+        Jason.encode!(body)
+      )
+
+    case result do
       {:ok, %{status: 200, body: body}} ->
         case Jason.decode!(body) do
           %{"id" => _, "result" => result} -> result
@@ -45,7 +52,7 @@ defmodule OcapRpc.Internal.EthRpc do
   # private functions
 
   defp get_tx_receipt(resp) do
-    receipt = request("eth_getTransactionReceipt", [resp["hash"]])
+    receipt = rpc_request("eth_getTransactionReceipt", [resp["hash"]])
     Map.merge(receipt, resp)
   end
 
@@ -58,7 +65,7 @@ defmodule OcapRpc.Internal.EthRpc do
         true ->
           hashes = Enum.map(tx_list, fn tx -> [tx["hash"]] end)
 
-          receipts = request("eth_getTransactionReceipt", [hashes])
+          receipts = rpc_request("eth_getTransactionReceipt", [hashes])
 
           for {tx, receipt} <- Enum.zip(tx_list, receipts) do
             Map.merge(receipt || %{}, tx)

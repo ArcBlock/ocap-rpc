@@ -1,15 +1,16 @@
 defmodule OcapRpcTest.EthBlock do
   use ExUnit.Case
   import Tesla.Mock
-  import OcapRpcTest.MockHttp
 
   alias OcapRpc.Converter
   alias OcapRpc.Eth.Block
+
+  alias OcapRpcTest.MockHttp
   alias OcapRpcTest.TestUtils
 
   setup do
     mock(fn %{method: :post, body: body} ->
-      json(post(body))
+      json(MockHttp.post(body))
     end)
 
     :ok

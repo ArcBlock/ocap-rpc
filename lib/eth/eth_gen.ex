@@ -44,7 +44,7 @@ defmodule OcapRpc.Internal.EthCodeGen do
         values = Enum.map(unquote(args), fn k -> Keyword.get(binding(), k) end)
 
         unquote(method)
-        |> EthRpc.request(values)
+        |> EthRpc.rpc_request(values)
         |> EthRpc.resp_hook(unquote(action))
         |> Extractor.process(unquote(Macro.escape(result)), unquote(mod_type))
       end

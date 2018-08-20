@@ -15,7 +15,7 @@ defmodule OcapRpc.Internal.BtcCodeGen do
       def unquote(String.to_atom(name))(unquote_splicing(Parser.gen_args(args))) do
         args = Enum.map(binding(), fn {_, v} -> v end)
 
-        response = BtcRpc.request(unquote(method), args)
+        response = BtcRpc.rpc_request(unquote(method), args)
         Extractor.process(response, unquote(Macro.escape(result)))
       end
     end

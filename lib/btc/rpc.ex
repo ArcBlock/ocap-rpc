@@ -5,10 +5,7 @@ defmodule OcapRpc.Internal.BtcRpc do
   require Logger
   use Tesla
 
-  @options [timeout: 30_000, recv_timeout: 20_000]
-  plug(Tesla.Middleware.Opts, @options)
-
-  def request(method, params) when is_atom(method) do
+  def rpc_request(method, params) when is_atom(method) do
     config = Application.get_env(:ex_bitcoin, :conn)
     %{hostname: hostname, port: port, user: user, password: password} = config
 
@@ -20,11 +17,14 @@ defmodule OcapRpc.Internal.BtcRpc do
 
     headers = [Authorization: "Basic " <> Base.encode64(user <> ":" <> password)]
 
-    case post(
-           "http://#{hostname}:#{to_string(port)}/",
-           Jason.encode!(data),
-           headers
-         ) do
+    result =
+      post(
+        "http://#{hostname}:#{to_string(port)}/",
+        Jason.encode!(data),
+        headers
+      )
+
+    case result do
       {:ok, %{status: 200, body: body}} ->
         %{"error" => nil, "result" => result} = Jason.decode!(body)
         {:ok, result}
