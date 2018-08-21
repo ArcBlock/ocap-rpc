@@ -5,12 +5,12 @@ Provide basic RPC functionalities for various Chain, in elixir way.
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `ex_bitcoin` to your list of dependencies in `mix.exs`:
+by adding `ocap_rpc` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:ex_bitcoin, "~> 0.1.0"}
+    {:ocap_rpc, "~> 0.0.0"}
   ]
 end
 ```
