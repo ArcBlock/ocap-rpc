@@ -1,3 +1,6 @@
+## 0.9.7 (August 21, 2018)
+  - Fix the readme.md
+
 ## 0.9.0 (August 01, 2018)
   - allow fees and reward calculation.
 
