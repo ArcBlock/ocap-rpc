@@ -2,28 +2,33 @@ defmodule OcapRpc.Internal.EthRpc do
   @moduledoc """
   RPC request to ethereum parity server
   """
+  use Tesla
   require Logger
 
-  @headers %{
-    "Content-Type" => "application/json"
-  }
+  plug(Tesla.Middleware.Retry, delay: 500, max_retries: 3)
 
-  def request(method, args) do
-    config = Application.get_env(:ocap_rpc, :eth)
-    %{hostname: hostname, port: port} = Keyword.get(config, :conn)
+  @headers [{"content-type", "application/json"}]
+  plug(Tesla.Middleware.Headers, @headers)
+
+  # TODO(lei): when tesla not compatible issue solved: `https://github.com/teamon/tesla/issues/157`
+  if Application.get_env(:ocap_rpc, :env) not in [:test] do
+    plug(Tesla.Middleware.Timeout, timeout: 5_000)
+  end
+
+  def call(method, args) do
+    %{hostname: hostname, port: port} =
+      :ocap_rpc |> Application.get_env(:eth) |> Keyword.get(:conn)
 
     body = get_body(method, args)
     # Logger.debug("Ethereum RPC request for: #{inspect(body)}}")
+    result =
+      post(
+        "http://#{hostname}:#{to_string(port)}",
+        Jason.encode!(body)
+      )
 
-    options = [timeout: 30_000, recv_timeout: 20_000]
-
-    case HTTPoison.post(
-           "http://#{hostname}:#{to_string(port)}/",
-           Poison.encode!(body),
-           @headers,
-           options
-         ) do
-      {:ok, %{status_code: 200, body: body}} ->
+    case result do
+      {:ok, %{status: 200, body: body}} ->
         case Jason.decode!(body) do
           %{"id" => _, "result" => result} -> result
           [_ | _] = data -> process_batch_result(data)
@@ -47,7 +52,7 @@ defmodule OcapRpc.Internal.EthRpc do
   # private functions
 
   defp get_tx_receipt(resp) do
-    receipt = request("eth_getTransactionReceipt", [resp["hash"]])
+    receipt = call("eth_getTransactionReceipt", [resp["hash"]])
     Map.merge(receipt, resp)
   end
 
@@ -60,10 +65,10 @@ defmodule OcapRpc.Internal.EthRpc do
         true ->
           hashes = Enum.map(tx_list, fn tx -> [tx["hash"]] end)
 
-          receipts = request("eth_getTransactionReceipt", [hashes])
+          receipts = call("eth_getTransactionReceipt", [hashes])
 
           for {tx, receipt} <- Enum.zip(tx_list, receipts) do
-            Map.merge(receipt, tx)
+            Map.merge(receipt || %{}, tx)
           end
 
         _ ->

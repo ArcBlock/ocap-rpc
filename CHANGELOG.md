@@ -1,3 +1,10 @@
+## 0.10.0 (August 16, 2018)
+  - replace httpoison with tesla
+  - add retry support
+
+## 0.9.7 (August 10, 2018)
+  - fix sentry issue
+
 ## 0.9.0 (August 01, 2018)
   - allow fees and reward calculation.
 
@@ -27,5 +34,3 @@
 
 
 ## 0.2.0 (July 26, 2018)
-
-

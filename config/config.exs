@@ -23,4 +23,7 @@ config :ocap_rpc, :btc,
   },
   chunk_size: 1000
 
+config :ocap_rpc,
+  env: Mix.env()
+
 import_config "#{Mix.env()}.exs"
