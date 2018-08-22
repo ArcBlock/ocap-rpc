@@ -75,7 +75,7 @@ defmodule OcapRpc.Internal.Erc20 do
     |> Enum.map(fn item -> get_tx(item["transactionHash"]) end)
   end
 
-  defp get_tx(hash), do: EthRpc.rpc_request("eth_getTransactionByHash", [hash])
-  defp call(data), do: EthRpc.rpc_request("eth_call", [data])
-  defp get_logs(data), do: EthRpc.rpc_request("eth_getLogs", [data])
+  defp get_tx(hash), do: EthRpc.call("eth_getTransactionByHash", [hash])
+  defp call(data), do: EthRpc.call("eth_call", [data])
+  defp get_logs(data), do: EthRpc.call("eth_getLogs", [data])
 end

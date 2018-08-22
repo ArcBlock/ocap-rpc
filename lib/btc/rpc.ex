@@ -5,7 +5,7 @@ defmodule OcapRpc.Internal.BtcRpc do
   require Logger
   use Tesla
 
-  def rpc_request(method, params) when is_atom(method) do
+  def call(method, params) when is_atom(method) do
     config = Application.get_env(:ex_bitcoin, :conn)
     %{hostname: hostname, port: port, user: user, password: password} = config
 

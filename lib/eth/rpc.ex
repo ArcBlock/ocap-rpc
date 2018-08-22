@@ -15,7 +15,7 @@ defmodule OcapRpc.Internal.EthRpc do
     plug(Tesla.Middleware.Timeout, timeout: 5_000)
   end
 
-  def rpc_request(method, args) do
+  def call(method, args) do
     %{hostname: hostname, port: port} =
       :ocap_rpc |> Application.get_env(:eth) |> Keyword.get(:conn)
 
@@ -52,7 +52,7 @@ defmodule OcapRpc.Internal.EthRpc do
   # private functions
 
   defp get_tx_receipt(resp) do
-    receipt = rpc_request("eth_getTransactionReceipt", [resp["hash"]])
+    receipt = call("eth_getTransactionReceipt", [resp["hash"]])
     Map.merge(receipt, resp)
   end
 
@@ -65,7 +65,7 @@ defmodule OcapRpc.Internal.EthRpc do
         true ->
           hashes = Enum.map(tx_list, fn tx -> [tx["hash"]] end)
 
-          receipts = rpc_request("eth_getTransactionReceipt", [hashes])
+          receipts = call("eth_getTransactionReceipt", [hashes])
 
           for {tx, receipt} <- Enum.zip(tx_list, receipts) do
             Map.merge(receipt || %{}, tx)
