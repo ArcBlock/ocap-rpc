@@ -5,6 +5,8 @@ defmodule OcapRpc.Internal.EthRpc do
   use Tesla
   require Logger
 
+  alias OcapRpc.Converter
+
   plug(Tesla.Middleware.Retry, delay: 500, max_retries: 3)
 
   @headers [{"content-type", "application/json"}]
@@ -92,7 +94,7 @@ defmodule OcapRpc.Internal.EthRpc do
   defp encode_single(method, args) do
     %{
       method: method,
-      params: args,
+      params: encode_params(args),
       id: 1,
       jsonrpc: "2.0"
     }
@@ -105,12 +107,22 @@ defmodule OcapRpc.Internal.EthRpc do
     |> Enum.map(fn {item, idx} ->
       %{
         method: method,
-        params: item,
+        params: encode_params(item),
         id: idx,
         jsonrpc: "2.0"
       }
     end)
   end
+
+  defp encode_params(args) when is_list(args), do: Enum.map(args, &encode_params/1)
+
+  defp encode_params(args) when is_map(args),
+    do: Enum.reduce(args, %{}, fn {k, v}, acc -> Map.put(acc, k, encode_params(v)) end)
+
+  defp encode_params(arg) when is_integer(arg), do: Converter.to_hex(arg)
+  defp encode_params("0x" <> _ = arg), do: arg
+  defp encode_params(arg) when is_binary(arg), do: "0x" <> arg
+  defp encode_params(arg), do: arg
 
   defp handle_error(code, msg) do
     Logger.error("Parity RPC error: #{code}: #{msg}")

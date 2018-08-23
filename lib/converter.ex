@@ -43,7 +43,7 @@ defmodule OcapRpc.Converter do
   @doc """
   Convert integer to hex string
   """
-  def to_hex(data), do: "0x" <> (data |> Hexate.encode())
+  def to_hex(data), do: data |> Hexate.encode()
 
   @doc """
   Call parity RPC trace function and return the result
@@ -74,6 +74,17 @@ defmodule OcapRpc.Converter do
   def to_code(code), do: code
 
   @doc """
+  Strip 0x for strings
+  """
+  def strip("0x" <> data), do: data
+  def strip(data) when is_list(data), do: Enum.map(data, &strip/1)
+
+  def strip(data) when is_map(data),
+    do: Enum.reduce(data, %{}, fn {k, v}, acc -> Map.put(acc, k, strip(v)) end)
+
+  def strip(data), do: data
+
+  @doc """
   Convert receipt status to integer
   """
   def to_recepit_status(nil), do: 1
@@ -84,6 +95,11 @@ defmodule OcapRpc.Converter do
   """
   def get_size("0x" <> data), do: get_size(data)
   def get_size(data), do: div(String.length(data), 2)
+
+  @doc """
+  Get length of array data
+  """
+  def len(data), do: length(data)
 
   def get_fees(data) do
     case Map.get(data, :gas_used) do
@@ -104,15 +120,36 @@ defmodule OcapRpc.Converter do
     tx_list = data.transactions
 
     case is_map(List.first(tx_list)) do
-      true -> Enum.reduce(data.transactions, 0, fn tx, acc -> acc + tx.fees end)
+      true -> Enum.reduce(tx_list, 0, fn tx, acc -> acc + tx.fees end)
       _ -> 0
     end
   end
 
-  @block_reward 3.0
+  def calc_block_total(data) do
+    tx_list = data.transactions
+
+    case is_map(List.first(tx_list)) do
+      true -> Enum.reduce(tx_list, 0, fn tx, acc -> acc + tx.total end)
+      _ -> 0
+    end
+  end
+
+  @block_reward 3
   def calc_block_reward(data) do
+    # TODO: for different height reward would be different
     @block_reward + @block_reward * length(data.uncles) / 32 + data.fees
   end
 
   def to_contract_value(data), do: EthTransaction.parse_input(data)
+
+  def calc_internal_txs(data) do
+    case data.tx_type do
+      "contract_execution" ->
+        [_ | rest] = EthTx.trace(data.hash)
+        rest
+
+      _ ->
+        nil
+    end
+  end
 end

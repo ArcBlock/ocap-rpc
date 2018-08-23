@@ -7,10 +7,10 @@ defmodule OcapRpc.Internal.Erc20 do
   alias OcapRpc.Internal.{EthRpc, Utils}
 
   @contract_addrs %{
-    abt: "0xB98d4C97425d9908E66E53A6fDf673ACcA0BE986",
-    ae: "0x5ca9a71b1d01849c0a95490cc00559717fcf0d1d",
-    aion: "0x4CEdA7906a5Ed2179785Cd3A40A69ee8bc99C466",
-    ctxc: "0xea11755ae41d889ceec39a63e6ff75a02bc1c00d"
+    abt: "B98d4C97425d9908E66E53A6fDf673ACcA0BE986",
+    ae: "5ca9a71b1d01849c0a95490cc00559717fcf0d1d",
+    aion: "4CEdA7906a5Ed2179785Cd3A40A69ee8bc99C466",
+    ctxc: "ea11755ae41d889ceec39a63e6ff75a02bc1c00d"
   }
 
   def balance_of(nil, _), do: 0

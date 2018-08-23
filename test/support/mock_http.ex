@@ -2,6 +2,7 @@ defmodule OcapRpcTest.MockHttp do
   @moduledoc false
   # credo:disable-for-this-file
   alias OcapRpcTest.TestUtils
+
   alias OcapRpc.Converter
 
   @abt_addr "0xB98d4C97425d9908E66E53A6fDf673ACcA0BE986"
