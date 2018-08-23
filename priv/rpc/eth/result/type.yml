@@ -75,7 +75,7 @@
     - logsBloom: "&strip(_)"
     - root: "&strip(_)"
     - status: "&to_recepit_status(_)"
-    - transaction_hash: _
+    - transaction_hash: "&strip(_)"
     - transaction_index: "&to_int(_)"
 
 - sign_result_tx:
