@@ -21,4 +21,7 @@ config :ocap_rpc, :btc,
     port: 8332
   }
 
+config :ocap_rpc,
+  env: Mix.env()
+
 import_config "#{Mix.env()}.exs"

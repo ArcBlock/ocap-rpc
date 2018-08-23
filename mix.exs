@@ -39,7 +39,7 @@ defmodule OcapRpc.MixProject do
       {:atomic_map, "~> 0.9"},
       {:decimal, "~> 1.1"},
       {:hexate, ">= 0.6.0"},
-      {:httpoison, "~> 1.0"},
+      {:tesla, "~> 1.0.0"},
       {:jason, "~> 1.1"},
       {:keccakf1600, "~> 2.0", hex: :keccakf1600_orig, override: true},
       {:proper_case, "~> 1.2.0"},

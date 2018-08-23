@@ -6,7 +6,7 @@ defmodule OcapRpcTest.MockHttp do
 
   @abt_addr "0xB98d4C97425d9908E66E53A6fDf673ACcA0BE986"
 
-  def post(_, data, _, _) do
+  def post(data) do
     data = Jason.decode!(data, keys: :atoms)
 
     batch? = is_list(data)
@@ -58,10 +58,10 @@ defmodule OcapRpcTest.MockHttp do
   defp encode_ether(data), do: Converter.to_hex(data * Converter.ether())
 
   defp encode_resp(data, false) do
-    {:ok, %{status_code: 200, body: Jason.encode!(%{"id" => 1, "result" => data})}}
+    %{"id" => 1, "result" => data}
   end
 
   defp encode_resp(data, true) do
-    {:ok, %{status_code: 200, body: Jason.encode!([%{"id" => 1, "result" => data}])}}
+    [%{"id" => 1, "result" => data}]
   end
 end
