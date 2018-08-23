@@ -83,7 +83,7 @@ defmodule OcapRpc.Converter do
   @doc """
   Convert receipt status to integer
   """
-  def to_recepit_status(nil), do: 0
+  def to_recepit_status(nil), do: 1
   def to_recepit_status(status), do: to_int(status)
 
   @doc """
