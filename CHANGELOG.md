@@ -1,3 +1,6 @@
+## 0.10.2 (August 23, 2018)
+  - fix various issues and use wei in all values
+
 ## 0.10.0 (August 16, 2018)
   - replace httpoison with tesla
   - add retry support
