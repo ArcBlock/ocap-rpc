@@ -5,15 +5,40 @@ Provide basic RPC functionalities for various Chain, in elixir way.
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `ex_bitcoin` to your list of dependencies in `mix.exs`:
+by adding `ocap_rpc` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:ex_bitcoin, "~> 0.1.0"}
+    {:ocap_rpc, "~> 0.0.0"}
   ]
 end
 ```
+
+## Configuration
+
+```elixir
+config :ocap_rpc, :eth,
+  conn: %{
+    hostname: "localhost",
+    port: 8545
+  }
+
+config :ocap_rpc, :btc,
+  conn: %{
+    hostname: "localhost",
+    port: 8332
+  }
+```
+
+## Environment Variable Dependencies
+
+To let ocap_rpc work correctly, please make sure you have following environment variables set in runtime environment.
+
+  - BTC_RPC_HOST
+  - BTC_RPC_USER
+  - BTC_RPC_PASS
+  - ETH_RPC_HOST
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
