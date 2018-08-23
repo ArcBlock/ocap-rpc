@@ -13,7 +13,7 @@
     # - value: _
     - index: "&to_int(transaction_index)"
     - size: "&get_size(raw)"
-    - total: "&to_int(value)"
+    - total: "&to_ether(value)"
     - raw: "&strip(_)"
     - r: "&strip(_)"
     - v: "&strip(_)"
