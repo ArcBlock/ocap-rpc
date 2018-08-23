@@ -5,7 +5,7 @@
     - from: "&strip(_)"
     - to: "&strip(_)"
     - gas_limit: "&to_int(gas)"
-    - gas_price: "&to_int(_)"
+    - gas_price: "&to_gwei(_)"
     - hash: "&strip(_)"
     - input: "&strip(_)"
     - nonce: "&to_int(_)"
@@ -88,7 +88,7 @@
     - to: "&strip(_)"
     - value: "&to_int(_)"
     - gas: "&to_int(_)"
-    - gas_price: "&to_int(_)"
+    - gas_price: "&to_gwei(_)"
     - input: "&strip(_)"
 
 - sign_result:

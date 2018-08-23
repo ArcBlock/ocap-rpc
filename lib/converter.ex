@@ -104,7 +104,7 @@ defmodule OcapRpc.Converter do
   def get_fees(data) do
     case Map.get(data, :gas_used) do
       nil -> 0
-      gas_used -> gas_used * data.gas_price / @ether
+      gas_used -> gas_used * data.gas_price / @gwei
     end
   end
 
