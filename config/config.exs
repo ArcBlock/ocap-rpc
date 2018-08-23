@@ -13,15 +13,13 @@ config :ocap_rpc, :eth,
   conn: %{
     hostname: "localhost",
     port: 8545
-  },
-  chunk_size: 1000
+  }
 
 config :ocap_rpc, :btc,
   conn: %{
     hostname: "localhost",
     port: 8332
-  },
-  chunk_size: 1000
+  }
 
 config :ocap_rpc,
   env: Mix.env()
