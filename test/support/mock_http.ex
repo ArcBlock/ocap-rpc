@@ -3,6 +3,8 @@ defmodule OcapRpcTest.MockHttp do
   # credo:disable-for-this-file
   alias OcapRpcTest.TestUtils
 
+  alias OcapRpc.Converter
+
   @abt_addr "0xB98d4C97425d9908E66E53A6fDf673ACcA0BE986"
 
   def post(data) do
@@ -18,7 +20,7 @@ defmodule OcapRpcTest.MockHttp do
 
     data =
       case method do
-        "eth_getBalance" -> TestUtils.user_balance()
+        "eth_getBalance" -> TestUtils.user_balance() |> encode_ether()
         "eth_getCode" -> ""
         "eth_getBlockByHash" -> get_block(params)
         "eth_getBlockByNumber" -> get_block(params)
@@ -48,11 +50,13 @@ defmodule OcapRpcTest.MockHttp do
   defp get_tx(_), do: TestUtils.tx()
 
   defp eth_call([%{data: _, from: _, to: @abt_addr}]),
-    do: TestUtils.user_balance()
+    do: TestUtils.user_balance() |> encode_ether()
 
   defp eth_call([%{data: _, to: @abt_addr}]), do: TestUtils.abt_supply()
 
   defp eth_log([%{topics: _, address: @abt_addr}]), do: [TestUtils.tx()]
+
+  defp encode_ether(data), do: Converter.to_hex(data * Converter.ether())
 
   defp encode_resp(data, false) do
     %{"id" => 1, "result" => data}

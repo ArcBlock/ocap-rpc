@@ -18,17 +18,17 @@ defmodule OcapRpc.Internal.EthTransaction do
                  "transferOwnership(address)"
                ]
                |> Enum.reduce(%{}, fn name, acc ->
-                 sig = "0x" <> Utils.get_method_sig(name)
+                 sig = Utils.get_method_sig(name)
                  fn_name = name |> String.split("(") |> List.first()
                  arity = name |> String.split(",") |> length()
                  Map.put(acc, sig, {fn_name, arity, name})
                end)
 
-  def parse_input(%{input: "0x"}), do: nil
-  def parse_input(%{input: "0x00"}), do: nil
+  def parse_input(%{input: ""}), do: nil
+  def parse_input(%{input: "00"}), do: nil
 
   def parse_input(data) when is_map(data) do
-    <<sig::binary-10, rest::binary>> = data.input
+    <<sig::binary-8, rest::binary>> = data.input
 
     {method, _arity, fn_sig} =
       case Map.get(@method_sigs, sig) do
@@ -67,7 +67,7 @@ defmodule OcapRpc.Internal.EthTransaction do
     data
     |> Map.put(:contract_from, from)
     |> Map.put(:contract_to, to)
-    |> Map.put(:contract_value, Converter.to_int(value))
+    |> Map.put(:contract_value, Converter.to_ether(value))
     |> Map.put(:input_plain, input)
   end
 
@@ -80,5 +80,5 @@ defmodule OcapRpc.Internal.EthTransaction do
   end
 
   defp get_args(data),
-    do: for(<<arg::binary-64 <- data>>, do: "0x" <> (arg |> String.trim_leading("0")))
+    do: for(<<arg::binary-64 <- data>>, do: arg |> String.trim_leading("0"))
 end

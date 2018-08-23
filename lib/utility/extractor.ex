@@ -11,37 +11,37 @@ defmodule OcapRpc.Internal.Extractor do
   def process(data, mapping, type) when is_list(data),
     do: Enum.map(data, fn item -> process(item, mapping, type) end)
 
-  def process(data, mapping, type) do
-    result =
-      data
-      |> AtomicMap.convert(safe: false)
-      |> process_data(mapping)
-
-    case type do
-      nil -> result
-      _ -> struct(type, result)
-    end
+  def process(data, mapping, _type) do
+    data
+    |> AtomicMap.convert(safe: false)
+    |> process_data(mapping)
   end
 
   defp process_data(data, nil), do: data
 
   defp process_data(data, mapping) when is_map(data) do
-    mapping
-    |> Enum.reduce(data, fn {k, v}, acc ->
-      try do
-        result = transform(v, acc, k)
+    result =
+      mapping
+      |> Enum.reduce(data, fn {k, v}, acc ->
+        try do
+          result = transform(v, acc, k)
 
-        case is_map(result) and Map.has_key?(result, k) do
-          true -> result
-          _ -> Map.put(acc, k, result)
+          case is_map(result) and Map.has_key?(result, k) do
+            true -> result
+            _ -> Map.put(acc, k, result)
+          end
+        rescue
+          e ->
+            Logger.error("Error: #{Exception.message(e)}, trace; #{Exception.format(:error, e)}")
+
+            acc
         end
-      rescue
-        e ->
-          Logger.error("Error: #{Exception.message(e)}, trace; #{Exception.format(:error, e)}")
+      end)
 
-          acc
-      end
-    end)
+    case mapping_to_type(mapping) do
+      nil -> result
+      type -> struct(type, result)
+    end
   end
 
   defp process_data(data, mapping) when is_list(data) do
@@ -100,4 +100,15 @@ defmodule OcapRpc.Internal.Extractor do
 
     apply(Converter, String.to_atom(fn_name), arg_list)
   end
+
+  defp mapping_to_type([{k, _} | _] = _mapping) do
+    case k do
+      :block_hash -> OcapRpc.Eth.Type.Transaction
+      :miner -> OcapRpc.Eth.Type.Block
+      :call_type -> OcapRpc.Eth.Type.TransactionTrace
+      _ -> nil
+    end
+  end
+
+  defp mapping_to_type(_), do: nil
 end

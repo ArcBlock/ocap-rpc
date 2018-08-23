@@ -6,7 +6,7 @@ public:
     desc: get balance of an address
     method: eth_getBalance
     args: ["address"]
-    result: "&to_int(_)"
+    result: "&to_ether(_)"
   - name: get_code
     desc: Returns code at a given address.
     method: eth_getCode

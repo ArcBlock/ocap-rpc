@@ -43,7 +43,7 @@ defmodule OcapRpc.Converter do
   @doc """
   Convert integer to hex string
   """
-  def to_hex(data), do: "0x" <> (data |> Hexate.encode())
+  def to_hex(data), do: data |> Hexate.encode()
 
   @doc """
   Call parity RPC trace function and return the result
@@ -78,6 +78,10 @@ defmodule OcapRpc.Converter do
   """
   def strip("0x" <> data), do: data
   def strip(data) when is_list(data), do: Enum.map(data, &strip/1)
+
+  def strip(data) when is_map(data),
+    do: Enum.reduce(data, %{}, fn {k, v}, acc -> Map.put(acc, k, strip(v)) end)
+
   def strip(data), do: data
 
   @doc """
@@ -100,7 +104,7 @@ defmodule OcapRpc.Converter do
   def get_fees(data) do
     case Map.get(data, :gas_used) do
       nil -> 0
-      gas_used -> gas_used * data.gas_price
+      gas_used -> gas_used * data.gas_price / @ether
     end
   end
 
@@ -130,7 +134,7 @@ defmodule OcapRpc.Converter do
     end
   end
 
-  @block_reward 3 * @ether
+  @block_reward 3
   def calc_block_reward(data) do
     # TODO: for different height reward would be different
     @block_reward + @block_reward * length(data.uncles) / 32 + data.fees

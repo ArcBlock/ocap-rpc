@@ -6,7 +6,7 @@ public:
     desc: get balance of an address for a specific contract
     method: eth_erc20_balance_of
     args: ["token", "address"]
-    result: "&to_int(_)"
+    result: "&to_ether(_)"
   - name: total_supply
     desc: get total supply for a specific contract
     method: eth_erc20_total_supply

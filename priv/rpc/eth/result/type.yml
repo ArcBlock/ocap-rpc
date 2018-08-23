@@ -1,34 +1,33 @@
 ---
 - transaction:
-    - block_hash: _
+    - block_hash: "&strip(_)"
     - block_height: "&to_int(block_number)"
-    - from: _
-    - to: _
+    - from: "&strip(_)"
+    - to: "&strip(_)"
     - gas_limit: "&to_int(gas)"
     - gas_price: "&to_int(_)"
-    - hash: _
-    - input: _
+    - hash: "&strip(_)"
+    - input: "&strip(_)"
     - nonce: "&to_int(_)"
-    - public_key: _
+    - public_key: "&strip(_)"
     # - value: _
     - index: "&to_int(transaction_index)"
     - size: "&get_size(raw)"
     - total: "&to_int(value)"
-    - raw: _
-    - r: _
-    - v: _
+    - raw: "&strip(_)"
+    - r: "&strip(_)"
+    - v: "&strip(_)"
     - standard_v: "&to_int(_)"
-    - condition: _
-    - creates: _
+    - condition: "&strip(_)"
+    - creates: "&strip(_)"
     - gas_used: "&to_int(_)"
     - cumulative_gas_used: "&to_int(_)"
-    - logs: _
-    - logs_bloom: _
-    - root: _
+    - logs: "&strip(_)"
+    - logs_bloom: "&strip(_)"
+    - root: "&strip(_)"
     - status: "&to_recepit_status(_)"
-    - contract_from: _
-    - contract_to: _
-    - contract_value: _
+    - contract_from: "&strip(_)"
+    - contract_to: "&strip(_)"
     - input_plain: _
     - fees: "&get_fees(*)"
     - contract_value: "&to_contract_value(*)"
@@ -36,29 +35,28 @@
     - internal_txs: "&calc_internal_txs(*)"
 
 - block:
-    - author: _
-    - miner: _
-    - difficulty: _
-    - extra_data: _
+    - miner: "&strip(_)"
+    - difficulty: "&strip(_)"
+    - extra_data: "&strip(_)"
     - extra_data_plain: "&decode(extra_data)"
     - gas_limit: "&to_int(_)"
     - gas_used: "&to_int(_)"
-    - hash: _
+    - hash: "&strip(_)"
     - pre_hash: parent_hash
-    - logs_bloom: _
-    - mix_hash: _
-    - nonce: _
+    - logs_bloom: "&strip(_)"
+    - mix_hash: "&strip(_)"
+    - nonce: "&strip(_)"
     - height: "&to_int(number)"
-    - parent_hash: _
-    - receipts_root: _
-    - seal_fields: _
-    - sha3_uncles: _
-    - uncles: _
+    - parent_hash: "&strip(_)"
+    - receipts_root: "&strip(_)"
+    - seal_fields: "&strip(_)"
+    - sha3_uncles: "&strip(_)"
+    - uncles: "&strip(_)"
     - size: "&to_int(_)"
-    - state_root: _
+    - state_root: "&strip(_)"
     - time: "&to_date(timestamp)"
-    - total_difficulty: _
-    - transactions_root: _
+    - total_difficulty: "&strip(_)"
+    - transactions_root: "&strip(_)"
     - transactions: @transaction
     - fees: "&calc_block_fees(*)"
     - reward: "&calc_block_reward(*)"
@@ -66,46 +64,49 @@
     - total: "&calc_block_total(*)"
 
 - transaction_receipt:
-    - block_hash: _
+    - block_hash: "&strip(_)"
     - block_number: "&to_int(_)"
-    - contract_address: _
-    - from: _
-    - to: _
+    - contract_address: "&strip(_)"
+    - from: "&strip(_)"
+    - to: "&strip(_)"
     - cumulative_gas_used: "&to_int(_)"
     - gas_used: "&to_int(_)"
-    - logs: _
-    - logsBloom: _
-    - root: _
+    - logs: "&strip(_)"
+    - logsBloom: "&strip(_)"
+    - root: "&strip(_)"
     - status: "&to_recepit_status(_)"
     - transaction_hash: _
     - transaction_index: "&to_int(_)"
 
 - sign_result_tx:
-    - hash: _
-    - nonce: _
-    - block_hash: _
-    - block_number: _
+    - hash: "&strip(_)"
+    - nonce: "&strip(_)"
+    - block_hash: "&strip(_)"
+    - block_number: "&strip(_)"
     - transaction_index: "&to_int(_)"
-    - from: _
-    - to: _
+    - from: "&strip(_)"
+    - to: "&strip(_)"
     - value: "&to_int(_)"
     - gas: "&to_int(_)"
     - gas_price: "&to_int(_)"
-    - input: _
+    - input: "&strip(_)"
 
 - sign_result:
-    - raw: _
+    - raw: "&strip(_)"
     - tx: @sign_result_tx
 
 
 - transaction_trace:
-    - call_type: action.call_type
-    - from: action.from
+    - call_type: "&strip(action.call_type)"
+    - parent_tx: "&strip(transaction_hash)"
+    - from: "&strip(action.from)"
     - gas_left: "&to_int(action.gas)"
-    - input: action.input
-    - to: action.to
-    - value: "&to_int(action.value)"
-    - output: result.output
+    - input: "&strip(action.input)"
+    - to: "&strip(action.to)"
+    - value: "&to_ether(action.value)"
+    - output: "&strip(result.output)"
     - gas_used: "&to_int(result.gas_used)"
-    - trace_address: _
-    - error: _
+    - trace_address: "&strip(_)"
+    - error: "&strip(_)"
+    - sub_traces: "&strip(subtraces)"
+    - trace_address: "&strip(_)"
