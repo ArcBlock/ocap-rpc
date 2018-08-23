@@ -14,7 +14,7 @@
   "deep_merge": {:hex, :deep_merge, "0.2.0", "c1050fa2edf4848b9f556fba1b75afc66608a4219659e3311d9c9427b5b680b3", [:mix], [], "hexpm"},
   "dialyxir": {:hex, :dialyxir, "0.5.1", "b331b091720fd93e878137add264bac4f644e1ddae07a70bf7062c7862c4b952", [:mix], [], "hexpm"},
   "distillery": {:hex, :distillery, "1.5.3", "b2f4fc34ec71ab4f1202a796f9290e068883b042319aa8c9aa45377ecac8597a", [:mix], [], "hexpm"},
-  "earmark": {:hex, :earmark, "1.2.5", "4d21980d5d2862a2e13ec3c49ad9ad783ffc7ca5769cf6ff891a4553fbaae761", [:mix], [], "hexpm"},
+  "earmark": {:hex, :earmark, "1.2.6", "b6da42b3831458d3ecc57314dff3051b080b9b2be88c2e5aa41cd642a5b044ed", [:mix], [], "hexpm"},
   "ecto": {:hex, :ecto, "2.2.10", "e7366dc82f48f8dd78fcbf3ab50985ceeb11cb3dc93435147c6e13f2cda0992e", [:mix], [{:db_connection, "~> 1.1", [hex: :db_connection, repo: "hexpm", optional: true]}, {:decimal, "~> 1.2", [hex: :decimal, repo: "hexpm", optional: false]}, {:mariaex, "~> 0.8.0", [hex: :mariaex, repo: "hexpm", optional: true]}, {:poison, "~> 2.2 or ~> 3.0", [hex: :poison, repo: "hexpm", optional: true]}, {:poolboy, "~> 1.5", [hex: :poolboy, repo: "hexpm", optional: false]}, {:postgrex, "~> 0.13.0", [hex: :postgrex, repo: "hexpm", optional: true]}, {:sbroker, "~> 1.0", [hex: :sbroker, repo: "hexpm", optional: true]}], "hexpm"},
   "elixir_make": {:hex, :elixir_make, "0.4.2", "332c649d08c18bc1ecc73b1befc68c647136de4f340b548844efc796405743bf", [:mix], [], "hexpm"},
   "ex_datadog_plug": {:hex, :ex_datadog_plug, "0.5.0", "6952c948f38594d27356dd48dcd695f507067af8a20d92b5ac6125df45641bd1", [:mix], [{:plug, "~> 1.5", [hex: :plug, repo: "hexpm", optional: false]}, {:statix, "> 0.0.0", [hex: :statix, repo: "hexpm", optional: false]}], "hexpm"},

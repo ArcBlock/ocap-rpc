@@ -67,7 +67,7 @@ defmodule OcapRpc.Internal.EthTransaction do
     data
     |> Map.put(:contract_from, from)
     |> Map.put(:contract_to, to)
-    |> Map.put(:contract_value, Converter.to_ether(value))
+    |> Map.put(:contract_value, Converter.to_int(value))
     |> Map.put(:input_plain, input)
   end
 

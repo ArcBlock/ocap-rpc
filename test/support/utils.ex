@@ -93,7 +93,7 @@ defmodule OcapRpcTest.TestUtils do
   }
 
   def user_account, do: @user_account
-  def user_balance, do: 1049.1876721330364
+  def user_balance, do: 1_049_187_672_133_036_408_832
 
   def contract_account, do: @contract_account
   def contract_code, do: "0xdeadbeef"

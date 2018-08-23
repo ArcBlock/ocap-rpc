@@ -5,15 +5,15 @@
     - from: _
     - to: _
     - gas_limit: "&to_int(gas)"
-    - gas_price: "&to_gwei(_)"
+    - gas_price: "&to_int(_)"
     - hash: _
     - input: _
     - nonce: "&to_int(_)"
     - public_key: _
-    - value: _
+    # - value: _
     - index: "&to_int(transaction_index)"
     - size: "&get_size(raw)"
-    - total: "&to_ether(value)"
+    - total: "&to_int(value)"
     - raw: _
     - r: _
     - v: _
@@ -33,6 +33,7 @@
     - fees: "&get_fees(*)"
     - contract_value: "&to_contract_value(*)"
     - tx_type: "&get_tx_type(*)"
+    - internal_txs: "&calc_internal_txs(*)"
 
 - block:
     - author: _
@@ -61,6 +62,8 @@
     - transactions: @transaction
     - fees: "&calc_block_fees(*)"
     - reward: "&calc_block_reward(*)"
+    - number_txs: "&len(transactions)"
+    - total: "&calc_block_total(*)"
 
 - transaction_receipt:
     - block_hash: _
@@ -87,7 +90,7 @@
     - to: _
     - value: "&to_int(_)"
     - gas: "&to_int(_)"
-    - gas_price: "&to_gwei(_)"
+    - gas_price: "&to_int(_)"
     - input: _
 
 - sign_result:
@@ -96,13 +99,13 @@
 
 
 - transaction_trace:
-    - call_type: action.callType
+    - call_type: action.call_type
     - from: action.from
     - gas_left: "&to_int(action.gas)"
     - input: action.input
     - to: action.to
-    - value: "&to_ether(action.value)"
+    - value: "&to_int(action.value)"
     - output: result.output
-    - gas_used: "&to_int(result.gasUsed)"
+    - gas_used: "&to_int(result.gas_used)"
     - trace_address: _
     - error: _
