@@ -6,6 +6,7 @@ defmodule OcapRpc.Converter do
   alias OcapRpc.Internal.EthTransaction
 
   @gwei 1_000_000_000
+  @satoshi 100_000_000
   @ether @gwei * @gwei
 
   def gwei, do: @gwei
@@ -26,10 +27,21 @@ defmodule OcapRpc.Converter do
   @doc """
   Convert timestamp to time string
   """
+  def to_date(timestamp) when is_integer(timestamp), do: DateTime.from_unix!(timestamp)
+
   def to_date(timestamp) do
     timestamp
     |> Hexate.to_integer()
     |> DateTime.from_unix!()
+  end
+
+  def milli_to_date(timestamp) when is_integer(timestamp),
+    do: DateTime.from_unix!(timestamp, :millisecond)
+
+  def milli_to_date(timestamp) do
+    timestamp
+    |> Hexate.to_integer()
+    |> DateTime.from_unix!(:millisecond)
   end
 
   @doc """
@@ -152,4 +164,10 @@ defmodule OcapRpc.Converter do
         nil
     end
   end
+
+  @doc """
+  Convert a bitcoin value to a satoshi value
+  """
+  def btc_to_satoshi(nil), do: 0
+  def btc_to_satoshi(value), do: round(value * @satoshi)
 end

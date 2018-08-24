@@ -1,0 +1,12 @@
+---
+name: Generating
+desc: Bitcoin account related RPC
+public:
+  - name: generate
+    desc: Mine up to nblocks blocks immediately to an address in the wallet
+    method: generate
+    args: ["nblocks","max_tries"]
+  - name: generate_to_address
+    desc: Mine blocks immediately to a specified address
+    method: generatetoaddress
+    args: ["nblocks","address","max_tries"]

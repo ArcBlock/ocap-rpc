@@ -4,6 +4,7 @@ defmodule OcapRpc.Internal.BtcRpc do
   """
   require Logger
   use Tesla
+  alias OcapRpc.Converter
 
   plug(Tesla.Middleware.Retry, delay: 500, max_retries: 3)
 
@@ -94,10 +95,10 @@ defmodule OcapRpc.Internal.BtcRpc do
   end
 
   defp list_to_map_and_append_key(resp) do
-    Enum.map(resp, fn groupings ->
+    resp
+    |> Enum.map(fn groupings ->
       Enum.map(groupings, fn address_details ->
         convert_list_to_map(address_details)
-        |> IO.inspect()
       end)
     end)
   end
@@ -107,7 +108,7 @@ defmodule OcapRpc.Internal.BtcRpc do
 
     %{}
     |> Map.put("address", address)
-    |> Map.put("balance", OcapRpc.Converter.btc_to_satoshi(balance))
+    |> Map.put("balance", Converter.btc_to_satoshi(balance))
     |> Map.put("account", account)
   end
 

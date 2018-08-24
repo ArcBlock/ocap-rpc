@@ -1,0 +1,95 @@
+---
+name: Blockchain
+desc: Bitcoin account related RPC
+public:
+  - name: get_best_block_hash
+    desc: Returns the header hash of the most recent block on the best block chain
+    method: getbestblockhash
+    args: []
+  - name: get_block
+    desc: Returns a block with a particular header hash. 
+    method: getblock
+    args: ["header_hash","format"]
+    result: block
+  - name: get_blockchain_info
+    desc: Returns information about the current state of the block chain
+    method: getblockchaininfo
+    args: []
+    result: block_chain_info
+  - name: get_block_count
+    desc: Returns the number of blocks in the local best block chain.
+    method: getblockcount
+    args: []
+  - name: get_block_hash
+    desc: Returns the header hash of a block at the given height in the local best block chain
+    method: getblockhash
+    args: ["block_height"] 
+  - name: get_block_header
+    desc: Returns a block header with a particular header hash
+    method: getblockheader
+    args: ["header_hash","format"]
+    result: block_header
+  - name: get_chain_tips
+    desc: Returns information about the highest-height block (tip) of each local block chain.
+    method: getchaintips
+    args: []
+    result: block_chain_tip
+  - name: get_difficulty
+    desc: Returns the proof-of-work difficulty as a multiple of the minimum difficulty.
+    method: getdifficulty
+    args: []
+  - name: get_mempool_ancestors
+    desc: Returns all in-mempool ancestors for a transaction in the mempool.
+    method: getmempoolancestors
+    args: ["tx_id","format"]
+    result: mem_pool_transaction
+  - name: get_mempool_descendants
+    desc: Returns all in-mempool descendants for a transaction in the mempool.
+    method: getmempooldescendants
+    args: ["tx_id","format"]
+    result: mem_pool_transaction
+  - name: get_mempool_entry
+    desc: Returns mempool data for given transaction.
+    method: getmempoolentry
+    args: ["tx_id"]
+    result: mem_pool_transaction
+  - name: get_mempool_info
+    desc: Returns all transaction identifiers (TXIDs) in the memory pool as a JSON array, or detailed information about each transaction in the memory pool as a JSON object.
+    method: getmempoolinfo
+    args: []
+    result: transaction_memory_pool_info
+  - name: get_raw_mempool
+    desc: Returns all transaction ids in memory pool as a json array of string transaction ids
+    method: getrawmempool
+    args: ["format"]
+    result: mem_pool_transaction
+  - name: get_tx_out
+    desc: Returns details about an unspent transaction output(UTXO).
+    method: gettxout
+    args: ["tx_id","vout","unconfirmed"]  
+    result: unspent_transaction_output
+  - name: get_tx_out_proof
+    desc: Returns a hex-encoded proof that one or more specified transactions were included in a block.
+    method: gettxoutproof
+    args: ["tx_ids","header_hash"]
+  - name: get_tx_out_set_info
+    desc: Returns statistics about the confirmed unspent transaction output set(UTXO) .
+    method: gettxoutsetinfo
+    args: []
+    result: confirmed_utxo_statistics
+  - name: precious_block
+    desc: Treats a block as if it were received before others with the same work
+    method: preciousblock
+    args: ["header_hash"]
+  - name: prune_blockchain
+    desc: Prunes the blockchain up to a specified height or timestamp. 
+    method: pruneblockchain
+    args: ["height"]
+  - name: verifychain
+    desc: Verifies each entry in the local block chain database
+    method: btc_verify_chain
+    args: ["check_level","nblocks"]
+  - name: verify_tx_out_proof
+    desc: Verifies that a proof points to one or more transactions in a block, returning the transactions the proof commits to and throwing an RPC error if the block is not in our best block chain.
+    method: verifytxoutproof
+    args: ["proof"]

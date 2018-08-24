@@ -1,5 +1,14 @@
 ---
 name: bitcoin
 doc: bitcoin RPC and enhanced functionalities
-result: []
-rpc: []
+result: 
+  - result/type.yml
+rpc: 
+  - rpc/blockchain.yml
+  - rpc/control.yml
+  - rpc/generating.yml
+  - rpc/mining.yml
+  - rpc/network.yml
+  - rpc/rawtransaction.yml
+  - rpc/util.yml
+  - rpc/wallet.yml

@@ -1,0 +1,466 @@
+---
+- block:
+    - hash: _
+    - confirmations: _
+    - size: _
+    - stripped_size: strippedsize
+    - weight: _
+    - height: _
+    - version: _
+    - version_hex: _
+    - merkle_root: merkleroot
+    - tx: _
+    - time: "&to_date(_)"
+    - median_time: "&to_date(mediantime)" 
+    - nonce: _
+    - bits: "&to_int(_)"
+    - difficulty: _
+    - chain_work: chainwork
+    - pre_hash: previousblockhash
+    - nextblockhash: _
+
+- enforce:
+    - status: _
+    - found: _
+    - required: _
+    - window: _
+
+- reject:
+    - status: _
+    - found: _
+    - required: _
+    - window: _
+    
+- soft_fork:
+    - id: _
+    - version: _
+    - enforce: @enforce
+    - reject: @reject
+
+- bip9_softfork:
+    - name: _
+    - status: _
+    - bit: _
+    - start_time: "&to_date(_)" 
+    - timeout: "&to_date(_)" 
+    - since: _
+
+- block_chain_info:
+    - chain: _
+    - blocks: _
+    - headers: _
+    - best_block_hash: bestblockhash
+    - difficulty: _
+    - median_time: "&to_date(mediantime)" 
+    - verification_progress: verificationprogress
+    - chain_work: chainwork
+    - pruned: _
+    - prune_height: pruneheight
+    - softforks: @soft_fork
+    - bip9_softforks: @bip9_softfork
+    
+- block_header:
+    - hash: _
+    - confirmations: _
+    - height: _
+    - version: _
+    - version_hex: _
+    - merkle_root: merkleroot
+    - time: "&to_date(_)" 
+    - mediant_time: "&to_date(mediantime)" 
+    - nonce: _
+    - bits: "&to_int(_)"
+    - difficulty: _
+    - chain_work: chainwork
+    - previous_blockhash: previousblockhash
+    - next_blockhash: nextblockhash
+
+- block_chain_tip:
+    - height: _
+    - hash: _
+    - branch_len: branchlen
+    - status: _
+
+- mem_pool_transaction:
+    - tx_id: _
+    - size: _
+    - fees: "&btc_to_satoshi(fee)"
+    - modified_fee: "&btc_to_satoshi(modifiedfee)"
+    - time: "&to_date(_)" 
+    - height: _
+    - starting_priority: startingpriority
+    - current_priority: currentpriority
+    - descendant_count: descendantcount
+    - descendant_size: descendantsize
+    - descendant_fees: descendantfees
+    - ancestor_count: ancestorcount
+    - ancestor_size: ancestorsize
+    - ancestor_fees: ancestorfees
+    - depends: _
+
+- in_wallet_tx_input_output:
+    - involves_watch_only: involvesWatchonly
+    - account: _
+    - address: _
+    - category: _
+    - value: "&btc_to_satoshi(amount)"
+    - index: vout
+    - fee: _
+    - abandoned: _
+
+- in_wallet_tx:
+    - total: "&btc_to_satoshi(amount)"
+    - fees: "&btc_to_satoshi(fee)"
+    - confirmations: _
+    - generated: _
+    - block_hash: blockhash 
+    - index: blockindex 
+    - block_time: "&to_date(blocktime)" 
+    - hash: txid
+    - wallet_conflicts: walletconflicts
+    - time: "&to_date(_)" 
+    - time_received: "&to_date(timereceived)" 
+    - bip125_replaceable: bip125-replaceable
+    - comment: _
+    - to: _
+    - details: @in_wallet_tx_input_output
+    - hex: _  
+
+- transaction_memory_pool_info:
+    - size:
+    - bytes: _
+    - usage: _
+    - max_mempool: maxmempool
+    - mempool_min_fee: mempoolminfee
+
+- script_pub_key:
+    - asm: _
+    - hex: _ 
+    - req_sigs: _
+    - type: _
+    - addresses: _
+
+- unspent_transaction_output:
+    - block_hash: bestblock 
+    - confirmations: _
+    - value: "&btc_to_satoshi(_)"
+    - scriptPubKey: @script_pub_key
+    - version: _
+    - coinbase: _
+
+- confirmed_utxo_statistics:
+    - height: _
+    - best_block: bestblock
+    - transactions: _
+    - tx_outs: txouts
+    - bytes_serialized: _
+    - hash_serialized: _
+    - total_amount: "&btc_to_satoshi(_)"
+
+- node_network_info:
+    - version: _
+    - protocol_version: protocolversion
+    - wallet_version: walletversion
+    - balance: _
+    - blocks: _
+    - time_offset: timeoffset
+    - connections: _
+    - proxy: _
+    - difficulty: _
+    - testnet: _
+    - keypool_oldest: keypoololdest
+    - keypool_size: keypoolsize
+    - pay_tx_fee: paytxfee
+    - relay_fee: relayfee
+    - unlocked_until: _
+    - errors: _
+
+- node_address:
+    - address: _
+    - connected: _
+
+- added_node_info:
+    - addednode: _
+    - connected: _
+    - addresses: @node_address
+
+- upload_target_info:
+    - time_frame: timeframe
+    - target: _
+    - target_reached: _
+    - serve_historical_blocks: _
+    - bytes_left_in_cycle: _
+    - time_left_in_cycle: _
+
+- network_traffic_info:
+    - total_bytes_recv: totalbytesrecv
+    - total_bytes_sent: totalbytessent
+    - time_millis: "&milli_to_date(timemillis)"
+    - uploadtarget: @upload_target_info
+
+- network:
+    - name: _
+    - limited: _
+    - reachable: _
+    - proxy: _
+    - proxy_randomize_credentials: _
+
+- localaddress:
+    - address: _
+    - port: _
+    - score: _
+
+- node_connection_network_info:
+    - version: _
+    - subversion: _
+    - protocol_version: protocolversion
+    - local_services: localservices
+    - local_relay: localrelay
+    - time_offset: timeoffset
+    - connections: _
+    - networks: @network
+    - relay_fee: "&btc_to_satoshi(relayfee)"
+    - incremental_fee: "&btc_to_satoshi(incrementalfee)"
+    - localaddresses: @localaddress
+    - warnings: _
+
+- connected_node_info:
+    - id: _
+    - addr: _
+    - addr_local: addrlocal
+    - services: "&to_int(_)"
+    - last_send: "&to_date(lastsend)"
+    - last_recv: "&to_date(lastrecv)"
+    - bytes_sent: bytessent
+    - bytes_recv: bytesrecv
+    - conn_time: "&to_date(conntime)"
+    - time_offset: timeoffset
+    - ping_time: pingtime
+    - min_ping: minping
+    - ping_wait: pingwait
+    - version: _
+    - subver: _
+    - inbound: _
+    - starting_height: startingheight
+    - banscore: _
+    - synced_headers: _
+    - synced_blocks: _
+    - inflight: _ 
+    - whitelisted: _
+    - bytes_sent_per_msg: bytessent_per_msg
+    - bytes_recv_per_msg: bytesrecv_per_msg
+
+- banned_node:
+    - address: _
+    - banned_until: "&to_date(banned_until)"
+    - ban_created: "&to_date(ban_created)"
+    - ban_reason: _
+
+- created_transaction_info:
+    - hex: _
+    - fee: "&btc_to_satoshi(_)"
+    - change_pos: changepos
+
+- tx_input_script_sig:
+    - asm: _
+    - script: hex
+
+- tx_input:
+    - tx_id: txid
+    - pre_output: vout
+    - script_sig: @tx_input_script_sig
+    - coinbase: _
+    - sequence: _
+    - tx_in_witness: txinwitness
+
+- tx_output_script_pub_key:
+    - asm: _
+    - script: hex
+    - req_sigs: _
+    - script_type: type
+    - addresses: _
+    
+- tx_output:
+    - value: "&btc_to_satoshi(_)"
+    - index: n
+    - script_pub_key: @tx_output_script_pub_key
+
+- decoded_transaction:
+    - hex: _
+    - block_hash: blockhash
+    - confirmations: _
+    - time: "&to_date(_)"
+    - block_time: "&to_date(blocktime)"
+    - tx_id: txid
+    - hash: _
+    - size: _
+    - virtual_size: vsize
+    - version: _
+    - lock_time: "&to_date(locktime)"
+    - vin: @tx_input
+    - vout: @tx_output 
+
+- decoded_script:
+    - asm: _
+    - type: _
+    - req_sigs: _
+    - addresses: _
+    - p2sh: _
+
+- signatures_results: 
+    - hex: _
+    - complete: _
+
+- redeem_script:
+    - address: _
+    - redeem_script: _
+
+- locked_memory_manager:
+    - used: _
+    - free: _
+    - total: _
+    - locked: _
+    - chunks_used: _
+    - chunks_free: _
+
+- memory_info:
+    - locked: @locked_memory_manager
+
+- address_info:
+    - isvalid: _
+    - address: _
+    - script_pubkey: script_pub_key
+    - is_mine: ismine
+    - is_watch_only: iswatchonly
+    - is_script: isscript
+    - is_witness: iswitness
+    - script_type: script
+    - hex: _
+    - addresses: _
+    - sig_required: sigrequired
+    - pub_key: pubkey
+    - is_compressed: iscompressed
+    - account: _
+    - hd_key_path: hdkeypath
+    - hd_master_key_id: hdmasterkeyid
+
+- new_transaction_info:
+    - tx_id: txid
+    - orig_fee: "&btc_to_satoshi(origfee)"
+    - fee: "&btc_to_satoshi(_)"
+    - errors: _
+
+- wallet_info:
+    - wallet_version: walletversion
+    - balance: "&btc_to_satoshi(_)"
+    - tx_count: txcount
+    - key_pool_oldest: keypoololdest
+    - key_pool_size: keypoolsize
+    - unlocked_until: _
+
+- mining_info:
+    - blocks: _
+    - current_block_weight: currentblockweight
+    - current_block_size: currentblocksize
+    - current_block_tx: currentblocktx
+    - difficulty: _
+    - errors: _
+    - gen_proc_limit: genproclimit
+    - network_hash_per_sec: networkhashps
+    - pooled_tx: pooledtx
+    - testnet: _
+    - chain: _
+    - generate: _
+    - hashes_per_sec: hashespersec
+
+- import_execution_result_error:
+    - code: _
+    - message: _
+
+- import_execution_result:
+    - success: _
+    - error: @import_execution_result_error
+
+- locked_output:
+    - tx_id: txid
+    - vout: _
+
+- since_block_tx_payment:
+    - involves_watch_only: involves_watchonly
+    - account: _
+    - address: _
+    - category: _
+    - amount: "&btc_to_satoshi(_)"
+    - vout: _
+    - fee: "&btc_to_satoshi(_)"
+    - confirmations: _
+    - generated: _
+    - block_hash: blockhash
+    - block_index: blockindex
+    - block_time: "&to_date(blocktime)"
+    - tx_id: txid
+    - wallet_conflicts: walletconflicts
+    - time: "&to_date(_)"
+    - time_received: "&to_date(timereceived)"
+    - bip125_replaceable: bip125-replaceable
+    - comment: _
+    - to: _
+    
+- since_block_txs:
+    - transactions: @since_block_tx_payment
+    - last_block: lastblock
+
+- tx_payment_info:
+    - account: _
+    - address: _
+    - category: _
+    - amount: "&btc_to_satoshi(_)"
+    - label: _
+    - vout: _
+    - fee: "&btc_to_satoshi(_)"
+    - confirmations: _
+    - trusted: _
+    - generated: _
+    - block_hash: blockhash
+    - block_index: blockindex
+    - block_time: "&to_date(blocktime)"
+    - tx_id: txid
+    - wallet_conflicts: walletconflicts
+    - time: "&to_date(_)"
+    - time_received: "&to_date(timereceived)"
+    - comment: _
+    - to: _
+    - otheraccount: _
+    - bip125_replaceable: bip125-replaceable
+    - abandoned: _
+
+- unspent_output:
+    - tx_id: txid
+    - vout: _
+    - address: _
+    - account: _
+    - script_pub_key: _
+    - redeem_script: _
+    - amount: "&btc_to_satoshi(_)"
+    - confirmations: _
+    - spendable: _
+    - solvable: _
+
+- received_address_info:
+    - involves_watch_only: involves_watchonly
+    - address: _
+    - account: _
+    - amount: "&btc_to_satoshi(_)"
+    - confirmations: _
+    - label: _
+    - tx_ids: txids
+
+- transaction:
+    - tx_id: txid
+    - hash: _
+    - size: _
+    - virtual_size: vsize
+    - version: _
+    - lock_time: "&to_date(locktime)"
+    - vin: @tx_input
+    - vout: @tx_output
