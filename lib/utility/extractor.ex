@@ -73,10 +73,17 @@ defmodule OcapRpc.Internal.Extractor do
   end
 
   defp transform(v, data, key) do
-    data
-    |> Map.get(key)
-    |> Enum.map(&process_data(&1, v))
-    |> Enum.reject(&is_nil/1)
+    value = Map.get(data, key)
+
+    case is_nil(value) do
+      true ->
+        nil
+
+      false ->
+        value
+        |> Enum.map(&process_data(&1, v))
+        |> Enum.reject(&is_nil/1)
+    end
   end
 
   defp call_function(fn_info, data, key) do

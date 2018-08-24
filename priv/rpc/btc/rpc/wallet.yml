@@ -1,0 +1,167 @@
+---
+name: Wallet
+desc: Bitcoin account related RPC
+public:
+  - name: abandon_transaction
+    desc: Marks an in-wallet transaction and all its in-wallet descendants as abandoned.
+    method: abandontransaction
+    args: ["tx_id"]
+  - name: add_multi_sig_address
+    desc: Adds a P2SH multisig address to the wallet.
+    method: btc_add_multi_sig_address
+    args: ["nrequired","keys","account"]  
+  - name: add_witness_address
+    desc: Add a witness address for a script (with pubkey or redeemscript known)
+    method: addwitnessaddress
+    args: ["address"]
+  - name: backup_wallet
+    desc: Safely copies current wallet file to destination, which can be a directory or a path with filename.
+    method: backupwallet
+    args: ["destination"]
+  - name: bump_fee
+    desc: Replaces an unconfirmed wallet transaction that signaled RBF with a new transaction that pays a higher fee
+    method: btc_bump_fee
+    args: ["tx_id"]
+    result: new_transaction_info
+  - name: dump_privkey
+    desc: Reveals the private key corresponding to 'address'
+    method: dumpprivkey
+    args: ["p2pkh_address"]
+  - name: dump_wallet
+    desc: Dumps all wallet keys in a human-readable format to a server-side file
+    method: dumpwallet
+    args: ["filename"]
+  - name: encrypt_wallet
+    desc: Encrypts the wallet  with a passphrase.
+    method: encryptwallet
+    args: ["passphrase"]
+  - name: get_account
+    desc: Returns the account associated with the given address.
+    method: getaccount
+    args: ["address"]
+  - name: get_balance
+    desc: If account is not specified, returns the server's total available balance.
+    method: getbalance
+    args: ["account","min_conf_num","include_watch_only"]
+    result: "&btc_to_satoshi(_)"
+  - name: get_new_address
+    desc: Returns a new Bitcoin address for receiving payments.
+    method: getnewaddress
+    args: ["account","address_type"]
+  - name: get_raw_change_address
+    desc: Returns a new Bitcoin address, for receiving change.
+    method: getrawchangeaddress
+    args: []
+  - name: get_received_by_address
+    desc: Returns the total amount received by the specified address in transactions with the specified number of confirmations.
+    method: getreceivedbyaddress
+    args: ["address","min_conf_num"]
+  - name: get_transaction
+    desc: Get detailed information about in-wallet transaction
+    method: gettransaction
+    args: ["tx_id","include_watch_only"]
+    result: in_wallet_tx
+  - name: get_unconfirmed_balance
+    desc: Returns the wallet’s total unconfirmed balance.
+    method: getunconfirmedbalance
+    args: []
+    result: "&btc_to_satoshi(_)"
+  - name: get_wallet_info
+    desc: Returns information about the wallet.
+    method: getwalletinfo
+    args: []
+    result: wallet_info
+  - name: import_address
+    desc: Adds an address or pubkey script to the wallet without the associated private key,allowing you to watch for transactions affecting that address or pubkey script without being able to spend any of its outputs.
+    method: importaddress
+    args: ["script_or_address","account","rescan"]
+  - name: import_multi
+    desc: Imports addresses or scripts (with private keys, public keys, or P2SH redeem scripts) and optionally performs the minimum necessary rescan for all imports.
+    method: importmulti
+    args: ["imports","option"]
+    result: import_execution_result
+  - name: import_privkey
+    desc: Adds a private key (as returned by dumpprivkey) to your wallet.
+    method: importprivkey
+    args: ["privkey","account","rescan"]
+  - name: import_pruned_funds
+    desc: Imports funds without the need of a rescan.
+    method: importprunedfunds
+    args: ["raw_tx","tx_out_proof"]
+  - name: import_wallet
+    desc: Imports private keys from a file in wallet dump file format  
+    method: importwallet
+    args: ["filename"]
+  - name: keypool_refill
+    desc: Fills the cache of unused pre-generated keys (the keypool).
+    method: keypoolrefill
+    args: ["key_pool_size"]
+  - name: list_address_groupings
+    desc: Lists groups of addresses which have had their common ownership\nmade public by common use as inputs or as the resulting change 
+    method: listaddressgroupings
+    args: []
+  - name: list_lock_unspent
+    desc: Returns a list of temporarily unspendable (locked) outputs.
+    method: listlockunspent
+    args: []
+    result: locked_output
+  - name: list_received_by_address
+    desc: lists the total number of bitcoins received by each address.
+    method: listreceivedbyaddress
+    args: ["min_conf_num","include_empty","include_watch_only"]
+    result: received_address_info
+  - name: list_since_block
+    desc: Get all transactions in blocks since block [blockhash], or all transactions if omitted 
+    method: listsinceblock
+    args: ["header_hash","target_conf","include_watch_only"]
+    result: since_block_txs
+  - name: list_transactions
+    desc: Returns the most recent transactions that affect the wallet.
+    method: listtransactions
+    args: ["account","count","skip","include_watch_only"] 
+    result: tx_payment_info
+  - name: list_unspent
+    desc: Returns an array of unspent transaction outputs belonging to this wallet.
+    method: listunspent
+    args: ["min_conf_num","max_conf_num","addresses"]
+    result: unspent_output
+  - name: lock_unspent
+    desc: lockunspent unlock
+    method: lockunspent
+    args: ["unlock","outputs"]
+  - name: remove_pruned_funds
+    desc: Deletes the specified transaction from the wallet.
+    method: removeprunedfunds
+    args: ["tx_id"]
+  - name: send_many
+    desc: Creates and broadcasts a transaction which sends outputs to multiple addresses.
+    method: sendmany
+    args: ["from_account","outputs","min_conf_num","comment","subtract_fee_from"]
+  - name: send_to_address
+    desc: Send an amount to a given address
+    method: sendtoaddress
+    args: ["to_address","amount","comment","comment_to","subtract_fee_from_amount"]
+  - name: set_tx_fee
+    desc: Sets the transaction fee per kilobyte paid by transactions created by this wallet.
+    method: settxfee
+    args: ["amount"]
+  - name: sign_message
+    desc: Sign a message with the private key of an address
+    method: signmessage
+    args: ["address","message"]
+  - name: sign_message_with_priv_key
+    desc: Signs a message with a given private key.
+    method: signmessagewithprivkey
+    args: ["priv_key","message"] 
+  - name: wallet_lock
+    desc: Removes the wallet encryption key from memory, locking the wallet. 
+    method: walletlock
+    args: []
+  - name: wallet_passphrase
+    desc: Stores the wallet decryption key in memory for the indicated number of seconds.
+    method: walletpassphrase
+    args: ["passphrase","seconds"]
+  - name: wallet_passphrase_change
+    desc: Changes the wallet passphrase from ‘old passphrase’ to ‘new passphrase’.
+    method: walletpassphrasechange
+    args: ["current_passphrase","new_passphrase"]

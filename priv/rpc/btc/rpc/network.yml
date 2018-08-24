@@ -1,0 +1,57 @@
+---
+name: Network
+desc: Bitcoin account related RPC
+public:
+  - name: add_node
+    desc: Attempts to add or remove a node from the addnode list
+    method: addnode
+    args: ["node","command"]
+  - name: clear_banned
+    desc: Clear all banned IPs
+    method: clearbanned
+    args: []
+  - name: disconnect_node
+    desc: Immediately disconnects from the specified peer node
+    method: disconnectnode
+    args: ["address"]
+  - name: get_added_node_info
+    desc: Returns information about the given added node, or all added nodes
+    method: getaddednodeinfo
+    args: ["details","node"]
+    result: added_node_info
+  - name: get_connection_count
+    desc: Returns the number of connections to other nodes
+    method: getconnectioncount
+    args: []
+  - name: get_net_totals
+    desc: Returns information about network traffic, including bytes in, bytes out, and the current time.
+    method: getnettotals
+    args: []
+    result: network_traffic_info
+  - name: get_network_info
+    desc: Returns information about the node’s connection to the network.
+    method: getnetworkinfo
+    args: []
+    result: node_connection_network_info
+  - name: get_peer_info
+    desc: Returns data about each connected network node.
+    method: getpeerinfo
+    args: []
+    result: connected_node_info
+  - name: list_banned
+    desc: List all banned IPs/Subnets.
+    method: listbanned
+    args: []
+    result: banned_node
+  - name: ping
+    desc: Requests that a ping be sent to all other nodes, to measure ping time.
+    method: ping
+    args: []
+  - name: setban
+    desc: Attempts to add or remove an IP/Subnet from the banned list.
+    method: setban
+    args: ["subnet","command","ban_time","absolute"]
+  - name: set_network_active
+    desc: Disable/enable all p2p network activity
+    method: setnetworkactive
+    args: ["activate"]

@@ -1,0 +1,23 @@
+---
+name: Util
+desc: Bitcoin account related RPC
+public:
+  - name: create_multi_sig
+    desc: Creates a P2SH multi-signature address.
+    method: createmultisig
+    args: ["nrequired","keys"]
+    result: redeem_script
+  - name: get_memory_info
+    desc: Returns information about memory usage.
+    method: getmemoryinfo
+    args: [] 
+    result: memory_info
+  - name: validate_address
+    desc: Return information about the given bitcoin address
+    method: validateaddress
+    args: ["address"]
+    result: address_info
+  - name: verify_message
+    desc: Verify a signed message
+    method: verifymessage
+    args: ["address", "signature", "message"]

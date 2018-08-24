@@ -24,4 +24,7 @@ config :ocap_rpc, :btc,
 config :ocap_rpc,
   env: Mix.env()
 
+config :ocap_rpc,
+  env: Mix.env()
+
 import_config "#{Mix.env()}.exs"

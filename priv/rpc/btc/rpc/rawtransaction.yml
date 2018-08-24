@@ -1,0 +1,37 @@
+---
+name: Raw_TX
+desc: Bitcoin account related RPC
+public:
+  - name: create_raw_transaction
+    desc: Create a transaction spending the given inputs and creating new outputs
+    method: createrawtransaction
+    args: ["inputs","outputs","locktime"]
+  - name: decode_raw_transaction
+    desc: Return a JSON object representing the serialized, hex-encoded transaction
+    method: decoderawtransaction
+    args: ["serialized_transaction"]
+    result: transaction
+  - name: decode_script
+    desc: Decode a hex-encoded script
+    method: decodescript
+    args: ["redeem_script"]
+    result: decoded_script
+  - name: fund_raw_transaction
+    desc: Add inputs to a transaction until it has enough in value to meet its out value
+    method: fundrawtransaction
+    args: ["hex_string", "options"]
+    result: created_transaction_info
+  - name: get_raw_transaction
+    desc: Returns a hex-encoded serialized transaction or a JSON object describing the transaction.
+    method: getrawtransaction
+    args: ["tx_id", "format"]
+    result: decoded_transaction
+  - name: send_raw_transaction
+    desc: Validates a transaction and broadcasts it to the peer-to-peer network.
+    method: sendrawtransaction
+    args: ["tx","allow_high_fees"]
+  - name: sign_raw_transaction
+    desc: Sign inputs for raw transaction (serialized, hex-encoded)], using private keys stored in the wallet or provided in the call.
+    method: signrawtransaction
+    args: ["tx"," deps","priv_keys","sig_hash"]
+    result: signatures_results

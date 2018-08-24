@@ -1,0 +1,25 @@
+---
+name: Mining
+desc: Bitcoin account related RPC
+public:
+  - name: get_block_template
+    desc: Returns a block template or proposal for use with mining software.
+    method: getblocktemplate
+    args: []
+  - name: get_mining_info
+    desc: Returns various mining-related information.
+    method: getmininginfo
+    args: []
+    result: mining_info
+  - name: get_network_hashps
+    desc: Returns the estimated current or historical network hashes per second based on the last n blocks.
+    method: getnetworkhashps
+    args: ["nblocks","height"]
+  - name: prioritise_transaction
+    desc: Adds virtual priority or fee to a transaction, allowing it to be accepted into blocks mined by this node (or miners which use this node) with a lower priority or fee.
+    method: prioritisetransaction
+    args: ["txi_d", "priority","fee"]
+  - name: submit_block
+    desc: Accepts a block, verifies it is a valid addition to the block chain, and broadcasts it to the network.
+    method: submitblock
+    args: ["block", "parameters"]

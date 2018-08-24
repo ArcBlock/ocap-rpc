@@ -1,0 +1,17 @@
+---
+name: Control
+desc: Bitcoin account related RPC
+public:
+  - name: get_info
+    desc: Returns an object containing various state info
+    method: getinfo
+    args: []
+    result: node_network_info
+  - name: help
+    desc: List all available public RPC comands, or gets help fro the specificed RPC. 
+    method: help
+    args: ["RPC"]
+  - name: stop
+    desc: Safely shuts down the Bitcoin Core server.
+    method: stop
+    args: []
