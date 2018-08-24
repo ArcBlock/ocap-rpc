@@ -42,7 +42,7 @@
     - gas_limit: "&to_int(_)"
     - gas_used: "&to_int(_)"
     - hash: "&strip(_)"
-    - pre_hash: parent_hash
+    - pre_hash: &strip(_)
     - logs_bloom: "&strip(_)"
     - mix_hash: "&strip(_)"
     - nonce: "&strip(_)"
