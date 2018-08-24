@@ -4,6 +4,7 @@ defmodule OcapRpc.Internal.BtcRpc do
   """
   require Logger
   use Tesla
+  alias OcapRpc.PoisonedDecimal
 
   def call(method, params) when is_atom(method) do
     config = Application.get_env(:ex_bitcoin, :conn)
