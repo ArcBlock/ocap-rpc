@@ -1,3 +1,6 @@
+## 0.10.3 (August 23, 2018)
+  - Remove 0x prefix for pre_hash
+
 ## 0.10.2 (August 23, 2018)
   - fix various issues and use wei in all values
 

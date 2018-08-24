@@ -42,12 +42,11 @@
     - gas_limit: "&to_int(_)"
     - gas_used: "&to_int(_)"
     - hash: "&strip(_)"
-    - pre_hash: parent_hash
+    - pre_hash: "&strip(parent_hash)"
     - logs_bloom: "&strip(_)"
     - mix_hash: "&strip(_)"
     - nonce: "&strip(_)"
     - height: "&to_int(number)"
-    - parent_hash: "&strip(_)"
     - receipts_root: "&strip(_)"
     - seal_fields: "&strip(_)"
     - sha3_uncles: "&strip(_)"
