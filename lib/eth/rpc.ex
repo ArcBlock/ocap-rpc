@@ -55,11 +55,14 @@ defmodule OcapRpc.Internal.EthRpc do
 
   defp get_tx_receipt(resp) do
     receipt = call("eth_getTransactionReceipt", [resp["hash"]])
-    Map.merge(receipt, resp)
+    block = call("eth_getBlockByHash", [resp["blockHash"], false])
+    result = Map.merge(receipt, resp)
+    Map.put(result, "timestamp", block["timestamp"])
   end
 
   defp get_block_tx_receipt_batch(resp) do
     tx_list = resp["transactions"]
+    timestamp = resp["timestamp"]
     first_tx = List.first(tx_list)
 
     transactions =
@@ -70,7 +73,9 @@ defmodule OcapRpc.Internal.EthRpc do
           receipts = call("eth_getTransactionReceipt", [hashes])
 
           for {tx, receipt} <- Enum.zip(tx_list, receipts) do
-            Map.merge(receipt || %{}, tx)
+            receipt = Map.put(receipt || %{}, "timestamp", timestamp)
+
+            Map.merge(receipt, tx)
           end
 
         _ ->
