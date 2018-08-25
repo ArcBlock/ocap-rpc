@@ -1,3 +1,6 @@
+## 0.11.3 (August 25, 2018)
+  - add tx time
+
 ## 0.11.1 (August 24, 2018)
   - Change namespace of PoisonedDecimal.
 
