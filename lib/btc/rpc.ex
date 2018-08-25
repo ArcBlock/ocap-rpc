@@ -5,8 +5,6 @@ defmodule OcapRpc.Internal.BtcRpc do
   require Logger
   use Tesla
 
-  alias OcapRpc.PoisonedDecimal
-
   alias OcapRpc.Converter
 
   plug(Tesla.Middleware.Retry, delay: 500, max_retries: 3)
