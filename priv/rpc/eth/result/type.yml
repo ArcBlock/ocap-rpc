@@ -33,6 +33,7 @@
     - contract_value: "&to_contract_value(*)"
     - tx_type: "&get_tx_type(*)"
     - internal_txs: "&calc_internal_txs(*)"
+    - time: "&to_date(timestamp)"
 
 - block:
     - miner: "&strip(_)"
