@@ -1,3 +1,6 @@
+## 0.11.1 (August 24, 2018)
+  - Change namespace of PoisonedDecimal.
+
 ## 0.11.0 (August 24, 2018)
   - support basic btc rpc
 

@@ -1,8 +1,9 @@
-defmodule PoisonedDecimal do
+defmodule OcapRpc.PoisonedDecimal do
   @moduledoc """
   Copied from https://github.com/solatis/gold.
   Hacky wrapper for Decimal library to use different encoding than the one prepared for Decimal in Ecto (or different conflicting libraries)
   """
+  alias OcapRpc.PoisonedDecimal
 
   defstruct [:decimal]
 
