@@ -11,10 +11,18 @@ defmodule OcapRpc.Internal.Extractor do
   def process(data, mapping, type) when is_list(data),
     do: Enum.map(data, fn item -> process(item, mapping, type) end)
 
-  def process(data, mapping, _type) do
-    data
-    |> AtomicMap.convert(safe: false)
-    |> process_data(mapping)
+  def process(data, mapping, type) do
+    result =
+      data
+      |> AtomicMap.convert(safe: false)
+      |> process_data(mapping)
+
+    cond do
+      not is_map(result) -> result
+      Map.has_key?(result, :__struct__) -> result
+      not is_nil(type) -> struct(type, result)
+      true -> result
+    end
   end
 
   defp process_data(data, nil), do: data
@@ -113,6 +121,7 @@ defmodule OcapRpc.Internal.Extractor do
       :block_hash -> OcapRpc.Eth.Type.Transaction
       :miner -> OcapRpc.Eth.Type.Block
       :call_type -> OcapRpc.Eth.Type.TransactionTrace
+      :reward_type -> OcapRpc.Eth.Type.BlockReward
       _ -> nil
     end
   end

@@ -1,11 +1,29 @@
 ---
+- transaction_trace:
+    - call_type: "&strip(action.call_type)"
+    - parent_tx: "&strip(transaction_hash)"
+    - from: "&strip(action.from)"
+    - tx_gas_limit: "&to_int(_)"
+    - gas_limit: "&to_int(action.gas)"
+    - input: "&strip(action.input)"
+    - to: "&strip(action.to)"
+    - value: "&to_int(action.value)"
+    - output: "&strip(result.output)"
+    - raw_gas_used: "&to_int(result.gas_used)"
+    - gas_used: "&calc_tx_gas_used(*)"
+    - trace_address: "&strip(_)"
+    - error: "&strip(_)"
+    - sub_traces: "&strip(subtraces)"
+    - trace_address: "&strip(_)"
+    - type: "&strip(_)"
+
 - transaction:
     - block_hash: "&strip(_)"
     - block_height: "&to_int(block_number)"
     - from: "&strip(_)"
     - to: "&strip(_)"
     - gas_limit: "&to_int(gas)"
-    - gas_price: "&to_gwei(_)"
+    - gas_price: "&to_int(_)"
     - hash: "&strip(_)"
     - input: "&strip(_)"
     - nonce: "&to_int(_)"
@@ -13,27 +31,31 @@
     # - value: _
     - index: "&to_int(transaction_index)"
     - size: "&get_size(raw)"
-    - total: "&to_ether(value)"
+    - total: "&to_int(value)"
     - raw: "&strip(_)"
     - r: "&strip(_)"
     - v: "&strip(_)"
     - standard_v: "&to_int(_)"
     - condition: "&strip(_)"
     - creates: "&strip(_)"
-    - gas_used: "&to_int(_)"
-    - cumulative_gas_used: "&to_int(_)"
     - logs: "&strip(_)"
     - logs_bloom: "&strip(_)"
     - root: "&strip(_)"
-    - status: "&to_recepit_status(_)"
     - contract_from: "&strip(_)"
     - contract_to: "&strip(_)"
     - input_plain: _
-    - fees: "&get_fees(*)"
     - contract_value: "&to_contract_value(*)"
     - tx_type: "&get_tx_type(*)"
-    - internal_txs: "&calc_internal_txs(*)"
     - time: "&to_date(timestamp)"
+    - traces: @transaction_trace
+    - status: "&calc_tx_status(*)"
+    - gas_used: "&get_tx_gas_used(*)"
+    - fees: "&get_tx_fees(*)"
+
+- block_reward:
+    - reward_type: "&strip(action.reward_type)"
+    - value: "&to_int(action.value)"
+    - author: "&strip(action.author)"
 
 - block:
     - miner: "&strip(_)"
@@ -59,11 +81,14 @@
     - transactions_root: "&strip(_)"
     - transactions: @transaction
     - fees: "&calc_block_fees(*)"
-    - reward: "&calc_block_reward(*)"
+    - rewards: @block_reward
+    - block_reward: "&calc_block_reward(*)"
+    - uncle_reward: "&calc_uncle_reward(*)"
     - number_txs: "&len(transactions)"
     - total: "&calc_block_total(*)"
 
 - transaction_receipt:
+    - status: "&to_recepit_status(_)"
     - block_hash: "&strip(_)"
     - block_number: "&to_int(_)"
     - contract_address: "&strip(_)"
@@ -74,7 +99,6 @@
     - logs: "&strip(_)"
     - logsBloom: "&strip(_)"
     - root: "&strip(_)"
-    - status: "&to_recepit_status(_)"
     - transaction_hash: "&strip(_)"
     - transaction_index: "&to_int(_)"
 
@@ -88,25 +112,9 @@
     - to: "&strip(_)"
     - value: "&to_int(_)"
     - gas: "&to_int(_)"
-    - gas_price: "&to_gwei(_)"
+    - gas_price: "&to_int(_)"
     - input: "&strip(_)"
 
 - sign_result:
     - raw: "&strip(_)"
     - tx: @sign_result_tx
-
-
-- transaction_trace:
-    - call_type: "&strip(action.call_type)"
-    - parent_tx: "&strip(transaction_hash)"
-    - from: "&strip(action.from)"
-    - gas_left: "&to_int(action.gas)"
-    - input: "&strip(action.input)"
-    - to: "&strip(action.to)"
-    - value: "&to_ether(action.value)"
-    - output: "&strip(result.output)"
-    - gas_used: "&to_int(result.gas_used)"
-    - trace_address: "&strip(_)"
-    - error: "&strip(_)"
-    - sub_traces: "&strip(subtraces)"
-    - trace_address: "&strip(_)"

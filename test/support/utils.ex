@@ -74,6 +74,60 @@ defmodule OcapRpcTest.TestUtils do
     "transactionHash" => "735975a1b3d79624c81a1c2c97a4d3cead388b8b1a9bba4da07bb0032dd862e4",
     "transactionIndex" => "0"
   }
+  @sample_tx_trace [
+    %{
+      "action" => %{
+        "callType" => "call",
+        "from" => "38871c5663bf192e32abd98ca558ac91ae101a72",
+        "gas" => "0",
+        "input" => "",
+        "to" => "b9ee1e551f538a464e8f8c41e9904498505b49b0",
+        "value" => "39aaed7b4b22400"
+      },
+      "blockHash" => "f1070c1252a9629c5f95728b44d5cb48869d33b69e05180c9eb74d551f6e8a28",
+      "blockNumber" => "5c5bd1",
+      "result" => %{"gasUsed" => "0", "output" => ""},
+      "subtraces" => 0,
+      "traceAddress" => [],
+      "transactionHash" => "735975a1b3d79624c81a1c2c97a4d3cead388b8b1a9bba4da07bb0032dd862e4",
+      "transactionPosition" => 64,
+      "txGasLimit" => "5208",
+      "type" => "call"
+    }
+  ]
+
+  @sample_block_trace [
+    %{
+      "action" => %{
+        "author" => "ea674fdde714fd979de3edf0f56aa9716b898ec8",
+        "rewardType" => "block",
+        "value" => "0x2aef353bcddd6000"
+      },
+      "blockHash" => "f1070c1252a9629c5f95728b44d5cb48869d33b69e05180c9eb74d551f6e8a28",
+      "blockNumber" => "5c5bd1",
+      "result" => nil,
+      "subtraces" => 0,
+      "traceAddress" => [],
+      "transactionHash" => nil,
+      "transactionPosition" => nil,
+      "type" => "reward"
+    },
+    %{
+      "action" => %{
+        "author" => "441d463d69cb6eaa851eb6138c3efac95c86d17b",
+        "rewardType" => "uncle",
+        "value" => "0x246ddf9797668000"
+      },
+      "blockHash" => "f1070c1252a9629c5f95728b44d5cb48869d33b69e05180c9eb74d551f6e8a28",
+      "blockNumber" => "5c5bd1",
+      "result" => nil,
+      "subtraces" => 0,
+      "traceAddress" => [],
+      "transactionHash" => nil,
+      "transactionPosition" => nil,
+      "type" => "reward"
+    }
+  ]
 
   @contract_tx %{
     "address" => "b98d4c97425d9908e66e53a6fdf673acca0be986",
@@ -93,7 +147,7 @@ defmodule OcapRpcTest.TestUtils do
   }
 
   def user_account, do: @user_account
-  def user_balance, do: 1049.1876721330364
+  def user_balance, do: 10_491_876_721_330_364
 
   def contract_account, do: @contract_account
   def contract_code, do: "deadbeef"
@@ -101,11 +155,13 @@ defmodule OcapRpcTest.TestUtils do
   def block, do: @sample_block
   def block_hash, do: Map.get(@sample_block, "hash")
   def block_height, do: Map.get(@sample_block, "number")
+  def block_trace, do: @sample_block_trace
 
   def tx, do: @sample_tx
   def tx_hash, do: Map.get(@sample_tx, "hash")
 
   def tx_receipt, do: @sample_tx_receipt
+  def tx_trace, do: @sample_tx_trace
 
   def gas_price, do: Map.get(@sample_tx, "gasPrice")
 

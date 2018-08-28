@@ -45,25 +45,36 @@ defmodule OcapRpc.Internal.EthRpc do
 
   def resp_hook(resp, type \\ nil) do
     case type do
-      :transaction -> get_tx_receipt(resp)
-      :block -> get_block_tx_receipt_batch(resp)
+      :transaction -> get_tx_trace(resp)
+      :block -> get_block_trace(resp)
       _ -> resp
     end
   end
 
   # private functions
-
-  defp get_tx_receipt(resp) do
-    receipt = call("eth_getTransactionReceipt", [resp["hash"]])
+  defp get_tx_trace(resp) do
+    hash = resp["hash"]
+    traces = Map.put(%{}, hash, call("trace_transaction", [hash]))
     block = call("eth_getBlockByHash", [resp["blockHash"], false])
-    result = Map.merge(receipt, resp)
-    Map.put(result, "timestamp", block["timestamp"])
+    receipt = call("eth_getTransactionReceipt", [resp["hash"]])
+
+    receipt
+    |> Map.merge(resp)
+    |> Map.put("traces", get_traces(resp, traces))
+    |> Map.put("timestamp", block["timestamp"])
   end
 
-  defp get_block_tx_receipt_batch(resp) do
+  defp get_block_trace(resp) do
     tx_list = resp["transactions"]
     timestamp = resp["timestamp"]
     first_tx = List.first(tx_list)
+
+    traces =
+      "trace_block"
+      |> call([resp["number"]])
+      |> Enum.group_by(fn tx -> tx["transactionHash"] end)
+
+    rewards = Map.get(traces, nil)
 
     transactions =
       case is_map(first_tx) do
@@ -72,17 +83,30 @@ defmodule OcapRpc.Internal.EthRpc do
 
           receipts = call("eth_getTransactionReceipt", [hashes])
 
-          for {tx, receipt} <- Enum.zip(tx_list, receipts) do
-            receipt = Map.put(receipt || %{}, "timestamp", timestamp)
+          tx_list =
+            for {tx, receipt} <- Enum.zip(tx_list, receipts) do
+              Map.merge(receipt || %{}, tx)
+            end
 
-            Map.merge(receipt, tx)
-          end
+          Enum.map(tx_list, fn tx ->
+            tx
+            |> Map.put("timestamp", timestamp)
+            |> Map.put("traces", get_traces(tx, traces))
+          end)
 
         _ ->
           tx_list
       end
 
-    Map.put(resp, "transactions", transactions)
+    resp
+    |> Map.put("transactions", transactions)
+    |> Map.put("rewards", rewards)
+  end
+
+  defp get_traces(tx, traces) do
+    traces
+    |> Map.get(tx["hash"], [])
+    |> Enum.map(fn trace -> Map.put(trace, "txGasLimit", tx["gas"]) end)
   end
 
   defp process_batch_result(data) do
