@@ -1,3 +1,7 @@
+## 0.12.0 (August 28, 2018)
+  - fix transaction tx type issue and parse contract from / to better
+  - retrieve block reward and change unit to wei
+
 ## 0.11.3 (August 25, 2018)
   - add tx time
 
