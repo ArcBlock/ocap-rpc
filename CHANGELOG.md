@@ -1,3 +1,6 @@
+## 0.11.4 (August 29, 2018)
+ - move timeout value to config
+
 ## 0.11.3 (August 25, 2018)
   - add tx time
 

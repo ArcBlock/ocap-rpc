@@ -10,11 +10,13 @@ defmodule OcapRpc.Internal.EthRpc do
   plug(Tesla.Middleware.Retry, delay: 500, max_retries: 3)
 
   @headers [{"content-type", "application/json"}]
+  @timeout :ocap_rpc |> Application.get_env(:eth) |> Keyword.get(:timeout)
+
   plug(Tesla.Middleware.Headers, @headers)
 
   # TODO(lei): when tesla not compatible issue solved: `https://github.com/teamon/tesla/issues/157`
   if Application.get_env(:ocap_rpc, :env) not in [:test] do
-    plug(Tesla.Middleware.Timeout, timeout: 5_000)
+    plug(Tesla.Middleware.Timeout, timeout: @timeout)
   end
 
   def call(method, args) do

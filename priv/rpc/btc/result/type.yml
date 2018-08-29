@@ -127,7 +127,7 @@
     - hex: _  
 
 - transaction_memory_pool_info:
-    - size:
+    - size: _
     - bytes: _
     - usage: _
     - max_mempool: maxmempool

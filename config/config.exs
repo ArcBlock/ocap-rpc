@@ -13,16 +13,15 @@ config :ocap_rpc, :eth,
   conn: %{
     hostname: "localhost",
     port: 8545
-  }
+  },
+  timeout: 5_000
 
 config :ocap_rpc, :btc,
   conn: %{
     hostname: "localhost",
     port: 8332
-  }
-
-config :ocap_rpc,
-  env: Mix.env()
+  },
+  timeout: 5_000
 
 config :ocap_rpc,
   env: Mix.env()
