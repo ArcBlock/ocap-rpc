@@ -46,6 +46,7 @@ defmodule OcapRpc.Converter do
   @doc """
   Convert hex string to integer
   """
+  def to_int(v) when is_integer(v), do: v
   def to_int(nil), do: 0
   def to_int(""), do: 0
   def to_int("0x" <> hex), do: to_int(hex)
@@ -113,7 +114,7 @@ defmodule OcapRpc.Converter do
   def get_tx_type(data) do
     cond do
       data.creates != nil -> "contract_deployment"
-      String.length(data.input) > 2 -> "contract_execution"
+      data.to_addr_code != "" -> "contract_execution"
       true -> "normal"
     end
   end
@@ -183,4 +184,17 @@ defmodule OcapRpc.Converter do
       true -> last_trace.error |> String.downcase()
     end
   end
+
+  def calc_block_internal_tx(block) do
+    Enum.flat_map(block.transactions, &get_internal_tx/1)
+  end
+
+  # private functions
+  defp get_internal_tx(%{tx_type: "contract_execution"} = tx) do
+    Enum.filter(tx.traces, fn trace ->
+      trace.from == tx.to and trace.value > 0 and trace.call_type == "call"
+    end)
+  end
+
+  defp get_internal_tx(_tx), do: []
 end

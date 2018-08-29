@@ -24,8 +24,22 @@ defmodule OcapRpc.Internal.EthTransaction do
                  Map.put(acc, sig, {fn_name, arity, name})
                end)
 
-  def parse_input(%{input: ""}), do: nil
-  def parse_input(%{input: "00"}), do: nil
+  def parse_input(%{input: "", tx_type: "contract_execution"} = data) do
+    # TODO(tchen): need to make sure this is the right calculation
+    trace =
+      data.traces
+      |> Enum.filter(fn trace ->
+        trace.from == data.to and trace.value > 0 and trace.call_type == "call"
+      end)
+      |> List.first()
+
+    case trace do
+      nil -> update_tx(data, nil, nil, nil, "")
+      _ -> update_tx(data, data.from, trace.to, trace.value, "")
+    end
+  end
+
+  def parse_input(%{input: ""} = data), do: update_tx(data, nil, nil, nil, "")
 
   def parse_input(data) when is_map(data) do
     <<sig::binary-8, rest::binary>> = data.input
@@ -50,7 +64,7 @@ defmodule OcapRpc.Internal.EthTransaction do
         update_tx(data, from, to, value, input_plain)
 
       _ ->
-        data.input
+        update_tx(data, nil, nil, nil, "")
     end
   rescue
     e ->

@@ -3,7 +3,6 @@
     - call_type: "&strip(action.call_type)"
     - parent_tx: "&strip(transaction_hash)"
     - from: "&strip(action.from)"
-    - tx_gas_limit: "&to_int(_)"
     - gas_limit: "&to_int(action.gas)"
     - input: "&strip(action.input)"
     - to: "&strip(action.to)"
@@ -24,11 +23,12 @@
     - to: "&strip(_)"
     - gas_limit: "&to_int(gas)"
     - gas_price: "&to_int(_)"
+    - gas_used: "&to_int(_)"
+    - cumulative_gas_used: "&to_int(_)"
     - hash: "&strip(_)"
     - input: "&strip(_)"
     - nonce: "&to_int(_)"
     - public_key: "&strip(_)"
-    # - value: _
     - index: "&to_int(transaction_index)"
     - size: "&get_size(raw)"
     - total: "&to_int(value)"
@@ -44,12 +44,12 @@
     - contract_from: "&strip(_)"
     - contract_to: "&strip(_)"
     - input_plain: _
-    - contract_value: "&to_contract_value(*)"
-    - tx_type: "&get_tx_type(*)"
-    - time: "&to_date(timestamp)"
     - traces: @transaction_trace
-    - status: "&calc_tx_status(*)"
-    - gas_used: "&get_tx_gas_used(*)"
+    - tx_type: "&get_tx_type(*)"
+    - contract_value: "&to_contract_value(*)"
+    - time: "&to_date(timestamp)"
+    - receipt_status: "&to_recepit_status(status)"
+    - trace_status: "&calc_tx_status(*)"
     - fees: "&get_tx_fees(*)"
 
 - block_reward:
@@ -86,6 +86,7 @@
     - uncle_reward: "&calc_uncle_reward(*)"
     - number_txs: "&len(transactions)"
     - total: "&calc_block_total(*)"
+    - internal_txs: "&calc_block_internal_tx(*)"
 
 - transaction_receipt:
     - status: "&to_recepit_status(_)"
