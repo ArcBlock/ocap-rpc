@@ -14,7 +14,7 @@ defmodule OcapRpc.Internal.EthRpc do
 
   # TODO(lei): when tesla not compatible issue solved: `https://github.com/teamon/tesla/issues/157`
   if Application.get_env(:ocap_rpc, :env) not in [:test] do
-    plug(Tesla.Middleware.Timeout, timeout: 5_000)
+    plug(Tesla.Middleware.Timeout, timeout: 15_000)
   end
 
   def call(method, args) do
