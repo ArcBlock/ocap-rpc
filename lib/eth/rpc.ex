@@ -57,7 +57,12 @@ defmodule OcapRpc.Internal.EthRpc do
     traces = call("trace_transaction", [hash])
     block = call("eth_getBlockByHash", [resp["blockHash"], false])
     receipt = call("eth_getTransactionReceipt", [resp["hash"]])
-    to_addr_code = call("eth_getCode", [resp["to"]])
+
+    to_addr_code =
+      case resp["to"] do
+        nil -> ""
+        to -> call("eth_getCode", [to])
+      end
 
     receipt
     |> Map.merge(resp)
@@ -82,15 +87,28 @@ defmodule OcapRpc.Internal.EthRpc do
       case is_map(first_tx) do
         true ->
           hashes = Enum.map(tx_list, fn tx -> [tx["hash"]] end)
-          accounts = Enum.map(tx_list, fn tx -> [tx["to"]] end)
+
+          accounts =
+            tx_list
+            |> Enum.reject(fn tx -> is_nil(tx["to"]) end)
+            |> Enum.map(fn tx -> [tx["to"]] end)
 
           receipts = call("eth_getTransactionReceipt", [hashes])
-          codes = call("eth_getCode", [accounts])
+
+          codes =
+            case accounts do
+              [] ->
+                %{}
+
+              _ ->
+                code_data = call("eth_getCode", [accounts])
+                accounts |> List.flatten() |> Enum.zip(code_data) |> Enum.into(%{})
+            end
 
           tx_list =
-            for {tx, receipt, code} <- Enum.zip([tx_list, receipts, codes]) do
+            for {tx, receipt} <- Enum.zip(tx_list, receipts) do
               (receipt || %{})
-              |> Map.put("toAddrCode", code)
+              |> Map.put("toAddrCode", Map.get(codes, tx["to"], ""))
               |> Map.merge(tx)
             end
 
