@@ -1,3 +1,6 @@
+## 0.11.5 (August 31, 2018)
+  - Add code to handle error.
+
 ## 0.11.4 (August 29, 2018)
  - move timeout value to config
 
