@@ -37,6 +37,13 @@ defmodule OcapRpc.Internal.EthRpc do
           %{"error" => %{"code" => code, "message" => msg}} -> handle_error(code, msg)
         end
 
+      {:error, reason} ->
+        raise(
+          "RPC call failed. Reason: #{inspect(reason)}, method: #{inspect(method)}, arguments: #{
+            inspect(args)
+          }"
+        )
+
       # TODO: unfortunately eth json rpc returns everything as 200, break out here as a TODO
       _ ->
         raise RuntimeError
