@@ -1,3 +1,6 @@
+## 0.11.4 (August 31, 2018)
+  - Add code to handle error.
+
 ## 0.11.3 (August 25, 2018)
   - add tx time
 
