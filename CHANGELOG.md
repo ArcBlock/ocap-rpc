@@ -1,3 +1,6 @@
+## 0.11.6 (August 31, 2018)
+ - Disable transaction trace for now.
+
 ## 0.11.5 (August 31, 2018)
   - Add code to handle error.
 
