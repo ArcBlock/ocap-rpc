@@ -69,6 +69,8 @@ defmodule OcapRpc.Internal.EthRpc do
     Map.put(result, "timestamp", block["timestamp"])
   end
 
+  defp get_block_tx_receipt_batch(nil), do: nil
+
   defp get_block_tx_receipt_batch(resp) do
     tx_list = resp["transactions"]
     timestamp = resp["timestamp"]
