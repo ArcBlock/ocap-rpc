@@ -191,8 +191,13 @@ defmodule OcapRpc.Converter do
 
   # private functions
   defp get_internal_tx(%{tx_type: "contract_execution"} = tx) do
-    Enum.filter(tx.traces, fn trace ->
+    tx.traces
+    |> Enum.filter(fn trace ->
       trace.from == tx.to and trace.value > 0 and trace.call_type == "call"
+    end)
+    |> Enum.map(fn trace ->
+      fee = trace.gas_used * tx.gas_price
+      Map.put(trace, :fee, fee)
     end)
   end
 
