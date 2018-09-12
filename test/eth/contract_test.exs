@@ -25,7 +25,7 @@ defmodule OcapRpcTest.EthContract do
   end
 
   test "Should return a list of transactions for a token" do
-    [tx | _] = Contract.get_transactions(:abt, nil, nil, 10000, 0)
+    [tx | _] = Contract.get_transactions(:abt, nil, nil, 10_000, 0)
     assert tx.hash == TestUtils.tx_hash()
   end
 end

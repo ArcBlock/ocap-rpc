@@ -27,6 +27,7 @@ defmodule OcapRpc.Converter do
   @doc """
   Convert timestamp to time string
   """
+  def to_date(nil), do: nil
   def to_date(timestamp) when is_integer(timestamp), do: DateTime.from_unix!(timestamp)
 
   def to_date(timestamp) do

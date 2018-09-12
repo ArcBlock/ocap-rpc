@@ -1,3 +1,6 @@
+## 0.11.7 (September 12, 2018)
+  - Handle the case where block number is out of range.
+
 ## 0.11.6 (August 31, 2018)
  - Disable transaction trace for now.
 
