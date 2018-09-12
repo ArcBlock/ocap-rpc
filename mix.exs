@@ -46,17 +46,18 @@ defmodule OcapRpc.MixProject do
       {:yaml_elixir, "~> 2.0.0"},
 
       # utility tools for error logs and metrics
-      {:logger_sentry, "~> 0.1.5"},
-      {:recon, "~> 2.3.2"},
-      {:recon_ex, "~> 0.9.1"},
-      {:sentry, "~> 6.4.0"},
+      # {:logger_sentry, "~> 0.1.5"},
+      # {:recon, "~> 2.3.2"},
+      # {:recon_ex, "~> 0.9.1"},
+      # {:sentry, "~> 6.4.0"},
 
       # utility belt
       # {:utility_belt, path: "/Users/tchen/projects/mycode/utility_belt"},
-      {:utility_belt, "> 0.0.0"},
+      # {:utility_belt, "> 0.0.0"},
 
       # deployment
-      {:distillery, "~> 1.5", runtime: false},
+      # {:distillery, "~> 1.5", runtime: false},
+      {:keccakf1600, "~> 2.0", hex: :keccakf1600_orig},
 
       # dev & test
       {:benchee, "~> 0.13.0", only: [:dev, :test], runtime: false},
