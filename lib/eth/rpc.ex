@@ -6,6 +6,7 @@ defmodule OcapRpc.Internal.EthRpc do
   require Logger
 
   alias OcapRpc.Converter
+  alias OcapRpc.Eth.LocalRpc
 
   # plug(Tesla.Middleware.Retry, delay: 500, max_retries: 3)
 
@@ -14,10 +15,30 @@ defmodule OcapRpc.Internal.EthRpc do
 
   # TODO(lei): when tesla not compatible issue solved: `https://github.com/teamon/tesla/issues/157`
   if Application.get_env(:ocap_rpc, :env) not in [:test] do
-    plug(Tesla.Middleware.Timeout, timeout: Application.get_env(:ocap_rpc, :timeout, 240_000))
+    plug(Tesla.Middleware.Timeout, timeout: Application.get_env(:ocap_rpc, :timeout, 5_000))
   end
 
   def call(method, args) do
+    case method in Application.get_env(:ocap_rpc, :local_rpc, []) do
+      true -> call_local(method, args)
+      _ -> call_rpc(method, args)
+    end
+  end
+
+  def resp_hook(resp, type \\ nil) do
+    case type do
+      :transaction -> get_tx_trace(resp)
+      :block -> get_block_trace(resp)
+      _ -> resp
+    end
+  end
+
+  # private functions
+  def call_local(method, args) do
+    LocalRpc.get(method, args)
+  end
+
+  def call_rpc(method, args) do
     %{hostname: hostname, port: port} =
       :ocap_rpc |> Application.get_env(:eth) |> Keyword.get(:conn)
 
@@ -39,19 +60,11 @@ defmodule OcapRpc.Internal.EthRpc do
 
       # TODO: unfortunately eth json rpc returns everything as 200, break out here as a TODO
       _ ->
+        Logger.error("Cannot retrieve rpc: #{method} and #{inspect(args)}")
         raise RuntimeError
     end
   end
 
-  def resp_hook(resp, type \\ nil) do
-    case type do
-      :transaction -> get_tx_trace(resp)
-      :block -> get_block_trace(resp)
-      _ -> resp
-    end
-  end
-
-  # private functions
   defp get_tx_trace(resp) do
     hash = resp["hash"]
     traces = call("trace_transaction", [hash])

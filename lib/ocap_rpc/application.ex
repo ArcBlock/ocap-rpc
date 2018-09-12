@@ -4,7 +4,14 @@ defmodule OcapRpc.Application do
   use Application
 
   def start(_type, _args) do
-    children = []
+    local_rpc =
+      case Application.get_env(:ocap_rpc, :local_rpc, []) do
+        [] -> []
+        _ -> [{OcapRpc.Eth.LocalRpc, [System.get_env("RPC_PATH")]}]
+      end
+
+    children = [] ++ local_rpc
+
     opts = [strategy: :one_for_one, name: OcapRpc.Supervisor]
 
     update_config()
