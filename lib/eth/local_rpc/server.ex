@@ -109,9 +109,10 @@ defmodule OcapRpc.Eth.LocalRpc do
     |> Path.join("blocks.json")
     |> File.stream!()
     |> Stream.map(&Jason.decode!/1)
-    |> Enum.reduce({%{}, 0}, fn data, {acc, _last_num} ->
+    |> Enum.reduce({%{}, 0}, fn data, {acc, last_num} ->
       num = data["number"] |> Converter.to_int()
-      {Map.put(acc, data["number"], data), num}
+      new_last_num = max(last_num, num)
+      {Map.put(acc, data["number"], data), new_last_num}
     end)
   end
 
