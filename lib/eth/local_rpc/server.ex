@@ -90,7 +90,7 @@ defmodule OcapRpc.Eth.LocalRpc do
     {blocks, end_num} = load_blocks(p)
     raw_txs = load_raw_txs(p)
 
-    %{
+    result = %{
       start: num,
       end: end_num,
       block_map: block_map,
@@ -99,6 +99,9 @@ defmodule OcapRpc.Eth.LocalRpc do
       traces: load_traces(p),
       receipts: load_receipts(p)
     }
+
+    Logger.info("Loaded new map from #{num} to #{end_num}")
+    result
   end
 
   defp load_blocks(p) do
