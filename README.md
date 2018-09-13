@@ -22,13 +22,15 @@ config :ocap_rpc, :eth,
   conn: %{
     hostname: "localhost",
     port: 8545
-  }
+  },
+  timeout: 5_000
 
 config :ocap_rpc, :btc,
   conn: %{
     hostname: "localhost",
     port: 8332
-  }
+  },
+  timeout: 5_000
 ```
 
 ## Environment Variable Dependencies

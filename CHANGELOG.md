@@ -2,6 +2,21 @@
   - fix transaction tx type issue and parse contract from / to better
   - retrieve block reward and change unit to wei
 
+## 0.11.8 (September 13, 2018)
+  - Bypass the contract_to parsing issue for now.
+
+## 0.11.7 (September 12, 2018)
+  - Handle the case where block number is out of range.
+
+## 0.11.6 (August 31, 2018)
+ - Disable transaction trace for now.
+
+## 0.11.5 (August 31, 2018)
+  - Add code to handle error.
+
+## 0.11.4 (August 29, 2018)
+ - move timeout value to config
+
 ## 0.11.3 (August 25, 2018)
   - add tx time
 

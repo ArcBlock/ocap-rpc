@@ -10,6 +10,8 @@ defmodule OcapRpc.Internal.EthRpc do
   # plug(Tesla.Middleware.Retry, delay: 500, max_retries: 3)
 
   @headers [{"content-type", "application/json"}]
+  @timeout :ocap_rpc |> Application.get_env(:eth) |> Keyword.get(:timeout)
+
   plug(Tesla.Middleware.Headers, @headers)
 
   # TODO(lei): when tesla not compatible issue solved: `https://github.com/teamon/tesla/issues/157`
@@ -36,6 +38,13 @@ defmodule OcapRpc.Internal.EthRpc do
           [_ | _] = data -> process_batch_result(data)
           %{"error" => %{"code" => code, "message" => msg}} -> handle_error(code, msg)
         end
+
+      {:error, reason} ->
+        raise(
+          "RPC call failed. Reason: #{inspect(reason)}, method: #{inspect(method)}, arguments: #{
+            inspect(args)
+          }"
+        )
 
       # TODO: unfortunately eth json rpc returns everything as 200, break out here as a TODO
       _ ->
