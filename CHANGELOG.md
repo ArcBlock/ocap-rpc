@@ -1,3 +1,6 @@
+## 0.11.8 (September 13, 2018)
+  - Bypass the contract_to parsing issue for now.
+
 ## 0.11.7 (September 12, 2018)
   - Handle the case where block number is out of range.
 
