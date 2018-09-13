@@ -43,10 +43,19 @@ defmodule OcapRpc.Internal.EthTransaction do
       "transfer" ->
         [to, value | _] = args
 
+        if to != nil && byte_size(to) > 40 do
+          raise("The length of contract_to is greater than 20 bytes.")
+        end
+
         update_tx(data, data.from, to, value, input_plain)
 
       "transferFrom" ->
         [from, to, value] = args
+
+        if to != nil && byte_size(to) > 40 do
+          raise("The length of contract_to is greater than 20 bytes.")
+        end
+
         update_tx(data, from, to, value, input_plain)
 
       _ ->
