@@ -4,105 +4,69 @@ defmodule OcapRpc.Internal.EthTransaction do
   """
   require Logger
 
-  alias OcapRpc.Converter
-  alias OcapRpc.Internal.Utils
+  alias OcapRpc.Eth.SignatureDatabase
 
-  @method_sigs [
-                 "approve(address,uint256)",
-                 "transferFrom(address,address,uint256)",
-                 "unpause()",
-                 "decreaseApproval(address,uint256)",
-                 "pause()",
-                 "transfer(address,uint256)",
-                 "increaseApproval(address,uint256)",
-                 "transferOwnership(address)"
-               ]
-               |> Enum.reduce(%{}, fn name, acc ->
-                 sig = Utils.get_method_sig(name)
-                 fn_name = name |> String.split("(") |> List.first()
-                 arity = name |> String.split(",") |> length()
-                 Map.put(acc, sig, {fn_name, arity, name})
-               end)
+  @sig_reg ~r{(.*)\((.*)\)}
 
-  def parse_input(%{input: "", tx_type: "contract_execution"} = data) do
-    # TODO(tchen): need to make sure this is the right calculation
-    trace =
-      data.traces
-      |> Enum.filter(fn trace ->
-        trace.from == data.to and trace.value > 0 and trace.call_type == "call"
-      end)
-      |> List.first()
-
-    case trace do
-      nil -> update_tx(data, nil, nil, nil, "")
-      _ -> update_tx(data, data.from, trace.to, trace.value, "")
+  def parse_input(transaction) when is_map(transaction) do
+    cond do
+      transaction.to == nil -> nil
+      byte_size(transaction.input) < 8 -> nil
+      true -> transaction.input |> Base.decode16!(case: :lower) |> parse_input()
     end
   end
 
-  def parse_input(%{input: ""} = data), do: update_tx(data, nil, nil, nil, "")
-  def parse_input(%{input: "00"} = data), do: update_tx(data, nil, nil, nil, "")
+  def parse_input(binary_input) when is_binary(binary_input) do
+    <<sig_bytes::binary-4, input_data::binary>> = binary_input
 
-  def parse_input(data) when is_map(data) do
-    <<sig::binary-8, rest::binary>> = data.input
+    sig_bytes
+    |> Base.encode16(case: :lower)
+    |> SignatureDatabase.get_signatures()
+    |> decode_transaction_input(input_data)
+  end
 
-    {method, _arity, fn_sig} =
-      case Map.get(@method_sigs, sig) do
-        nil -> {"unknownMethod", 0, "n/a"}
-        v -> v
-      end
+  def decode_transaction_input(nil, _input_data), do: nil
+  def decode_transaction_input([], _input_data), do: nil
 
-    args = get_args(rest)
-    input_plain = get_input_plain(fn_sig, sig, args)
+  @doc """
+  Decode the transaction input based on the given `signatures`.
+  """
+  @spec decode_transaction_input(list[String.t()], binary) :: nil | {String.t(), list}
+  def decode_transaction_input(signatures, input_data) when is_list(signatures) do
+    signatures
+    |> Enum.map(&decode_transaction_input(&1, input_data))
+    |> Enum.find(nil, fn item -> item != nil end)
+  end
 
-    case method do
-      "transfer" ->
-        [to, value | _] = args
+  @doc """
+  Decode transaction input data.
+  """
+  @spec decode_transaction_input(String.t(), binary) :: nil | {String.t(), list}
+  def decode_transaction_input(signature, input_data) do
+    [_, fn_name, params] = Regex.run(@sig_reg, signature)
 
-        if to != nil && byte_size(to) > 40 do
-          raise("The length of contract_to is greater than 20 bytes.")
-        end
+    # This is a workaround of this issue https://github.com/exthereum/abi/issues/13
+    new_signature = fn_name <> "((" <> params <> "))"
 
-        update_tx(data, data.from, to, value, input_plain)
-
-      "transferFrom" ->
-        [from, to, value] = args
-
-        if to != nil && byte_size(to) > 40 do
-          raise("The length of contract_to is greater than 20 bytes.")
-        end
-
-        update_tx(data, from, to, value, input_plain)
-
-      _ ->
-        update_tx(data, nil, nil, nil, "")
+    try do
+      [tuple] = ABI.decode(new_signature, input_data)
+      types = String.split(params, ",")
+      args = parse_args(types, tuple)
+      {signature, args}
+    rescue
+      RuntimeError -> nil
     end
-  rescue
-    e ->
-      Logger.warn(
-        "Cannot process input data. Error: #{Exception.message(e)}. Tx hash is #{data.hash}. Input: #{
-          data.input
-        }."
-      )
-
-      update_tx(data, nil, nil, nil, "")
   end
 
-  defp update_tx(data, from, to, value, input) do
-    data
-    |> Map.put(:contract_from, from)
-    |> Map.put(:contract_to, to)
-    |> Map.put(:contract_value, Converter.to_int(value))
-    |> Map.put(:input_plain, input)
-  end
+  def parse_args(types, args) do
+    # assert(length(types) == length(args))
 
-  defp get_input_plain(fn_sig, sig, args) do
     args
-    |> Enum.with_index()
-    |> Enum.reduce("Function: #{fn_sig}\nMethodID: #{sig}", fn {item, idx}, acc ->
-      acc <> "\n[#{idx}]: #{item}"
-    end)
+    |> Tuple.to_list()
+    |> Enum.zip(types)
+    |> Enum.map(&parse_arg/1)
   end
 
-  defp get_args(data),
-    do: for(<<arg::binary-64 <- data>>, do: arg |> String.trim_leading("0"))
+  def parse_arg({arg, "address"}), do: "0x" <> Base.encode16(arg, case: :lower)
+  def parse_arg({arg, _type}), do: arg
 end
