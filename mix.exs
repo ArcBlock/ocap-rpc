@@ -44,6 +44,7 @@ defmodule OcapRpc.MixProject do
       {:proper_case, "~> 1.2.0"},
       {:recase, "~> 0.3.0"},
       {:yaml_elixir, "~> 2.0.0"},
+      {:abi, "~> 0.1.8"},
 
       # utility tools for error logs and metrics
       {:logger_sentry, "~> 0.1.5"},
