@@ -34,4 +34,7 @@ defmodule OcapRpc.Internal.Utils do
   end
 
   def int_to_hex(int), do: "0x" <> (int |> Integer.to_string(16) |> padding())
+
+  def hex_to_binary("0x" <> hex), do: hex_to_binary(hex)
+  def hex_to_binary(hex), do: Base.decode16!(hex, case: :lower)
 end

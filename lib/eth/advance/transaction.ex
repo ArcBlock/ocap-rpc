@@ -5,14 +5,15 @@ defmodule OcapRpc.Internal.EthTransaction do
   require Logger
 
   alias OcapRpc.Eth.SignatureDatabase
+  alias OcapRpc.Internal.Utils
 
   @sig_reg ~r{(.*)\((.*)\)}
 
   def parse_input(transaction) when is_map(transaction) do
     cond do
-      transaction.to == nil -> nil
+      Map.get(transaction, :to, nil) == nil -> nil
       byte_size(transaction.input) < 8 -> nil
-      true -> transaction.input |> Base.decode16!(case: :lower) |> parse_input()
+      true -> transaction.input |> Utils.hex_to_binary() |> parse_input()
     end
   end
 
