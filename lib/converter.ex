@@ -173,7 +173,7 @@ defmodule OcapRpc.Converter do
     data = for <<b::binary-2 <- input>>, do: b
     zeros = Enum.count(data, &(&1 == "00"))
     non_zeros = length(data) - zeros
-    21000 + trace.raw_gas_used + zeros * 4 + non_zeros * 68
+    21_000 + trace.raw_gas_used + zeros * 4 + non_zeros * 68
   end
 
   def calc_tx_status(tx) do
@@ -188,6 +188,13 @@ defmodule OcapRpc.Converter do
 
   def calc_block_internal_tx(block) do
     Enum.flat_map(block.transactions, &get_internal_tx/1)
+  end
+
+  def get_input_plain(data) do
+    case EthTransaction.parse_input(data) do
+      nil -> nil
+      {signature, input} -> %{signature: signature, parameters: input}
+    end
   end
 
   # private functions
