@@ -1,4 +1,6 @@
 defmodule OcapRpcTest.EthTx do
+  @moduledoc false
+
   use ExUnit.Case
   import Tesla.Mock
 

@@ -30,19 +30,12 @@ defmodule OcapRpc.Internal.Extractor do
   defp process_data(data, mapping) when is_map(data) do
     result =
       mapping
-      |> Enum.reduce(data, fn {k, v}, acc ->
-        try do
-          result = transform(v, acc, k)
+      |> Enum.reduce(data, fn {k, action}, acc ->
+        result = transform(action, acc, k)
 
-          case is_map(result) and Map.has_key?(result, k) do
-            true -> result
-            _ -> Map.put(acc, k, result)
-          end
-        rescue
-          e ->
-            Logger.error("Error: #{Exception.message(e)}, trace; #{Exception.format(:error, e)}")
-
-            acc
+        case is_map(result) and Map.has_key?(result, k) do
+          true -> result
+          _ -> Map.put(acc, k, result)
         end
       end)
 
@@ -71,9 +64,9 @@ defmodule OcapRpc.Internal.Extractor do
   defp transform("&" <> fn_info, data, key), do: call_function(fn_info, data, key)
 
   # process normal case like "gas_limit" or complicate case "action.gas"
-  defp transform(v, data, _key) when is_binary(v) do
+  defp transform(action, data, _key) when is_binary(action) do
     path =
-      v
+      action
       |> String.split(".")
       |> Enum.map(&String.to_atom(&1))
 
@@ -81,6 +74,8 @@ defmodule OcapRpc.Internal.Extractor do
   end
 
   defp transform(v, data, key) do
+    # IO.inspect(binding())
+
     value = Map.get(data, key)
 
     case is_nil(value) do

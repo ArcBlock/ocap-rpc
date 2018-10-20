@@ -2,7 +2,7 @@ defmodule OcapRpc.Converter do
   @moduledoc """
   Utility functions for convert data
   """
-  alias OcapRpc.Internal.EthTransaction
+  alias OcapRpc.Internal.EthABI
 
   @gwei 1_000_000_000
   @satoshi 100_000_000
@@ -159,7 +159,7 @@ defmodule OcapRpc.Converter do
     |> Enum.reduce(0, fn reward, acc -> acc + reward.value end)
   end
 
-  def to_contract_value(data), do: EthTransaction.parse_input(data)
+  def to_contract_value(data), do: EthABI.parse_input(data)
 
   @doc """
   Convert a bitcoin value to a satoshi value
@@ -186,23 +186,14 @@ defmodule OcapRpc.Converter do
     end
   end
 
-  def calc_block_internal_tx(block) do
-    Enum.flat_map(block.transactions, &get_internal_tx/1)
-  end
-
   def get_input_plain(data) do
-    case EthTransaction.parse_input(data) do
+    case EthABI.parse_input(data) do
       nil -> nil
       {signature, input} -> %{signature: signature, parameters: input}
     end
   end
 
-  # private functions
-  defp get_internal_tx(%{tx_type: "contract_execution"} = tx) do
-    Enum.filter(tx.traces, fn trace ->
-      trace.from == tx.to and trace.value > 0 and trace.call_type == "call"
-    end)
+  def get_trace_address(address) do
+    [-1 | address]
   end
-
-  defp get_internal_tx(_tx), do: []
 end

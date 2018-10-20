@@ -92,6 +92,12 @@ defmodule OcapRpc.Internal.EthRpc do
 
     rewards = Map.get(traces, nil)
 
+    uncle_details =
+      case resp["uncles"] do
+        [] -> []
+        uncles -> get_uncles_details(uncles, resp["number"])
+      end
+
     transactions =
       case is_map(first_tx) do
         true ->
@@ -134,6 +140,7 @@ defmodule OcapRpc.Internal.EthRpc do
     resp
     |> Map.put("transactions", transactions)
     |> Map.put("rewards", rewards)
+    |> Map.put("uncles", uncle_details)
   end
 
   defp process_batch_result(data) do
@@ -145,6 +152,14 @@ defmodule OcapRpc.Internal.EthRpc do
       true -> encode_many(method, args)
       _ -> encode_single(method, args)
     end
+  end
+
+  def get_uncles_details(uncles, number) do
+    uncles
+    |> Enum.with_index()
+    |> Enum.map(fn {_hash, index} ->
+      call("eth_getUncleByBlockNumberAndIndex", [number, "0x" <> Hexate.encode(index)])
+    end)
   end
 
   defp encode_single(method, args) do

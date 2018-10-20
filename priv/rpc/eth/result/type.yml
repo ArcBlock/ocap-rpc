@@ -1,10 +1,22 @@
 ---
+- transaction_log:
+    - address: "&strip(_)"
+    - block_hash: "&strip(_)"
+    - block_height: "&to_int(block_number)"
+    - data: "&strip(_)"
+    - log_index: "&to_int(_)"
+    - topics: "&strip(_)"
+    - transaction_hash: "&strip(_)"
+    - transaction_index: "&to_int(_)"
+    - transaction_log_index: "&to_int(_)"
+    - type: "&strip(_)"
+
 - transaction_trace:
     - block_height: "&to_int(block_number)"
     - block_hash: "&strip(block_hash)"
     - transaction_hash: "&strip(transaction_hash)"
     - transaction_index: "&strip(transaction_position)"
-    - trace_address: "&strip(_)"
+    - trace_address: "&get_trace_address(_)"
     - sub_traces: "&strip(subtraces)"
     # possible types: "call", "create", "suicide"
     - type: "&strip(_)"
@@ -15,7 +27,7 @@
     - action_value: "&to_int(action.value)"
     - action_gas_limit: "&to_int(action.gas)"
     - action_input: "&strip(action.input)"
-    - action_input_plain: "&get_input_plain(action)"
+    - action_input_plain: "&get_input_plain(*)"
     # For type = "create"
     - action_init: "&strip(action.init)"
     # For type = "suicide"
@@ -53,7 +65,7 @@
     - standard_v: "&to_int(_)"
     - condition: "&strip(_)"
     - creates: "&strip(_)"
-    - logs: "&strip(_)"
+    - logs: @transaction_log
     - logs_bloom: "&strip(_)"
     - root: "&strip(_)"
     - traces: @transaction_trace
@@ -67,6 +79,28 @@
     - reward_type: "&strip(action.reward_type)"
     - value: "&to_int(action.value)"
     - author: "&strip(action.author)"
+
+- uncle:
+    - miner: "&strip(_)"
+    - difficulty: "&strip(_)"
+    - extra_data: "&strip(_)"
+    - extra_data_plain: "&decode(extra_data)"
+    - gas_limit: "&to_int(_)"
+    - gas_used: "&to_int(_)"
+    - hash: "&strip(_)"
+    - pre_hash: "&strip(parent_hash)"
+    - logs_bloom: "&strip(_)"
+    - mix_hash: "&strip(_)"
+    - nonce: "&strip(_)"
+    - height: "&to_int(number)"
+    - receipts_root: "&strip(_)"
+    - seal_fields: "&strip(_)"
+    - sha3_uncles: "&strip(_)"
+    - size: "&to_int(_)"
+    - state_root: "&strip(_)"
+    - time: "&to_date(timestamp)"
+    - total_difficulty: "&to_int(_)"
+    - transactions_root: "&strip(_)"
 
 - block:
     - miner: "&strip(_)"
@@ -84,11 +118,11 @@
     - receipts_root: "&strip(_)"
     - seal_fields: "&strip(_)"
     - sha3_uncles: "&strip(_)"
-    - uncles: "&strip(_)"
+    - uncles: @uncle
     - size: "&to_int(_)"
     - state_root: "&strip(_)"
     - time: "&to_date(timestamp)"
-    - total_difficulty: "&strip(_)"
+    - total_difficulty: "&to_int(_)"
     - transactions_root: "&strip(_)"
     - transactions: @transaction
     - fees: "&calc_block_fees(*)"
@@ -97,7 +131,6 @@
     - uncle_reward: "&calc_uncle_reward(*)"
     - number_txs: "&len(transactions)"
     - total: "&calc_block_total(*)"
-    - internal_txs: "&calc_block_internal_tx(*)"
 
 - transaction_receipt:
     - status: "&to_recepit_status(_)"
