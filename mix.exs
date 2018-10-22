@@ -46,7 +46,7 @@ defmodule OcapRpc.MixProject do
       {:yaml_elixir, "~> 2.0.0"},
 
       # Ethereum related deps
-      {:abi, git: "git@github.com:arcblock/abi.git", tag: "master"},
+      {:abi, git: "https://github.com/arcblock/abi.git", tag: "master"},
 
       # utility tools for error logs and metrics
       {:logger_sentry, "~> 0.1.5"},
