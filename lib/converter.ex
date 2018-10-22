@@ -113,10 +113,13 @@ defmodule OcapRpc.Converter do
   end
 
   def get_tx_type(data) do
+    value = to_int(data.value)
+
     cond do
       data.creates != nil -> "contract_deployment"
-      data.to_addr_code != "" -> "contract_execution"
-      true -> "normal"
+      value > 0 && byte_size(data.input) < 10 -> "transfer_ether"
+      value <= 0 && byte_size(data.input) >= 10 -> "contract_execution"
+      true -> "transfer_ether_and_contract_execution"
     end
   end
 
