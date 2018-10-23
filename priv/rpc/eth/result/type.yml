@@ -1,10 +1,10 @@
 ---
 - transaction_log:
+    - log_index: "&to_int(_)"
     - address: "&strip(_)"
     - block_hash: "&strip(_)"
     - block_height: "&to_int(block_number)"
     - data: "&strip(_)"
-    - log_index: "&to_int(_)"
     - topics: "&strip(_)"
     - transaction_hash: "&strip(_)"
     - transaction_index: "&to_int(_)"
@@ -12,11 +12,11 @@
     - type: "&strip(_)"
 
 - transaction_trace:
+    - trace_address: "&get_trace_address(_)"
     - block_height: "&to_int(block_number)"
     - block_hash: "&strip(block_hash)"
     - transaction_hash: "&strip(transaction_hash)"
     - transaction_index: "&strip(transaction_position)"
-    - trace_address: "&get_trace_address(_)"
     - sub_traces: "&strip(subtraces)"
     # possible types: "call", "create", "suicide"
     - type: "&strip(_)"
@@ -81,8 +81,9 @@
     - author: "&strip(action.author)"
 
 - uncle:
+    - reward: "&to_int(_)"
     - miner: "&strip(_)"
-    - difficulty: "&strip(_)"
+    - difficulty: "&to_int(_)"
     - extra_data: "&strip(_)"
     - extra_data_plain: "&decode(extra_data)"
     - gas_limit: "&to_int(_)"
@@ -104,7 +105,7 @@
 
 - block:
     - miner: "&strip(_)"
-    - difficulty: "&strip(_)"
+    - difficulty: "&to_int(_)"
     - extra_data: "&strip(_)"
     - extra_data_plain: "&decode(extra_data)"
     - gas_limit: "&to_int(_)"

@@ -8,8 +8,9 @@ defmodule OcapRpc.Internal.Extractor do
   @doc """
   Process the response data with predefined mapping
   """
-  def process(data, mapping, type) when is_list(data),
-    do: Enum.map(data, fn item -> process(item, mapping, type) end)
+  def process(data, mapping, type) when is_list(data) do
+    Enum.map(data, fn item -> process(item, mapping, type) end)
+  end
 
   def process(data, mapping, type) do
     result =
@@ -115,8 +116,10 @@ defmodule OcapRpc.Internal.Extractor do
     case k do
       :block_hash -> OcapRpc.Eth.Type.Transaction
       :miner -> OcapRpc.Eth.Type.Block
-      :call_type -> OcapRpc.Eth.Type.TransactionTrace
       :reward_type -> OcapRpc.Eth.Type.BlockReward
+      :trace_address -> OcapRpc.Eth.Type.TransactionTrace
+      :log_index -> OcapRpc.Eth.Type.TransactionLog
+      :reward -> OcapRpc.Eth.Type.Uncle
       _ -> nil
     end
   end

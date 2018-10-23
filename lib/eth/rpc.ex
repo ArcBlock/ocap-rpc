@@ -91,6 +91,22 @@ defmodule OcapRpc.Internal.EthRpc do
         uncles -> get_uncles_details(uncles, resp["number"])
       end
 
+    uncle_rewards =
+      Enum.filter(rewards, fn reward -> reward["action"]["rewardType"] == "uncle" end)
+
+    uncle_details =
+      case uncle_details do
+        [] ->
+          []
+
+        uncle_details ->
+          uncle_details
+          |> Enum.zip(uncle_rewards)
+          |> Enum.map(fn {detail, reward} ->
+            Map.put(detail, "reward", reward["action"]["value"])
+          end)
+      end
+
     transactions =
       case is_map(first_tx) do
         true ->

@@ -37,7 +37,7 @@ defmodule OcapRpc.Internal.EthABI do
 
   defp slice_input(input) do
     case Utils.hex_to_binary(input) do
-      bin when byte_size(bin) < 8 ->
+      bin when byte_size(bin) < 4 ->
         {nil, nil}
 
       bin ->
