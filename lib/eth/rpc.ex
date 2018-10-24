@@ -7,7 +7,7 @@ defmodule OcapRpc.Internal.EthRpc do
 
   alias OcapRpc.Converter
 
-  plug(Tesla.Middleware.Retry, delay: 500, max_retries: 3)
+  # plug(Tesla.Middleware.Retry, delay: 500, max_retries: 3)
 
   @headers [{"content-type", "application/json"}]
   @timeout :ocap_rpc |> Application.get_env(:eth) |> Keyword.get(:timeout)
@@ -16,7 +16,7 @@ defmodule OcapRpc.Internal.EthRpc do
 
   # TODO(lei): when tesla not compatible issue solved: `https://github.com/teamon/tesla/issues/157`
   if Application.get_env(:ocap_rpc, :env) not in [:test] do
-    plug(Tesla.Middleware.Timeout, timeout: @timeout)
+    plug(Tesla.Middleware.Timeout, timeout: Application.get_env(:ocap_rpc, :timeout, 240_000))
   end
 
   def call(method, args) do
@@ -54,27 +54,58 @@ defmodule OcapRpc.Internal.EthRpc do
 
   def resp_hook(resp, type \\ nil) do
     case type do
-      :transaction -> get_tx_receipt(resp)
-      :block -> get_block_tx_receipt_batch(resp)
+      :transaction -> get_tx_trace(resp)
+      :block -> get_block_trace(resp)
       _ -> resp
     end
   end
 
   # private functions
-
-  defp get_tx_receipt(resp) do
-    receipt = call("eth_getTransactionReceipt", [resp["hash"]])
+  defp get_tx_trace(resp) do
+    hash = resp["hash"]
+    traces = call("trace_transaction", [hash])
     block = call("eth_getBlockByHash", [resp["blockHash"], false])
-    result = Map.merge(receipt, resp)
-    Map.put(result, "timestamp", block["timestamp"])
+    receipt = call("eth_getTransactionReceipt", [resp["hash"]])
+
+    receipt
+    |> Map.merge(resp)
+    |> Map.put("traces", traces)
+    |> Map.put("timestamp", block["timestamp"])
   end
 
-  defp get_block_tx_receipt_batch(nil), do: nil
-
-  defp get_block_tx_receipt_batch(resp) do
+  defp get_block_trace(resp) do
     tx_list = resp["transactions"]
     timestamp = resp["timestamp"]
     first_tx = List.first(tx_list)
+
+    traces =
+      "trace_block"
+      |> call([resp["number"]])
+      |> Enum.group_by(fn tx -> tx["transactionHash"] end)
+
+    rewards = Map.get(traces, nil)
+
+    uncle_details =
+      case resp["uncles"] do
+        [] -> []
+        uncles -> get_uncles_details(uncles, resp["number"])
+      end
+
+    uncle_rewards =
+      Enum.filter(rewards, fn reward -> reward["action"]["rewardType"] == "uncle" end)
+
+    uncle_details =
+      case uncle_details do
+        [] ->
+          []
+
+        uncle_details ->
+          uncle_details
+          |> Enum.zip(uncle_rewards)
+          |> Enum.map(fn {detail, reward} ->
+            Map.put(detail, "reward", reward["action"]["value"])
+          end)
+      end
 
     transactions =
       case is_map(first_tx) do
@@ -83,17 +114,26 @@ defmodule OcapRpc.Internal.EthRpc do
 
           receipts = call("eth_getTransactionReceipt", [hashes])
 
-          for {tx, receipt} <- Enum.zip(tx_list, receipts) do
-            receipt = Map.put(receipt || %{}, "timestamp", timestamp)
+          tx_list =
+            for {tx, receipt} <- Enum.zip(tx_list, receipts) do
+              (receipt || %{})
+              |> Map.merge(tx)
+            end
 
-            Map.merge(receipt, tx)
-          end
+          Enum.map(tx_list, fn tx ->
+            tx
+            |> Map.put("timestamp", timestamp)
+            |> Map.put("traces", Map.get(traces, tx["hash"], []))
+          end)
 
         _ ->
           tx_list
       end
 
-    Map.put(resp, "transactions", transactions)
+    resp
+    |> Map.put("transactions", transactions)
+    |> Map.put("rewards", rewards)
+    |> Map.put("uncles", uncle_details)
   end
 
   defp process_batch_result(data) do
@@ -105,6 +145,14 @@ defmodule OcapRpc.Internal.EthRpc do
       true -> encode_many(method, args)
       _ -> encode_single(method, args)
     end
+  end
+
+  def get_uncles_details(uncles, number) do
+    uncles
+    |> Enum.with_index()
+    |> Enum.map(fn {_hash, index} ->
+      call("eth_getUncleByBlockNumberAndIndex", [number, "0x" <> Hexate.encode(index)])
+    end)
   end
 
   defp encode_single(method, args) do

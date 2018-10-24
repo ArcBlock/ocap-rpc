@@ -8,13 +8,22 @@ defmodule OcapRpc.Internal.Extractor do
   @doc """
   Process the response data with predefined mapping
   """
-  def process(data, mapping, type) when is_list(data),
-    do: Enum.map(data, fn item -> process(item, mapping, type) end)
+  def process(data, mapping, type) when is_list(data) do
+    Enum.map(data, fn item -> process(item, mapping, type) end)
+  end
 
-  def process(data, mapping, _type) do
-    data
-    |> AtomicMap.convert(safe: false)
-    |> process_data(mapping)
+  def process(data, mapping, type) do
+    result =
+      data
+      |> AtomicMap.convert(safe: false)
+      |> process_data(mapping)
+
+    cond do
+      not is_map(result) -> result
+      Map.has_key?(result, :__struct__) -> result
+      not is_nil(type) -> struct(type, result)
+      true -> result
+    end
   end
 
   defp process_data(data, nil), do: data
@@ -22,19 +31,12 @@ defmodule OcapRpc.Internal.Extractor do
   defp process_data(data, mapping) when is_map(data) do
     result =
       mapping
-      |> Enum.reduce(data, fn {k, v}, acc ->
-        try do
-          result = transform(v, acc, k)
+      |> Enum.reduce(data, fn {k, action}, acc ->
+        result = transform(action, acc, k)
 
-          case is_map(result) and Map.has_key?(result, k) do
-            true -> result
-            _ -> Map.put(acc, k, result)
-          end
-        rescue
-          e ->
-            Logger.error("Error: #{Exception.message(e)}, trace; #{Exception.format(:error, e)}")
-
-            acc
+        case is_map(result) and Map.has_key?(result, k) do
+          true -> result
+          _ -> Map.put(acc, k, result)
         end
       end)
 
@@ -63,9 +65,9 @@ defmodule OcapRpc.Internal.Extractor do
   defp transform("&" <> fn_info, data, key), do: call_function(fn_info, data, key)
 
   # process normal case like "gas_limit" or complicate case "action.gas"
-  defp transform(v, data, _key) when is_binary(v) do
+  defp transform(action, data, _key) when is_binary(action) do
     path =
-      v
+      action
       |> String.split(".")
       |> Enum.map(&String.to_atom(&1))
 
@@ -112,7 +114,10 @@ defmodule OcapRpc.Internal.Extractor do
     case k do
       :block_hash -> OcapRpc.Eth.Type.Transaction
       :miner -> OcapRpc.Eth.Type.Block
-      :call_type -> OcapRpc.Eth.Type.TransactionTrace
+      :reward_type -> OcapRpc.Eth.Type.BlockReward
+      :trace_address -> OcapRpc.Eth.Type.TransactionTrace
+      :log_index -> OcapRpc.Eth.Type.TransactionLog
+      :reward -> OcapRpc.Eth.Type.Uncle
       _ -> nil
     end
   end

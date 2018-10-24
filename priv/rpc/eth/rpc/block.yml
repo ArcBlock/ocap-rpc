@@ -46,3 +46,4 @@ public:
     desc: Returns traces created at given block.
     method: trace_block
     args: ["number"]
+    result: transaction_trace

@@ -2,8 +2,7 @@ defmodule OcapRpc.Converter do
   @moduledoc """
   Utility functions for convert data
   """
-  alias OcapRpc.Eth.Transaction, as: EthTx
-  alias OcapRpc.Internal.EthTransaction
+  alias OcapRpc.Internal.EthABI
 
   @gwei 1_000_000_000
   @satoshi 100_000_000
@@ -48,6 +47,7 @@ defmodule OcapRpc.Converter do
   @doc """
   Convert hex string to integer
   """
+  def to_int(v) when is_integer(v), do: v
   def to_int(nil), do: 0
   def to_int(""), do: 0
   def to_int("0x" <> hex), do: to_int(hex)
@@ -58,26 +58,9 @@ defmodule OcapRpc.Converter do
   """
   def to_hex(data), do: data |> Hexate.encode()
 
-  @doc """
-  Call parity RPC trace function and return the result
-  """
-  def trace_rpc(hash), do: EthTx.trace("0x#{hash}")
-
-  @doc """
-  Convert value to a value with gwei system
-  """
-  def to_gwei(value), do: to_int(value) / @gwei
-
-  @doc """
-  Convert value to a value with ether system
-  """
-  def to_ether(nil), do: 0
-  def to_ether(value) when is_binary(value), do: to_int(value) / @ether
-  def to_ether(value) when is_integer(value) or is_float(value), do: value / @ether
-
   def to_supply_amount(""), do: 0
   def to_supply_amount(nil), do: 0
-  def to_supply_amount(total), do: div(to_int(total), @ether)
+  def to_supply_amount(total), do: to_int(total)
 
   @doc """
   Convert code to readable data. TODO: (tchen)
@@ -114,18 +97,29 @@ defmodule OcapRpc.Converter do
   """
   def len(data), do: length(data)
 
-  def get_fees(data) do
-    case Map.get(data, :gas_used) do
+  def get_tx_gas_used(tx) do
+    case Map.get(tx, :traces) do
       nil -> 0
-      gas_used -> gas_used * data.gas_price / @gwei
+      [] -> 0
+      traces -> traces |> List.first() |> Map.get(:gas_used)
+    end
+  end
+
+  def get_tx_fees(tx) do
+    case Map.get(tx, :gas_used) do
+      nil -> 0
+      gas_used -> gas_used * tx.gas_price
     end
   end
 
   def get_tx_type(data) do
+    value = to_int(data.value)
+
     cond do
       data.creates != nil -> "contract_deployment"
-      String.length(data.input) > 2 -> "contract_execution"
-      true -> "normal"
+      value > 0 && byte_size(data.input) < 10 -> "transfer_ether"
+      value <= 0 && byte_size(data.input) >= 10 -> "contract_execution"
+      true -> "transfer_ether_and_contract_execution"
     end
   end
 
@@ -133,8 +127,13 @@ defmodule OcapRpc.Converter do
     tx_list = data.transactions
 
     case is_map(List.first(tx_list)) do
-      true -> Enum.reduce(tx_list, 0, fn tx, acc -> acc + tx.fees end)
-      _ -> 0
+      true ->
+        Enum.reduce(tx_list, 0, fn tx, acc ->
+          acc + tx.fees
+        end)
+
+      _ ->
+        0
     end
   end
 
@@ -147,28 +146,62 @@ defmodule OcapRpc.Converter do
     end
   end
 
-  @block_reward 3
   def calc_block_reward(data) do
-    # TODO: for different height reward would be different
-    @block_reward + @block_reward * length(data.uncles) / 32 + data.fees
+    reward =
+      data.rewards
+      |> Enum.filter(fn reward ->
+        (Map.get(reward, :reward_type) || Map.get(reward, :action_reward_type)) == "block"
+      end)
+      |> List.first()
+
+    (Map.get(reward, :value) || Map.get(reward, :action_value)) + data.fees
   end
 
-  def to_contract_value(data), do: EthTransaction.parse_input(data)
-
-  def calc_internal_txs(data) do
-    case data.tx_type do
-      "contract_execution" ->
-        [_ | rest] = EthTx.trace(data.hash)
-        rest
-
-      _ ->
-        nil
-    end
+  def calc_uncle_reward(data) do
+    data.rewards
+    |> Enum.filter(fn reward ->
+      (Map.get(reward, :reward_type) || Map.get(reward, :action_reward_type)) == "uncle"
+    end)
+    |> Enum.reduce(0, fn reward, acc ->
+      acc + (Map.get(reward, :value) || Map.get(reward, :action_value))
+    end)
   end
+
+  def to_contract_value(data), do: EthABI.parse_input(data)
 
   @doc """
   Convert a bitcoin value to a satoshi value
   """
   def btc_to_satoshi(nil), do: 0
   def btc_to_satoshi(value), do: round(value * @satoshi)
+
+  # Once parity 2.1 release with this PR: https://github.com/paritytech/parity-ethereum/pull/9194, we shall deprecated this calculation.
+  def calc_tx_gas_used(trace) do
+    input = String.trim_leading(trace.input || "", "0x")
+    data = for <<b::binary-2 <- input>>, do: b
+    zeros = Enum.count(data, &(&1 == "00"))
+    non_zeros = length(data) - zeros
+    21_000 + trace.raw_gas_used + zeros * 4 + non_zeros * 68
+  end
+
+  def calc_tx_status(tx) do
+    last_trace = Enum.at(tx.traces, -1)
+
+    cond do
+      is_nil(last_trace) -> "error"
+      is_nil(Map.get(last_trace, :error)) -> "normal"
+      true -> last_trace.error |> String.downcase()
+    end
+  end
+
+  def get_input_plain(data) do
+    case EthABI.parse_input(data) do
+      nil -> nil
+      {signature, input} -> %{signature: signature, parameters: input}
+    end
+  end
+
+  def get_trace_address(address) do
+    [-1 | address]
+  end
 end
