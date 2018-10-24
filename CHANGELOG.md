@@ -1,3 +1,6 @@
+## 0.12.1 (October 24, 2018)
+  - Add time and receipt status to trace.
+
 ## 0.12.0 (August 28, 2018)
   - fix transaction tx type issue and parse contract from / to better
   - retrieve block reward and change unit to wei
