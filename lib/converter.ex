@@ -149,17 +149,22 @@ defmodule OcapRpc.Converter do
   def calc_block_reward(data) do
     reward =
       data.rewards
-      |> Enum.filter(fn reward -> reward.reward_type == "block" end)
+      |> Enum.filter(fn reward ->
+        (Map.get(reward, :reward_type) || Map.get(reward, :action_reward_type)) == "block"
+      end)
       |> List.first()
-      |> Map.get(:value)
 
-    reward + data.fees
+    (Map.get(reward, :value) || Map.get(reward, :action_value)) + data.fees
   end
 
   def calc_uncle_reward(data) do
     data.rewards
-    |> Enum.filter(fn reward -> reward.reward_type == "uncle" end)
-    |> Enum.reduce(0, fn reward, acc -> acc + reward.value end)
+    |> Enum.filter(fn reward ->
+      (Map.get(reward, :reward_type) || Map.get(reward, :action_reward_type)) == "uncle"
+    end)
+    |> Enum.reduce(0, fn reward, acc ->
+      acc + (Map.get(reward, :value) || Map.get(reward, :action_value))
+    end)
   end
 
   def to_contract_value(data), do: EthABI.parse_input(data)

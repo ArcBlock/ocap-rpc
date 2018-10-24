@@ -21,6 +21,8 @@
     # possible types: "call", "create", "suicide"
     - type: "&strip(_)"
     # possible types: "call", "delegatecall", "callcode"
+    - action_miner: "&strip(action.author)"
+    - action_reward_type: "&strip(action.reward_type)"
     - action_call_type: "&strip(action.call_type)"
     - action_from: "&strip(action.from)"
     - action_to: "&strip(action.to)"
@@ -61,6 +63,7 @@
     - total: "&to_int(value)"
     - raw: "&strip(_)"
     - r: "&strip(_)"
+    - s: "&strip(_)"
     - v: "&strip(_)"
     - standard_v: "&to_int(_)"
     - condition: "&strip(_)"
@@ -78,7 +81,7 @@
 - block_reward:
     - reward_type: "&strip(action.reward_type)"
     - value: "&to_int(action.value)"
-    - author: "&strip(action.author)"
+    - miner: "&strip(action.author)"
 
 - uncle:
     - reward: "&to_int(_)"
@@ -128,7 +131,7 @@
     - transactions: @transaction
     - fees: "&calc_block_fees(*)"
     - rewards: @block_reward
-    - block_reward: "&calc_block_reward(*)"
+    - reward: "&calc_block_reward(*)"
     - uncle_reward: "&calc_uncle_reward(*)"
     - number_txs: "&len(transactions)"
     - total: "&calc_block_total(*)"

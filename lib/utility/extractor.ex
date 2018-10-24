@@ -75,8 +75,6 @@ defmodule OcapRpc.Internal.Extractor do
   end
 
   defp transform(v, data, key) do
-    # IO.inspect(binding())
-
     value = Map.get(data, key)
 
     case is_nil(value) do
