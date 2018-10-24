@@ -91,7 +91,6 @@ defmodule OcapRpc.Internal.EthRpc do
       case is_map(first_tx) do
         true ->
           hashes = Enum.map(tx_list, fn tx -> [tx["hash"]] end)
-
           receipts = call("eth_getTransactionReceipt", [hashes])
 
           tx_list =
@@ -101,9 +100,8 @@ defmodule OcapRpc.Internal.EthRpc do
             end
 
           tx_list
-          |> Enum.with_index()
-          |> Enum.map(fn {tx, index} ->
-            tx = Map.put(tx, "timestamp", blocktime + index)
+          |> Enum.map(fn tx ->
+            tx = Map.put(tx, "timestamp", blocktime + Converter.to_int(tx["transactionIndex"]))
             Map.put(tx, "traces", update_traces(Map.get(traces, tx["hash"]), tx))
           end)
 
