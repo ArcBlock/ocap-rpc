@@ -54,6 +54,16 @@ defmodule OcapRpc.Internal.EthABI do
 
   def decode_input({nil, _input_data}), do: nil
   def decode_input({[], _input_data}), do: nil
+
+  def decode_input({signatures, ""}) when is_list(signatures) do
+    signature = Enum.find(signatures, nil, fn sig -> String.ends_with?(sig, "()") end)
+
+    case signature do
+      nil -> nil
+      _ -> {:ok, signature, []}
+    end
+  end
+
   def decode_input({signature, ""}), do: {:ok, signature, []}
 
   @doc """
@@ -62,11 +72,18 @@ defmodule OcapRpc.Internal.EthABI do
   @spec decode_input({list[String.t()], binary}) :: list[invalid_sig()] | valid_sig()
   def decode_input({signatures, input_data}) when is_list(signatures) do
     all_results = Enum.map(signatures, &decode_input({&1, input_data}))
-    valid_result = Enum.find(all_results, nil, fn item -> elem(item, 0) == :ok end)
 
-    case valid_result do
-      nil -> all_results
-      _ -> valid_result
+    case all_results do
+      nil ->
+        nil
+
+      _ ->
+        valid_result = Enum.find(all_results, nil, fn item -> elem(item, 0) == :ok end)
+
+        case valid_result do
+          nil -> all_results
+          _ -> valid_result
+        end
     end
   end
 
