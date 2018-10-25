@@ -116,7 +116,12 @@ defmodule OcapRpc.Internal.EthABI do
     |> Enum.map(&parse_arg/1)
   end
 
-  def parse_arg({arg, "string"}), do: arg
+  def parse_arg({arg, "string"}) do
+    case String.printable?(arg) do
+      true -> arg
+      false -> "0x" <> Base.encode16(arg, case: :lower)
+    end
+  end
 
   def parse_arg({arg, type})
       when type in [
