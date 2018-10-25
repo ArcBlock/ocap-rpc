@@ -1,3 +1,6 @@
+## 0.12.3 (October 25, 2018)
+  - Update the logic to handle unprintable string.
+
 ## 0.12.2 (October 25, 2018)
   - Update the logic to parse error and receipt status in trace.
 
