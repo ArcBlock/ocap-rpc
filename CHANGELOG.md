@@ -1,3 +1,6 @@
+## 0.12.2 (October 25, 2018)
+  - Update the logic to parse error and receipt status in trace.
+
 ## 0.12.1 (October 24, 2018)
   - Add time and receipt status to trace.
 
