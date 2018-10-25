@@ -17,6 +17,8 @@
     - block_hash: "&strip(block_hash)"
     - transaction_hash: "&strip(transaction_hash)"
     - transaction_index: "&strip(transaction_position)"
+    - receipt_status: "&to_recepit_status(status)"
+    - time: "&milli_to_date(timestamp)"
     - sub_traces: "&strip(subtraces)"
     # possible types: "call", "create", "suicide"
     - type: "&strip(_)"
@@ -73,7 +75,7 @@
     - root: "&strip(_)"
     - traces: @transaction_trace
     - tx_type: "&get_tx_type(*)"
-    - time: "&to_date(timestamp)"
+    - time: "&milli_to_date(timestamp)"
     - receipt_status: "&to_recepit_status(status)"
     - trace_status: "&calc_tx_status(*)"
     - fees: "&get_tx_fees(*)"

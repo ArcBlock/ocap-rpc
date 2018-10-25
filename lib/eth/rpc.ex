@@ -75,7 +75,7 @@ defmodule OcapRpc.Internal.EthRpc do
 
   defp get_block_trace(resp) do
     tx_list = resp["transactions"]
-    timestamp = resp["timestamp"]
+    blocktime = resp["timestamp"] |> Converter.to_int() |> Kernel.*(1000)
     first_tx = List.first(tx_list)
 
     traces =
@@ -85,33 +85,12 @@ defmodule OcapRpc.Internal.EthRpc do
 
     rewards = Map.get(traces, nil)
 
-    uncle_details =
-      case resp["uncles"] do
-        [] -> []
-        uncles -> get_uncles_details(uncles, resp["number"])
-      end
-
-    uncle_rewards =
-      Enum.filter(rewards, fn reward -> reward["action"]["rewardType"] == "uncle" end)
-
-    uncle_details =
-      case uncle_details do
-        [] ->
-          []
-
-        uncle_details ->
-          uncle_details
-          |> Enum.zip(uncle_rewards)
-          |> Enum.map(fn {detail, reward} ->
-            Map.put(detail, "reward", reward["action"]["value"])
-          end)
-      end
+    uncle_details = prepare_uncles(rewards, resp["number"], resp["uncles"])
 
     transactions =
       case is_map(first_tx) do
         true ->
           hashes = Enum.map(tx_list, fn tx -> [tx["hash"]] end)
-
           receipts = call("eth_getTransactionReceipt", [hashes])
 
           tx_list =
@@ -120,10 +99,10 @@ defmodule OcapRpc.Internal.EthRpc do
               |> Map.merge(tx)
             end
 
-          Enum.map(tx_list, fn tx ->
-            tx
-            |> Map.put("timestamp", timestamp)
-            |> Map.put("traces", Map.get(traces, tx["hash"], []))
+          tx_list
+          |> Enum.map(fn tx ->
+            tx = Map.put(tx, "timestamp", blocktime + Converter.to_int(tx["transactionIndex"]))
+            Map.put(tx, "traces", update_traces(Map.get(traces, tx["hash"]), tx))
           end)
 
         _ ->
@@ -134,6 +113,15 @@ defmodule OcapRpc.Internal.EthRpc do
     |> Map.put("transactions", transactions)
     |> Map.put("rewards", rewards)
     |> Map.put("uncles", uncle_details)
+  end
+
+  defp update_traces(traces, tx) do
+    traces
+    |> Enum.map(fn trace ->
+      trace
+      |> Map.put("timestamp", tx["timestamp"])
+      |> Map.put("status", tx["status"])
+    end)
   end
 
   defp process_batch_result(data) do
@@ -147,7 +135,21 @@ defmodule OcapRpc.Internal.EthRpc do
     end
   end
 
-  def get_uncles_details(uncles, number) do
+  defp prepare_uncles(_, _, []), do: []
+
+  defp prepare_uncles(rewards, block_number, uncles) do
+    uncle_rewards =
+      Enum.filter(rewards, fn reward -> reward["action"]["rewardType"] == "uncle" end)
+
+    uncles
+    |> get_uncles_details(block_number)
+    |> Enum.zip(uncle_rewards)
+    |> Enum.map(fn {detail, reward} ->
+      Map.put(detail, "reward", reward["action"]["value"])
+    end)
+  end
+
+  defp get_uncles_details(uncles, number) do
     uncles
     |> Enum.with_index()
     |> Enum.map(fn {_hash, index} ->

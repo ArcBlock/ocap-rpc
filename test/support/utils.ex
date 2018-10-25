@@ -126,6 +126,25 @@ defmodule OcapRpcTest.TestUtils do
       "transactionHash" => nil,
       "transactionPosition" => nil,
       "type" => "reward"
+    },
+    %{
+      "action" => %{
+        "callType" => "call",
+        "from" => "38871c5663bf192e32abd98ca558ac91ae101a72",
+        "gas" => "0",
+        "input" => "",
+        "to" => "b9ee1e551f538a464e8f8c41e9904498505b49b0",
+        "value" => "39aaed7b4b22400"
+      },
+      "blockHash" => "f1070c1252a9629c5f95728b44d5cb48869d33b69e05180c9eb74d551f6e8a28",
+      "blockNumber" => "5c5bd1",
+      "result" => %{"gasUsed" => "0", "output" => ""},
+      "subtraces" => 0,
+      "traceAddress" => [],
+      "transactionHash" => "735975a1b3d79624c81a1c2c97a4d3cead388b8b1a9bba4da07bb0032dd862e4",
+      "transactionPosition" => 64,
+      "txGasLimit" => "5208",
+      "type" => "call"
     }
   ]
 

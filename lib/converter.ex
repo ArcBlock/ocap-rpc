@@ -35,6 +35,8 @@ defmodule OcapRpc.Converter do
     |> DateTime.from_unix!()
   end
 
+  def milli_to_date(nil), do: nil
+
   def milli_to_date(timestamp) when is_integer(timestamp),
     do: DateTime.from_unix!(timestamp, :millisecond)
 
