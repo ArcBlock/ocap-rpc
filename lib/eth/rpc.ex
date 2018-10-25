@@ -63,9 +63,13 @@ defmodule OcapRpc.Internal.EthRpc do
   # private functions
   defp get_tx_trace(resp) do
     hash = resp["hash"]
-    traces = call("trace_transaction", [hash])
     block = call("eth_getBlockByHash", [resp["blockHash"], false])
     receipt = call("eth_getTransactionReceipt", [resp["hash"]])
+
+    traces =
+      "trace_transaction"
+      |> call([hash])
+      |> Enum.map(fn trace -> Map.put(trace, "status", receipt["status"]) end)
 
     receipt
     |> Map.merge(resp)
