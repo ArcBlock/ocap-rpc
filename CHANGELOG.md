@@ -1,3 +1,6 @@
+## 0.12.7 (October 28, 2018)
+  - Use the new abi to handle the memory leak.
+
 ## 0.12.6 (October 27, 2018)
   - Resolve the ignored transactions at runtime.
 
