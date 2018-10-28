@@ -47,6 +47,7 @@ defmodule OcapRpc.MixProject do
 
       # Ethereum related deps
       {:abi, git: "https://github.com/arcblock/abi.git", tag: "master"},
+      # {:abi, path: "/Users/peiling/Documents/GitHub/ArcBlock/abi"},
 
       # utility tools for error logs and metrics
       {:logger_sentry, "~> 0.1.5"},
@@ -55,7 +56,6 @@ defmodule OcapRpc.MixProject do
       {:sentry, "~> 6.4.0"},
 
       # utility belt
-      # {:utility_belt, path: "/Users/tchen/projects/mycode/utility_belt"},
       {:utility_belt, "> 0.0.0"},
 
       # deployment

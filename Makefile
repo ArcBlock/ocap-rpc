@@ -9,7 +9,7 @@ OTP_VERSION=$(strip $(shell cat .otp_version))
 
 build:
 	@echo "Building the software..."
-	@rm -rf _build/dev/lib/ocap_rpc
+	@rm -rf _build/dev/lib/{ocap_rpc,abi}
 	@make format
 
 format:
