@@ -9,17 +9,32 @@ defmodule OcapRpc.Internal.EthABI do
 
   @sig_reg ~r{(.*)\((.*)\)}
 
+  # There are some transactions that have huge input data which leads to memory leak
+  # when tries to decode its ABI.
+  @ignored_transactions :ocap_rpc
+                        |> Application.get_env(:abi)
+                        |> Keyword.fetch!(:ignored_transactions)
+                        |> MapSet.new()
+
   @type valid_sig :: {:ok, String.t(), list}
   @type invalid_sig :: {:error, String.t(), Error}
+
+  def ignored_transactions, do: @ignored_transactions
 
   def parse_input(%{to: to}) when is_nil(to), do: nil
   def parse_input(%{type: "create"}), do: nil
 
   def parse_input(%{input: input, hash: hash}) do
-    input
-    |> slice_input()
-    |> decode_input()
-    |> log_and_return(hash, [-1], input)
+    case MapSet.member?(@ignored_transactions, String.trim(hash, "0x")) do
+      true ->
+        nil
+
+      false ->
+        input
+        |> slice_input()
+        |> decode_input()
+        |> log_and_return(hash, [-1], input)
+    end
   end
 
   def parse_input(%{
@@ -27,10 +42,16 @@ defmodule OcapRpc.Internal.EthABI do
         transaction_hash: hash,
         trace_address: trace_address
       }) do
-    input
-    |> slice_input()
-    |> decode_input()
-    |> log_and_return(hash, trace_address, input)
+    case MapSet.member?(@ignored_transactions, String.trim(hash, "0x")) do
+      true ->
+        nil
+
+      false ->
+        input
+        |> slice_input()
+        |> decode_input()
+        |> log_and_return(hash, trace_address, input)
+    end
   end
 
   def parse_input(_), do: nil
@@ -43,8 +64,6 @@ defmodule OcapRpc.Internal.EthABI do
     else
       <<sig_bytes::binary-4, input_data::binary>> = bin
 
-      # There are some transactions that have huge input data which leads to memory leak
-      # when tries to decode its ABI.
       if byte_size(input_data) > 3000 do
         {nil, nil}
       else
