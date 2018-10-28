@@ -43,7 +43,7 @@ defmodule OcapRpc.Internal.EthABI do
         transaction_hash: hash,
         trace_address: trace_address
       }) do
-    case MapSet.member?(@ignored_transactions, String.trim(hash, "0x")) do
+    case MapSet.member?(ignored_transactions(), String.trim(hash, "0x")) do
       true ->
         nil
 
