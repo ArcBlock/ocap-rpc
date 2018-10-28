@@ -1,3 +1,6 @@
+## 0.12.5 (October 27, 2018)
+  - Ignore transactions that could cause memory leak while decoding ABI.
+
 ## 0.12.4 (October 27, 2018)
   - Stop decoding huge transaction input to prevent potential memory leak.
 
