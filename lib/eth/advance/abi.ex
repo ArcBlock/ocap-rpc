@@ -36,19 +36,25 @@ defmodule OcapRpc.Internal.EthABI do
   def parse_input(_), do: nil
 
   defp slice_input(input) do
-    case Utils.hex_to_binary(input) do
-      bin when byte_size(bin) < 4 ->
+    bin = Utils.hex_to_binary(input)
+
+    if byte_size(bin) < 4 do
+      {nil, nil}
+    else
+      <<sig_bytes::binary-4, input_data::binary>> = bin
+
+      # There are some transactions that have huge input data which leads to memory leak
+      # when tries to decode its ABI.
+      if byte_size(input_data) > 3000 do
         {nil, nil}
-
-      bin ->
-        <<sig_bytes::binary-4, input_data::binary>> = bin
-
+      else
         signature =
           sig_bytes
           |> Base.encode16(case: :lower)
           |> SignatureDatabase.get_signatures()
 
         {signature, input_data}
+      end
     end
   end
 

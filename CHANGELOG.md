@@ -1,3 +1,6 @@
+## 0.12.4 (October 27, 2018)
+  - Stop decoding huge transaction input to prevent potential memory leak.
+
 ## 0.12.3 (October 25, 2018)
   - Update the logic to handle unprintable string.
 
