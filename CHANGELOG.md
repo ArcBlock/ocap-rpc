@@ -1,3 +1,6 @@
+## 0.12.6 (October 27, 2018)
+  - Resolve the ignored transactions at runtime.
+
 ## 0.12.5 (October 27, 2018)
   - Ignore transactions that could cause memory leak while decoding ABI.
 

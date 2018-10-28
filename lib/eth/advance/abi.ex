@@ -11,21 +11,22 @@ defmodule OcapRpc.Internal.EthABI do
 
   # There are some transactions that have huge input data which leads to memory leak
   # when tries to decode its ABI.
-  @ignored_transactions :ocap_rpc
-                        |> Application.get_env(:abi)
-                        |> Keyword.fetch!(:ignored_transactions)
-                        |> MapSet.new()
 
   @type valid_sig :: {:ok, String.t(), list}
   @type invalid_sig :: {:error, String.t(), Error}
 
-  def ignored_transactions, do: @ignored_transactions
+  def ignored_transactions do
+    :ocap_rpc
+    |> Application.get_env(:abi)
+    |> Keyword.fetch!(:ignored_transactions)
+    |> MapSet.new()
+  end
 
   def parse_input(%{to: to}) when is_nil(to), do: nil
   def parse_input(%{type: "create"}), do: nil
 
   def parse_input(%{input: input, hash: hash}) do
-    case MapSet.member?(@ignored_transactions, String.trim(hash, "0x")) do
+    case MapSet.member?(ignored_transactions(), String.trim(hash, "0x")) do
       true ->
         nil
 
@@ -42,7 +43,7 @@ defmodule OcapRpc.Internal.EthABI do
         transaction_hash: hash,
         trace_address: trace_address
       }) do
-    case MapSet.member?(@ignored_transactions, String.trim(hash, "0x")) do
+    case MapSet.member?(ignored_transactions(), String.trim(hash, "0x")) do
       true ->
         nil
 
