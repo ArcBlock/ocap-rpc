@@ -1,3 +1,6 @@
+## 0.12.8 (October 30, 2018)
+  - Add logic to handle the case where no traces retrieved for calculating block reward.
+
 ## 0.12.7 (October 28, 2018)
   - Use the new abi to handle the memory leak.
 
