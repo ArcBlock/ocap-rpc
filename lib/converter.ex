@@ -148,16 +148,19 @@ defmodule OcapRpc.Converter do
     end
   end
 
+  def calc_block_reward(%{rewards: []}), do: 0
+
   def calc_block_reward(data) do
     reward =
       data.rewards
-      |> Enum.filter(fn reward ->
+      |> Enum.find(fn reward ->
         (Map.get(reward, :reward_type) || Map.get(reward, :action_reward_type)) == "block"
       end)
-      |> List.first()
 
     (Map.get(reward, :value) || Map.get(reward, :action_value)) + data.fees
   end
+
+  def calc_uncle_reward(%{rewards: []}), do: 0
 
   def calc_uncle_reward(data) do
     data.rewards
