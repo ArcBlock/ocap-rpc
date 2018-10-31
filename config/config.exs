@@ -2,7 +2,7 @@ use Mix.Config
 
 # log related
 config :logger,
-  level: :debug,
+  level: :info,
   utc_log: false
 
 config :logger, :console,

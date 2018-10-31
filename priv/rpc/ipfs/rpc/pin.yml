@@ -1,0 +1,25 @@
+---
+name: Pin
+desc: IPFS pin API
+public:
+  - name: add
+    desc: Pin objects to local storage.
+    method: pin/add
+    args: ["arg", "recursive"]
+  - name: ls
+    desc: List objects pinned to local storage.
+    method: pin/ls
+    args: ["arg"]
+  - name: rm
+    desc: Remove pinned objects from local storage.
+    method: pin/rm
+    args: ["arg", "recursive"]
+  - name: update
+    desc: Update a recursive pin. old - path to old object, new - path to new o bject, unpin - true to remove the old pin.
+    method: pin/update
+    args: ["old", "new", "unpin"]
+    args_mapping: ["arg", "arg", "unpin"]
+  - name: verify
+    desc: Verify that recursive pins are complete.
+    method: pin/verify
+    args: []

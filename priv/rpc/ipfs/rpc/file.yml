@@ -1,0 +1,63 @@
+---
+name: File
+desc: IPFS file & files API
+public:
+  - name: ls
+    desc: List directory contents for Unix filesystem objects.
+    method: file/ls
+    args: ["arg"]
+  - name: chcid
+    desc: Change the cid version or hash function of the root node of a given path.
+    method: files/chcid
+    args: ["arg"]
+  - name: cp
+    desc: copy files into mfs.
+    method: files/cp
+    args: ["src", "dst"]
+    args_mapping: ["arg", "arg"]
+  - name: flush
+    desc: flush a given path's data to disk.
+    method: files/flush
+    args: ["arg"]
+  - name: ls
+    desc: List directories in the local mutable namespace.
+    method: files/ls
+    args: ["arg"]
+  - name: mkdir
+    desc: Make directories
+    method: files/mkdir
+    args: ["arg"]
+  - name: mv
+    desc: move files.
+    method: files/mv
+    args: ["src", "dst"]
+    args_mapping: ["arg", "arg"]
+  - name: read
+    desc: read a file in a given mfs.
+    method: files/read
+    args: ["arg"]
+  - name: rm
+    desc: remove a file (or a directory)
+    method: files/rm
+    args: ["arg", "recursive"]
+  - name: stat
+    desc: display file status
+    method: files/stat
+    args: ["arg"]
+  - name: write
+    desc: Write to a mutable file in a given filesystem. Argument “data” is of file type. This endpoint expects a file in the body of the request as ‘multipart/form-data’.
+    method: files/write
+    args: ["arg", "file"]
+    args_mapping: ["arg", "arg"]
+  - name: dups
+    desc: List blocks that are both in the filestore and standard block storage.
+    method: filestore/dups
+    args: []
+  - name: filestore_ls
+    desc: list objects in filestore.
+    method: filestore/ls
+    args: ["arg"]
+  - name: verify
+    desc: Verify objects in filestore.
+    method: filestore/verify
+    args: ["arg", "file-order"]

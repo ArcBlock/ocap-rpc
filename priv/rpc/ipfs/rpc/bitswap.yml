@@ -1,0 +1,24 @@
+---
+name: Bitswap
+desc: IPFS bitswap related API
+public:
+  - name: ledger
+    desc: Show the current ledger for a peer.
+    method: bitswap/ledger
+    args: ["arg"]
+  - name: reprovide
+    desc: Trigger reprovider.
+    method: bitswap/reprovide
+    args: []
+  - name: stat
+    desc: Show some diagnostic information on the bitswap agent.
+    method: bitswap/stat
+    args: []
+  - name: unwant
+    desc: Remove a given block from your wantlist.
+    method: bitswap/unwant
+    args: ["arg"]
+  - name: wantlist
+    desc: Show blocks currently on the wantlist.
+    method: bitswap/wantlist
+    args: ["peer"]

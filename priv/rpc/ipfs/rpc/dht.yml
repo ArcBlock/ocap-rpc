@@ -1,0 +1,29 @@
+---
+name: Dht
+desc: IPFS dht API
+public:
+  - name: find_peer
+    desc: Query the DHT for all of the multiaddresses associated with a Peer ID.
+    method: dht/findpeer
+    args: ["arg"]
+  - name: find_provider
+    desc: Find peers in the DHT that can provide a specific value, given a key. Default to 20 providers.
+    method: dht/findprovs
+    args: ["arg"]
+  - name: get
+    desc: Given a key, query the DHT for its best value.
+    method: dht/get
+    args: ["arg"]
+  - name: provide
+    desc: Announce to the network that you are providing given values.
+    method: dht/provide
+    args: ["arg", "recursive"]
+  - name: put
+    desc: Write a key/value pair to the DHT.
+    method: dht/put
+    args: ["key", "value"]
+    args_mapping: ["arg", "arg"]
+  - name: query
+    desc: Find the closest Peer IDs to a given Peer ID by querying the DHT.
+    method: dht/query
+    args: ["arg"]

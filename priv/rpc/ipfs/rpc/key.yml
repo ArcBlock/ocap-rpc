@@ -1,0 +1,21 @@
+---
+name: Key
+desc: IPFS key pair related API
+public:
+  - name: gen
+    desc: create a new keypair. Type could be "rsa" or "ed25519".
+    method: key/gen
+    args: ["arg", "type"]
+  - name: list
+    desc: List all local keypairs.
+    method: key/list
+    args: []
+  - name: rename
+    desc: rename a keypair
+    method: key/rename
+    args: ["src", "dst"]
+    args_mapping: ["arg", "arg"]
+  - name: rm
+    desc: remove a keypair
+    method: key/rm
+    args: ["arg"]

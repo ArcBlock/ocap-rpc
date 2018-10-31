@@ -1,0 +1,44 @@
+---
+name: Utils
+desc: IPFS utility API
+public:
+  - name: cat
+    desc: Show IPFS object data.
+    method: cat
+    args: ["arg"]
+  - name: cat
+    desc: Show IPFS object data.
+    method: cat
+    args: ["arg", "offset"]
+  - name: cat
+    desc: Show IPFS object data.
+    method: cat
+    args: ["arg", "offset", "length"]
+  - name: commands
+    desc: List all available commands.
+    method: commands
+    args: []
+  - name: dns
+    desc: Resolve dns links
+    method: dns
+    args: ["arg", "recursive"]
+  - name: get
+    desc: Download ipfs objects
+    method: get
+    args: ["arg"]
+  - name: id
+    desc: Show ipfs node id info.
+    method: get
+    args: ["arg"]
+  - name: mount
+    desc: mount ipfs to the filesystem (read-only).
+    method: mount
+    args: ["ipfs-path", "ipns-path"]
+  - name: ping
+    desc: Send echo request packets to IPFS hosts.
+    method: ping
+    args: ["ipfs-path", "ipns-path"]
+  - name: version
+    desc: Show ipfs version info.
+    method: version
+    args: []

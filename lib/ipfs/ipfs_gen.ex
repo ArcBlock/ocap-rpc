@@ -15,12 +15,23 @@ defmodule OcapRpc.Internal.IpfsCodeGen do
     doc = Access.get(opts, :doc)
     mod_type = get_type(opts)
     verb = Access.get(opts, :verb)
+    mapping = Access.get(opts, :args_mapping)
 
     quote do
       @doc unquote(doc)
       def unquote(String.to_atom(name))(unquote_splicing(Parser.gen_args(args))) do
         # need a way to know if the arg is a file and do multi part upload here
-        data = binding()
+
+        data =
+          case unquote(mapping) do
+            [] ->
+              binding()
+
+            _ ->
+              unquote(mapping)
+              |> Enum.zip(binding())
+              |> Enum.map(fn {k, {_, v}} -> {k, v} end)
+          end
 
         unquote(method)
         |> IpfsRpc.call(unquote(verb), data)
