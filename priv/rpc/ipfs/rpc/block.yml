@@ -1,0 +1,21 @@
+---
+name: Block
+desc: IPFS block related API
+public:
+  - name: get
+    desc: Get a raw IPFS block.
+    method: block/get
+    args: ["arg"]
+  - name: put
+    verb: post
+    desc: Store input as an IPFS block. This endpoint expects a file in the body of the request as ‘multipart/form-data’.
+    method: block/put
+    args: ["arg"]
+  - name: rm
+    desc: Remove IPFS block(s).
+    method: block/rm
+    args: ["arg"]
+  - name: stat
+    desc: Print information of a raw IPFS block.
+    method: block/stat
+    args: ["arg"]

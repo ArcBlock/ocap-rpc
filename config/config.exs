@@ -2,7 +2,7 @@ use Mix.Config
 
 # log related
 config :logger,
-  level: :debug,
+  level: :info,
   utc_log: false
 
 config :logger, :console,
@@ -20,6 +20,13 @@ config :ocap_rpc, :btc,
   conn: %{
     hostname: "localhost",
     port: 8332
+  },
+  timeout: 5_000
+
+config :ocap_rpc, :ipfs,
+  conn: %{
+    hostname: "localhost",
+    port: 5001
   },
   timeout: 5_000
 

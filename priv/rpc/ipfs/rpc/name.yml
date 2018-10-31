@@ -1,0 +1,12 @@
+---
+name: Name
+desc: IPFS name related API
+public:
+  - name: publish
+    desc: public IPNS names.
+    method: name/publish
+    args: ["arg"]
+  - name: resolve
+    desc: Resolve IPNS names.
+    method: name/resolve
+    args: []

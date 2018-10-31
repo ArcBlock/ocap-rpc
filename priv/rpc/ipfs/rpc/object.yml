@@ -1,0 +1,33 @@
+---
+name: Object
+desc: IPFS object API
+public:
+  - name: data
+    desc: Output the raw bytes of an IPFS object.
+    method: object/data
+    args: ["arg"]
+  - name: diff
+    desc: Display the diff between two ipfs objects.
+    method: object/diff
+    args: ["src", "dst"]
+    args_mapping: ["arg", "arg"]
+  - name: get
+    desc: Get and serialize the DAG node named by.
+    method: object/get
+    args: ["arg"]
+  - name: links
+    desc: Output the links pointed to by the specified object.
+    method: object/links
+    args: ["arg"]
+  - name: new
+    desc: Create a new object from an ipfs template.
+    method: object/new
+    args: ["arg"]
+  - name: put
+    desc: Store input as a DAG object. Default encoding of input data is "json" and default data file encoding is "text".
+    method: object/new
+    args: ["arg"]
+  - name: stat
+    desc: Get stats for the DAG node named by.
+    method: object/stat
+    args: ["arg"]

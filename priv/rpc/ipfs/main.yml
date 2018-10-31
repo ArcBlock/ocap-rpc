@@ -1,0 +1,15 @@
+---
+name: ipfs
+doc: ipfs RPC and enhanced functionalities
+result:
+  - result/type.yml
+rpc:
+  - rpc/bitswap.yml
+  - rpc/block.yml
+  - rpc/dag.yml
+  - rpc/dht.yml
+  - rpc/file.yml
+  - rpc/key.yml
+  - rpc/name.yml
+  - rpc/repo.yml
+  - rpc/utils.yml

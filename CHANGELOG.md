@@ -1,3 +1,7 @@
+## 0.13.0 (October 31, 2018)
+  - support most of the ipfs APIs (note that the file upload is not fully functional yet)
+  - support the first ipfs rpc
+
 ## 0.12.8 (October 30, 2018)
   - Add logic to handle the case where no traces retrieved for calculating block reward.
 

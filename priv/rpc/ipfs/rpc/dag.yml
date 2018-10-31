@@ -1,0 +1,13 @@
+---
+name: Dag
+desc: IPFS dag API
+public:
+  - name: put
+    verb: post
+    desc: Add a dag node to ipfs. The Format will be "cbor" and input file enc will be "json".
+    method: dag/put
+    args: ["arg"]
+  - name: resolve
+    desc: Resolve ipid block.
+    method: dag/resolve
+    args: ["arg"]
