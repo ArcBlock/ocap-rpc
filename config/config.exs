@@ -23,6 +23,13 @@ config :ocap_rpc, :btc,
   },
   timeout: 5_000
 
+config :ocap_rpc, :ipfs,
+  conn: %{
+    hostname: "localhost",
+    port: 5001
+  },
+  timeout: 5_000
+
 config :ocap_rpc,
   env: Mix.env()
 

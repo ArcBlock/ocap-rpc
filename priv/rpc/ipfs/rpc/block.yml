@@ -1,0 +1,8 @@
+---
+name: Block
+desc: IPFS block related API
+public:
+  - name: get
+    desc: Get a raw IPFS block.
+    method: block/get
+    args: ["arg"]

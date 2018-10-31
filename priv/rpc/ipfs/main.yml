@@ -1,0 +1,7 @@
+---
+name: ethereum
+doc: ethereum RPC and enhanced functionalities
+result:
+  - result/type.yml
+rpc:
+  - rpc/block.yml

@@ -5,14 +5,14 @@ defmodule OcapRpc.Internal do
   alias OcapRpc.Internal.{CodeGen, Parser}
   path = Path.join(File.cwd!(), "priv/gen")
 
-  [:btc, :eth]
-  |> Enum.flat_map(fn token ->
-    data = Parser.read_main(token)
+  [:btc, :eth, :ipfs]
+  |> Enum.flat_map(fn type ->
+    data = Parser.read_main(type)
 
     Enum.map(data["result"], fn {name, fields} ->
-      CodeGen.gen_type(name, fields, token, path: Path.join(path, "type"))
+      CodeGen.gen_type(name, fields, type, path: Path.join(path, "type"))
     end)
 
-    Enum.map(data["rpc"], &CodeGen.gen(&1, data["result"], token, path: Path.join(path, "rpc")))
+    Enum.map(data["rpc"], &CodeGen.gen(&1, data["result"], type, path: Path.join(path, "rpc")))
   end)
 end
