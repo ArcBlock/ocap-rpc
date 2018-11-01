@@ -37,7 +37,7 @@ public:
   - name: ping
     desc: Send echo request packets to IPFS hosts.
     method: ping
-    args: ["ipfs-path", "ipns-path"]
+    args: ["arg"]
   - name: version
     desc: Show ipfs version info.
     method: version

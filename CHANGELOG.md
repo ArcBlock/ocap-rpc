@@ -1,3 +1,6 @@
+## 0.13.1 (November 01, 2018)
+  - update args in ipfs rpc
+
 ## 0.13.0 (October 31, 2018)
   - support most of the ipfs APIs (note that the file upload is not fully functional yet)
   - support the first ipfs rpc

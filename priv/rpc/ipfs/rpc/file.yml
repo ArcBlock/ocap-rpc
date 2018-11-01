@@ -2,7 +2,7 @@
 name: File
 desc: IPFS file & files API
 public:
-  - name: ls
+  - name: unix_ls
     desc: List directory contents for Unix filesystem objects.
     method: file/ls
     args: ["arg"]
