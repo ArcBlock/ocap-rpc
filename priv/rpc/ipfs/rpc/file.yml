@@ -19,7 +19,7 @@ public:
     desc: flush a given path's data to disk.
     method: files/flush
     args: ["arg"]
-  - name: ls
+  - name: files_ls
     desc: List directories in the local mutable namespace.
     method: files/ls
     args: ["arg"]

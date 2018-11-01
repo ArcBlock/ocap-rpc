@@ -25,7 +25,7 @@ public:
     args: ["arg"]
   - name: put
     desc: Store input as a DAG object. Default encoding of input data is "json" and default data file encoding is "text".
-    method: object/new
+    method: object/put
     args: ["arg"]
   - name: stat
     desc: Get stats for the DAG node named by.
