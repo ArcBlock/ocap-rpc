@@ -16,7 +16,7 @@ defmodule OcapRpcTest.EthAccount do
   end
 
   test "account balance should return ether" do
-    assert Account.balance(TestUtils.user_account()) == TestUtils.user_balance()
+    assert Account.balance(TestUtils.user_account(), :latest) == TestUtils.user_balance()
   end
 
   test "account code should be empty for user" do

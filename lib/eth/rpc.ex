@@ -87,7 +87,10 @@ defmodule OcapRpc.Internal.EthRpc do
       |> call([resp["number"]])
       |> Enum.group_by(fn tx -> tx["transactionHash"] end)
 
-    rewards = Map.get(traces, nil)
+    rewards =
+      traces
+      |> Map.get(nil)
+      |> Enum.map(fn trace -> Map.put(trace, "timestamp", blocktime) end)
 
     uncle_details = prepare_uncles(rewards, resp["number"], resp["uncles"])
 
