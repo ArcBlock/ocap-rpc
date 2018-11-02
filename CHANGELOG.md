@@ -1,3 +1,6 @@
+## 0.13.2 (November 02, 2018)
+  - Updates for arc block listener ethereum v2.
+
 ## 0.13.1 (November 01, 2018)
   - update args in ipfs rpc
 
