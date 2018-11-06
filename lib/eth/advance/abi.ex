@@ -14,22 +14,22 @@ defmodule OcapRpc.Internal.EthABI do
   def parse_input(%{to: to}) when is_nil(to), do: nil
   def parse_input(%{type: "create"}), do: nil
 
-  def parse_input(%{input: input, hash: hash}) do
+  def parse_input(%{input: input, hash: _hash}) do
     input
     |> slice_input()
     |> decode_input()
-    |> log_and_return(hash, [-1], input)
+    |> return()
   end
 
   def parse_input(%{
         action: %{input: input},
-        transaction_hash: hash,
-        trace_address: trace_address
+        transaction_hash: _hash,
+        trace_address: _trace_address
       }) do
     input
     |> slice_input()
     |> decode_input()
-    |> log_and_return(hash, trace_address, input)
+    |> return()
   end
 
   def parse_input(_), do: nil
@@ -189,7 +189,7 @@ defmodule OcapRpc.Internal.EthABI do
     index
   end
 
-  defp log_and_return(decoded_input, hash, trace_address, input) do
+  defp return(decoded_input) do
     case decoded_input do
       nil ->
         nil
@@ -197,27 +197,11 @@ defmodule OcapRpc.Internal.EthABI do
       {:ok, signature, args} ->
         {signature, args}
 
-      {:error, signature, e} ->
-        log(hash, trace_address, input, signature, e)
+      {:error, _signature, _e} ->
+        nil
 
-      list ->
-        Enum.each(list, fn {:error, signature, e} ->
-          log(hash, trace_address, input, signature, e)
-        end)
-
+      list when is_list(list) ->
         nil
     end
-  end
-
-  defp log(hash, trace_address, input, signature, e) do
-    Logger.warn(
-      "Unable to decode the input. Transaction Hash: #{hash}, Trace Address: #{
-        inspect(trace_address)
-      }, Input: #{input}, Signature: #{signature}, Error: #{Exception.message(e)}, Error trace; #{
-        Exception.format(:error, e)
-      }"
-    )
-
-    nil
   end
 end
