@@ -40,4 +40,4 @@ public:
     desc: trace a transaction by its hash
     method: trace_transaction
     args: ["hash"]
-    result: transaction_trace
+    result: trace

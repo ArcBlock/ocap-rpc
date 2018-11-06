@@ -3,7 +3,7 @@ defmodule OcapRpc.Internal.EthAccount do
   Contract method for ABT.
   """
   alias OcapRpc.Converter
-  alias OcapRpc.Eth.{Account, Chain, Contract, Trace, Transaction}
+  alias OcapRpc.Eth.{Account, Chain, Trace, Transaction}
 
   def txs_sent(address, num_blocks, block_offset),
     do: get_transactions(address, num_blocks, block_offset, :sent)
@@ -11,12 +11,11 @@ defmodule OcapRpc.Internal.EthAccount do
   def txs_received(address, num_blocks, block_offset),
     do: get_transactions(address, num_blocks, block_offset, :received)
 
-  def get_by_address(address) do
+  def get_by_address(address, block_number) do
     %{
-      balance: Account.balance(address),
       address: address,
-      is_contract: Contract.total_supply(address) != 0,
-      number_txs_sent: Account.num_tx_sent(address)
+      balance: Account.balance(address, block_number),
+      number_txs_sent: Account.num_tx_sent(address, block_number)
     }
   end
 

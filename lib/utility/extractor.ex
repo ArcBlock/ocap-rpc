@@ -114,9 +114,8 @@ defmodule OcapRpc.Internal.Extractor do
     case k do
       :block_hash -> OcapRpc.Eth.Type.Transaction
       :miner -> OcapRpc.Eth.Type.Block
-      :reward_type -> OcapRpc.Eth.Type.BlockReward
-      :trace_address -> OcapRpc.Eth.Type.TransactionTrace
-      :log_index -> OcapRpc.Eth.Type.TransactionLog
+      :trace_address -> OcapRpc.Eth.Type.Trace
+      :log_index -> OcapRpc.Eth.Type.Log
       :reward -> OcapRpc.Eth.Type.Uncle
       _ -> nil
     end

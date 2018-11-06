@@ -1,5 +1,5 @@
 ---
-- transaction_log:
+- log:
     - log_index: "&to_int(_)"
     - address: "&strip(_)"
     - block_hash: "&strip(_)"
@@ -11,7 +11,7 @@
     - transaction_log_index: "&to_int(_)"
     - type: "&strip(_)"
 
-- transaction_trace:
+- trace:
     - trace_address: "&get_trace_address(_)"
     - block_height: "&to_int(block_number)"
     - block_hash: "&strip(block_hash)"
@@ -71,20 +71,15 @@
     - standard_v: "&to_int(_)"
     - condition: "&strip(_)"
     - creates: "&strip(_)"
-    - logs: @transaction_log
+    - logs: @log
     - logs_bloom: "&strip(_)"
     - root: "&strip(_)"
-    - traces: @transaction_trace
+    - traces: @trace
     - tx_type: "&get_tx_type(*)"
     - time: "&milli_to_date(timestamp)"
     - receipt_status: "&to_recepit_status(status)"
     - trace_status: "&calc_tx_status(*)"
     - fees: "&get_tx_fees(*)"
-
-- block_reward:
-    - reward_type: "&strip(action.reward_type)"
-    - value: "&to_int(action.value)"
-    - miner: "&strip(action.author)"
 
 - uncle:
     - reward: "&to_int(_)"
@@ -133,7 +128,7 @@
     - transactions_root: "&strip(_)"
     - transactions: @transaction
     - fees: "&calc_block_fees(*)"
-    - rewards: @block_reward
+    - rewards: @trace
     - reward: "&calc_block_reward(*)"
     - uncle_reward: "&calc_uncle_reward(*)"
     - number_txs: "&len(transactions)"
