@@ -1,3 +1,6 @@
+## 0.13.3 (November 06, 2018)
+  - Disable the unnecessary logs.
+
 ## 0.13.2 (November 02, 2018)
   - Updates for arc block listener ethereum v2.
 
