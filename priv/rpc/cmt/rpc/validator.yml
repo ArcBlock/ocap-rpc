@@ -1,0 +1,16 @@
+---
+name: Validator
+desc: CyberMiles validator related RPC
+public:
+  - name: query_validator
+    desc: Returns the current stake status of a specific validator.
+    method: cmt_queryValidator
+    args: ["address", "block_height"]
+  - name: query_validators
+    desc: Returns the current stake status of a specific validator.
+    method: cmt_queryValidators
+    args: ["block_height"]
+  - name: query_award_info
+    desc: Returns award information of all current validators and backup validators.
+    method: cmt_queryAwardInfos
+    args: ["block_height"]

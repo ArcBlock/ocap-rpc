@@ -1,0 +1,12 @@
+---
+name: Block
+desc: CyberMiles block related RPC
+public:
+  - name: get_by_number
+    desc: Returns a block matching the block number.
+    method: cmt_getBlockByNumber
+    args: ["number"]
+  - name: syncing
+    desc: Returns the sync object.
+    method: cmt_syncing
+    args: []

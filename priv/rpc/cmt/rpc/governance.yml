@@ -1,0 +1,12 @@
+---
+name: Governance
+desc: CyberMiles governance related RPC
+public:
+  - name: query_proposals
+    desc: Returns a list of all proposals.
+    method: cmt_queryProposals
+    args: []
+  - name: query_params
+    desc: Returns current settings of system parameters.
+    method: cmt_queryParams
+    args: ["block_height"]

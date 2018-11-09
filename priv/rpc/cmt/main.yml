@@ -1,0 +1,11 @@
+---
+name: cyberMiles
+doc: cyberMiles RPC and enhanced functionalities
+result:
+  - result/type.yml
+rpc:
+  - rpc/block.yml
+  - rpc/delegator.yml
+  - rpc/governance.yml
+  - rpc/transaction.yml
+  - rpc/validator.yml

@@ -2,7 +2,7 @@ defmodule OcapRpc.Internal.CodeGen do
   @moduledoc """
   Generate RPC code based on priv/rpc/*.yml.
   """
-  alias OcapRpc.Internal.{BtcCodeGen, EthCodeGen, IpfsCodeGen}
+  alias OcapRpc.Internal.{BtcCodeGen, CmtCodeGen, EthCodeGen, IpfsCodeGen}
   alias UtilityBelt.CodeGen.DynamicModule
   require DynamicModule
 
@@ -15,6 +15,7 @@ defmodule OcapRpc.Internal.CodeGen do
         :eth -> EthCodeGen
         :btc -> BtcCodeGen
         :ipfs -> IpfsCodeGen
+        :cmt -> CmtCodeGen
         _ -> :not_implemented
       end
 

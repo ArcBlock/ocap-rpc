@@ -1,0 +1,8 @@
+---
+name: Delegator
+desc: CyberMiles delegator related RPC
+public:
+  - name: query_delegator
+    desc: Returns the current stake status of a specific delegator.
+    method: cmt_queryDelegator
+    args: ["address", "block_height"]
