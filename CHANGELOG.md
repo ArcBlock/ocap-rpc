@@ -1,4 +1,4 @@
-## 0.14.1 (November 08, 2018)
+## 0.13.4 (November 08, 2018)
   - support cmt basic rpc
 
 ## 0.13.3 (November 06, 2018)
