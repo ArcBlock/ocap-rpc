@@ -7,5 +7,6 @@ rpc:
   - rpc/block.yml
   - rpc/delegator.yml
   - rpc/governance.yml
+  - rpc/net.yml
   - rpc/transaction.yml
   - rpc/validator.yml

@@ -6,10 +6,6 @@ public:
     desc: Returns a transaction based on a block hash or number and the transactions index position.
     method: cmt_getTransactionFromBlock
     args: ["block_hash", "idx"]
-  - name: get_by_block_number_and_index
-    desc: Returns information about a d by block number and transaction index position.
-    method: cmt_getTransactionByBlockNumberAndIndex
-    args: ["block_number", "idx"]
   - name: get_by_hash
     desc: Returns a transaction matching the given transaction hash.
     method: cmt_getTransactionByHash

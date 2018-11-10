@@ -14,3 +14,39 @@ public:
     desc: Returns award information of all current validators and backup validators.
     method: cmt_queryAwardInfos
     args: ["block_height"]
+  - name: declare_candidacy
+    desc: Allows a potential validator declares its candidacy.
+    method: cmt_declareCandidacy
+    args: ["from", "pub_key", "max_amount", "comp_rate"]
+  - name: update_candidacy
+    desc: Allows a validator candidate to change its candidacy.
+    method: cmt_updateCandidacy
+    args: ["from"]
+  - name: withdraw_candidacy
+    desc: Allows a validator to withdraw.
+    method: cmt_withdrawCandidacy
+    args: ["from"]
+  - name: verify_candidacy
+    desc: Allows the foundation to “verify” a validator’s information.
+    method: cmt_verifyCandidacy
+    args: ["from"]
+  - name: activate_candidacy
+    desc: Allows a “removed” validator to re-activate itself.
+    method: cmt_activateCandidacy
+    args: ["from"]
+  - name: deactivate_candidacy
+    desc: Allows a validator to deactivate itself.
+    method: cmt_deactivateCandidacy
+    args: ["from"]
+  - name: set_comp_rate
+    desc: Allows a validator to update the compensation rate for its delegators.
+    method: cmt_setCompRate
+    args: ["from","delegator_address","comp_rate"]
+  - name: update_candidacy_account
+    desc: A validator requests to update its binding address.
+    method: cmt_updateCandidacyAccount
+    args: ["from", "new_candidate_account"]
+  - name: accept_candidacy_account_update
+    desc: A validator uses its new address to accept an account updating request.
+    method: cmt_acceptCandidacyAccountUpdate
+    args: ["from", "account_update_request_id"]
