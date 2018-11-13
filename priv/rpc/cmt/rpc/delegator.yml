@@ -1,0 +1,16 @@
+---
+name: Delegator
+desc: CyberMiles delegator related RPC
+public:
+  - name: query_delegator
+    desc: Returns the current stake status of a specific delegator.
+    method: cmt_queryDelegator
+    args: ["address", "block_height"]
+  - name: delegate
+    desc: Used by a delegator to stake CMTs to a validator.
+    method: cmt_delegate
+    args: ["from", "validator_address", "amount", "cube_batch", "sig"]
+  - name : withdraw
+    desc: Used by a delegator to unbind staked CMTs from a validator.
+    method: cmt_withdraw
+    args: ["from", "validator_address", "amount"]

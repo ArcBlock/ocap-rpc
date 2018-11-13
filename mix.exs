@@ -68,7 +68,7 @@ defmodule OcapRpc.MixProject do
       {:ex_doc, "~> 0.18.0", only: [:dev, :test], runtime: false},
       {:excheck, "~> 0.5", only: :test, runtime: false},
       {:pre_commit_hook, "~> 1.2", only: [:dev, :test], runtime: false},
-      {:triq, github: "triqng/triq", only: :test, runtime: false},
+      {:triq, "~> 1.3.0", only: :test, runtime: false},
 
       # test only
       {:ex_machina, "~> 2.2", only: [:dev, :test]},

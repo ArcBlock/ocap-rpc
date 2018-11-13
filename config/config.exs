@@ -30,6 +30,13 @@ config :ocap_rpc, :ipfs,
   },
   timeout: 5_000
 
+config :ocap_rpc, :cmt,
+  conn: %{
+    hostname: "localhost",
+    port: 8545
+  },
+  timeout: 5_000
+
 config :ocap_rpc,
   env: Mix.env()
 

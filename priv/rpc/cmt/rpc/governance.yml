@@ -1,0 +1,32 @@
+---
+name: Governance
+desc: CyberMiles governance related RPC
+public:
+  - name: query_proposals
+    desc: Returns a list of all proposals.
+    method: cmt_queryProposals
+    args: []
+  - name: query_params
+    desc: Returns current settings of system parameters.
+    method: cmt_queryParams
+    args: ["block_height"]
+  - name: vote
+    desc: Vote on proposals of making changes to the system state.
+    method: cmt_vote
+    args: ["from", "proposal_id", "answer"]
+  - name: propose_transfer_fund
+    desc: Propose a fund recovery proposal.
+    method: cmt_proposeTransferFund
+    args: ["from", "transfer_form", "transfer_to", "amount"]
+  - name: propose_change_param
+    desc: Propose a system parameter change.
+    method: cmt_proposeChangeParam
+    args: ["from", "name", "value"]
+  - name: propose_deploy_lib_eni
+    desc: Propose a new library for ENI.
+    method: cmt_proposeDeployLibEni
+    args: ["from", "name", "version", "file_url", "md5"]
+  - name: propose_retire_program
+    desc: Propose to retire the program.
+    method: cmt_proposeRetireProgram
+    args: ["from", "preserved_validator"]

@@ -1,5 +1,6 @@
 ## 0.13.4 (November 13, 2018)
   - Handle the case where the block returned is null.
+  - Support cmt basic rpc.
 
 ## 0.13.3 (November 06, 2018)
   - Disable the unnecessary logs.

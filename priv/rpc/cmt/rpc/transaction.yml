@@ -1,0 +1,12 @@
+---
+name: Transaction
+desc: CyberMiles transaction related RPC
+public:
+  - name: get_by_block_hash_and_index
+    desc: Returns a transaction based on a block hash or number and the transactions index position.
+    method: cmt_getTransactionFromBlock
+    args: ["block_hash", "idx"]
+  - name: get_by_hash
+    desc: Returns a transaction matching the given transaction hash.
+    method: cmt_getTransactionByHash
+    args: ["hash"]
