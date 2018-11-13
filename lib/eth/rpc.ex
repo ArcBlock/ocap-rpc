@@ -77,6 +77,8 @@ defmodule OcapRpc.Internal.EthRpc do
     |> Map.put("timestamp", block["timestamp"])
   end
 
+  defp get_block_trace(nil), do: nil
+
   defp get_block_trace(resp) do
     tx_list = resp["transactions"]
     blocktime = resp["timestamp"] |> Converter.to_int() |> Kernel.*(1000)
