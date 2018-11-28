@@ -1,3 +1,7 @@
+## 0.14.0 (November 28, 2018)
+  - Bring  ocap rpc to use elixir 1.7.4
+  - support cmt basic rpc (#39)
+
 ## 0.13.4 (November 13, 2018)
   - Handle the case where the block returned is null.
   - Support cmt basic rpc.
