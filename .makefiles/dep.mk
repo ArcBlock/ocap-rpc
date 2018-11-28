@@ -1,6 +1,6 @@
 SRC=.
-DEPS_VER=v0.3.0
-DEPS_PREFIX=https://github.com/tyrchen/mix-deps/releases/download
+DEPS_VER=v0.6.0
+DEPS_PREFIX=https://github.com/ArcBlock/mix-deps/releases/download
 BUILDS_FILE=builds.tgz
 DEPS_FILE=deps.tgz
 BUILDS_URL=$(DEPS_PREFIX)/$(DEPS_VER)/$(BUILDS_FILE)
