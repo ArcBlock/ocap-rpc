@@ -36,44 +36,48 @@ defmodule OcapRpc.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      # convert
       {:atomic_map, "~> 0.9"},
-      {:decimal, "~> 1.1"},
+      {:decimal, "~> 1.6"},
       {:hexate, ">= 0.6.0"},
-      {:tesla, "~> 1.0.0"},
+      {:proper_case, "~> 1.3"},
+      {:recase, "~> 0.3"},
+      {:yaml_elixir, "~> 2.1"},
+
+      # http client
+      {:tesla, "~> 1.2"},
       {:jason, "~> 1.1"},
-      {:proper_case, "~> 1.2.0"},
-      {:recase, "~> 0.3.0"},
-      {:yaml_elixir, "~> 2.0.0"},
 
       # Ethereum related deps
       {:abi, git: "https://github.com/arcblock/abi.git", tag: "master"},
       # {:abi, path: "/Users/peiling/Documents/GitHub/ArcBlock/abi"},
 
-      # utility tools for error logs and metrics
-      {:logger_sentry, "~> 0.1.5"},
-      {:recon, "~> 2.3.2"},
+      # logger and sentry
+      {:logger_sentry, "~> 0.2"},
+      {:sentry, "~> 7.0"},
+
+      # recon
+      {:recon, "~> 2.3"},
       {:recon_ex, "~> 0.9.1"},
-      {:sentry, "~> 6.4.0"},
 
       # utility belt
-      {:utility_belt, "> 0.0.0"},
+      {:utility_belt, github: "arcblock/utility_belt", tag: "v0.12.0"},
 
       # deployment
-      {:distillery, "~> 1.5", runtime: false},
+      {:distillery, "~> 2.0", runtime: false},
 
       # dev & test
-      {:benchee, "~> 0.13.0", only: [:dev, :test], runtime: false},
-      {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.0", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 0.5", only: [:dev], runtime: false},
-      {:ex_doc, "~> 0.18.0", only: [:dev, :test], runtime: false},
-      {:excheck, "~> 0.5", only: :test, runtime: false},
+      {:ex_doc, "~> 0.19", only: [:dev, :test], runtime: false},
+      {:excheck, "~> 0.6", only: :test, runtime: false},
       {:pre_commit_hook, "~> 1.2", only: [:dev, :test], runtime: false},
-      {:triq, "~> 1.3.0", only: :test, runtime: false},
+      {:triq, "~> 1.3", only: :test, runtime: false},
 
       # test only
       {:ex_machina, "~> 2.2", only: [:dev, :test]},
-      {:faker, "~> 0.10", only: [:dev, :test]},
-      {:mock, "~> 0.3.1", only: [:dev, :test]}
+      {:faker, "~> 0.11", only: [:dev, :test]},
+      {:mock, "~> 0.3", only: [:dev, :test]}
     ]
   end
 end
