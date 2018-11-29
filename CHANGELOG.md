@@ -1,3 +1,6 @@
+## 0.14.1 (November 29, 2018)
+  - delete distillery and make abi optional
+
 ## 0.14.0 (November 28, 2018)
   - Bring  ocap rpc to use elixir 1.7.4
   - support cmt basic rpc (#39)
