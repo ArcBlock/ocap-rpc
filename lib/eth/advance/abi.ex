@@ -14,24 +14,23 @@ defmodule OcapRpc.Internal.EthABI do
   def parse_input(%{to: to}) when is_nil(to), do: nil
   def parse_input(%{type: "create"}), do: nil
 
-  # Parse input for transaction
-  def parse_input(%{input: input, receipt_status: receipt_status, hash: _hash}) do
+  # Parse input for trace
+  def parse_input(%{
+        action: %{input: input},
+        receipt_status: receipt_status,
+        trace_address: _trace_address
+      }) do
     input
     |> slice_input()
     |> decode_input(receipt_status == 1)
     |> return()
   end
 
-  # Parse input for trace
-  def parse_input(%{
-        action: %{input: input},
-        transaction_hash: _hash,
-        trace_address: _trace_address,
-        error: error
-      }) do
+  # Parse input for transaction
+  def parse_input(%{input: input, receipt_status: receipt_status} = tx) do
     input
     |> slice_input()
-    |> decode_input(error == nil)
+    |> decode_input(receipt_status == 1)
     |> return()
   end
 
@@ -107,7 +106,7 @@ defmodule OcapRpc.Internal.EthABI do
     rescue
       e in RuntimeError ->
         if String.starts_with?(e.message, "Found extra binary data") and succeeded? do
-          trunc_and_decode(param_types, new_signature, input_data)
+          trunc_and_decode(param_types, new_signature, signature, input_data)
         else
           {:error, signature, e}
         end
@@ -212,11 +211,11 @@ defmodule OcapRpc.Internal.EthABI do
     end
   end
 
-  defp trunc_and_decode(param_types, signature, input_data) do
+  defp trunc_and_decode(param_types, new_signature, signature, input_data) do
     size = byte_size(input_data)
     trunced_size = div(size, 32) * 32
     <<trunced_input::binary-size(trunced_size), _::binary>> = input_data
-    [arg_values] = ABI.decode(signature, trunced_input)
+    [arg_values] = ABI.decode(new_signature, trunced_input)
     types = String.split(param_types, ",")
     args = parse_args(types, arg_values)
     {:ok, signature, args}
