@@ -107,7 +107,7 @@ defmodule OcapRpc.Internal.EthABI do
     rescue
       e in RuntimeError ->
         if String.starts_with?(e.message, "Found extra binary data") and succeeded? do
-          trunc_and_decode(param_types, new_signature, input_data) |> IO.inspect()
+          trunc_and_decode(param_types, new_signature, input_data)
         else
           {:error, signature, e}
         end
