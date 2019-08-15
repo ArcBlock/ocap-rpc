@@ -14,21 +14,24 @@ defmodule OcapRpc.Internal.EthABI do
   def parse_input(%{to: to}) when is_nil(to), do: nil
   def parse_input(%{type: "create"}), do: nil
 
-  def parse_input(%{input: input, hash: _hash}) do
+  # Parse input for transaction
+  def parse_input(%{input: input, receipt_status: receipt_status, hash: _hash}) do
     input
     |> slice_input()
-    |> decode_input()
+    |> decode_input(receipt_status == 1)
     |> return()
   end
 
+  # Parse input for trace
   def parse_input(%{
         action: %{input: input},
         transaction_hash: _hash,
-        trace_address: _trace_address
+        trace_address: _trace_address,
+        error: error
       }) do
     input
     |> slice_input()
-    |> decode_input()
+    |> decode_input(error == nil)
     |> return()
   end
 
@@ -37,28 +40,24 @@ defmodule OcapRpc.Internal.EthABI do
   defp slice_input(input) do
     bin = Utils.hex_to_binary(input)
 
-    if byte_size(bin) < 4 do
+    if byte_size(bin) < 4 or byte_size(bin) > 3004 do
       {nil, nil}
     else
       <<sig_bytes::binary-4, input_data::binary>> = bin
 
-      if byte_size(input_data) > 3000 do
-        {nil, nil}
-      else
-        signature =
-          sig_bytes
-          |> Base.encode16(case: :lower)
-          |> SignatureDatabase.get_signatures()
+      signature =
+        sig_bytes
+        |> Base.encode16(case: :lower)
+        |> SignatureDatabase.get_signatures()
 
-        {signature, input_data}
-      end
+      {signature, input_data}
     end
   end
 
-  def decode_input({nil, _input_data}), do: nil
-  def decode_input({[], _input_data}), do: nil
+  def decode_input({nil, _input_data}, _), do: nil
+  def decode_input({[], _input_data}, _), do: nil
 
-  def decode_input({signatures, ""}) when is_list(signatures) do
+  def decode_input({signatures, ""}, _) when is_list(signatures) do
     signature = Enum.find(signatures, nil, fn sig -> String.ends_with?(sig, "()") end)
 
     case signature do
@@ -67,14 +66,14 @@ defmodule OcapRpc.Internal.EthABI do
     end
   end
 
-  def decode_input({signature, ""}), do: {:ok, signature, []}
+  def decode_input({signature, ""}, _), do: {:ok, signature, []}
 
   @doc """
   Decode the transaction input based on the given `signatures`.
   """
-  @spec decode_input({list[String.t()], binary}) :: list[invalid_sig()] | valid_sig()
-  def decode_input({signatures, input_data}) when is_list(signatures) do
-    all_results = Enum.map(signatures, &decode_input({&1, input_data}))
+  @spec decode_input({list[String.t()], binary}, boolean) :: list[invalid_sig()] | valid_sig()
+  def decode_input({signatures, input_data}, succeeded?) when is_list(signatures) do
+    all_results = Enum.map(signatures, &decode_input({&1, input_data}, succeeded?))
 
     case all_results do
       nil ->
@@ -93,8 +92,8 @@ defmodule OcapRpc.Internal.EthABI do
   @doc """
   Decode transaction input data. Returns the signature and the arguments list.
   """
-  @spec decode_input({String.t(), binary}) :: valid_sig() | invalid_sig()
-  def decode_input({signature, input_data}) do
+  @spec decode_input({String.t(), binary}, boolean) :: valid_sig() | invalid_sig()
+  def decode_input({signature, input_data}, succeeded?) do
     [_, fn_name, param_types] = Regex.run(@sig_reg, signature)
 
     # This is a workaround of this issue https://github.com/exthereum/abi/issues/13
@@ -106,7 +105,15 @@ defmodule OcapRpc.Internal.EthABI do
       args = parse_args(types, arg_values)
       {:ok, signature, args}
     rescue
-      e -> {:error, signature, e}
+      e in RuntimeError ->
+        if String.starts_with?(e.message, "Found extra binary data") and succeeded? do
+          trunc_and_decode(param_types, new_signature, input_data) |> IO.inspect()
+        else
+          {:error, signature, e}
+        end
+
+      e ->
+        {:error, signature, e}
     end
   end
 
@@ -203,5 +210,17 @@ defmodule OcapRpc.Internal.EthABI do
       list when is_list(list) ->
         nil
     end
+  end
+
+  defp trunc_and_decode(param_types, signature, input_data) do
+    size = byte_size(input_data)
+    trunced_size = div(size, 32) * 32
+    <<trunced_input::binary-size(trunced_size), _::binary>> = input_data
+    [arg_values] = ABI.decode(signature, trunced_input)
+    types = String.split(param_types, ",")
+    args = parse_args(types, arg_values)
+    {:ok, signature, args}
+  rescue
+    e -> {:error, signature, e}
   end
 end
