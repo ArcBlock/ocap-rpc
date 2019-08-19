@@ -200,8 +200,6 @@ defmodule OcapRpc.Converter do
   end
 
   def get_input_plain(data) do
-    # IO.inspect(data, label: "!!!", limit: :infinity)
-
     case EthABI.parse_input(data) do
       nil -> nil
       {signature, input} -> %{signature: signature, parameters: input}
