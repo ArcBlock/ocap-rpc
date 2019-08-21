@@ -37,7 +37,7 @@ public:
     result: sign_result
   - name: send_transaction
     desc: Composes, signs and broadcasts a transaction.
-    method: eth_transaction_send_transaction
+    method: eth_tx_send_transaction
     args: ["nonce", "gas_price", "gas_limit", "to", "value", "input", "private_key"]
   - name: trace
     desc: trace a transaction by its hash

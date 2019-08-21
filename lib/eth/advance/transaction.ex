@@ -13,6 +13,7 @@ defmodule OcapRpc.Internal.EthTransaction do
   def send_transaction(nonce, gas_price, gas_limit, to, value, input, private_key) do
     nonce = get_next_nonce(private_key, nonce)
     gas_price = get_gas_price(gas_price)
+    gas_limit = get_gas_limit(gas_limit, input)
 
     nonce
     |> get_raw_transaction(gas_price, gas_limit, to, value, input, private_key)
@@ -38,4 +39,8 @@ defmodule OcapRpc.Internal.EthTransaction do
 
   defp get_gas_price(nil), do: Chain.gas_price()
   defp get_gas_price(gas_price), do: gas_price
+
+  defp get_gas_limit(nil, input) when input in [nil, ""], do: 22_000
+  defp get_gas_limit(nil, input), do: 30_000
+  defp get_gas_limit(gas_limit, _), do: gas_limit
 end
