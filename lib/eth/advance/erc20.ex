@@ -4,14 +4,34 @@ defmodule OcapRpc.Internal.Erc20 do
   """
   alias OcapRpc.Converter
   alias OcapRpc.Eth.Chain
-  alias OcapRpc.Internal.{EthRpc, Utils}
+  alias OcapRpc.Internal.{EthRpc, EthTransaction, Utils}
 
   @contract_addrs %{
-    abt: "B98d4C97425d9908E66E53A6fDf673ACcA0BE986",
+    abt: "b98d4c97425d9908e66e53a6fdf673acca0be986",
     ae: "5ca9a71b1d01849c0a95490cc00559717fcf0d1d",
-    aion: "4CEdA7906a5Ed2179785Cd3A40A69ee8bc99C466",
+    aion: "4ceda7906a5ed2179785cd3a40a69ee8bc99c466",
     ctxc: "ea11755ae41d889ceec39a63e6ff75a02bc1c00d"
   }
+
+  def transfer(contract, nonce, gas_price, gas_limit, to, value, private_key) do
+    contract_addr = Map.get(@contract_addrs, contract, contract)
+    receiver = Utils.hex_to_binary(to)
+
+    input =
+      "transfer(address,uint256)"
+      |> ABI.encode([receiver, value])
+      |> Base.encode16(case: :lower)
+
+    EthTransaction.send_transaction(
+      nonce,
+      gas_price,
+      gas_limit,
+      contract_addr,
+      0,
+      input,
+      private_key
+    )
+  end
 
   def balance_of(nil, _), do: 0
 
