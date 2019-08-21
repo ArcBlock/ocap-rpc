@@ -13,7 +13,7 @@ defmodule OcapRpc.Internal.Erc20 do
     ctxc: "ea11755ae41d889ceec39a63e6ff75a02bc1c00d"
   }
 
-  def transfer(contract, private_key, to, value, opts) do
+  def transfer(contract, private_key, to, value, opts \\ []) do
     contract_addr = Map.get(@contract_addrs, contract, contract)
     receiver = Utils.hex_to_binary(to)
 

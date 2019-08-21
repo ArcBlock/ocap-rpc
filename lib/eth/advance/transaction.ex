@@ -10,7 +10,7 @@ defmodule OcapRpc.Internal.EthTransaction do
   @doc """
   Signs and then broadcasts the transaction, returns the transaction hash.
   """
-  def send_transaction(private_key, to, value, opts) do
+  def send_transaction(private_key, to, value, opts \\ []) do
     nonce = get_next_nonce(private_key, opts)
     gas_price = get_gas_price(opts)
     gas_limit = get_gas_limit(opts)
