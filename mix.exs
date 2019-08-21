@@ -41,7 +41,7 @@ defmodule OcapRpc.MixProject do
       {:decimal, "~> 1.6"},
       {:hexate, ">= 0.6.0"},
       {:proper_case, "~> 1.3"},
-      {:recase, "~> 0.3"},
+      {:recase, "~> 0.4"},
       {:yaml_elixir, "~> 2.1"},
 
       # http client
@@ -49,20 +49,17 @@ defmodule OcapRpc.MixProject do
       {:jason, "~> 1.1"},
 
       # Ethereum related deps
-      {:abi, git: "https://github.com/arcblock/abi.git", tag: "master", optional: true},
+      {:abi, git: "https://github.com/arcblock/abi.git"},
       # {:abi, path: "/Users/peiling/Documents/GitHub/ArcBlock/abi"},
+      {:exth_crypto, "~> 0.1"},
       {:ex_rlp, "~> 0.5.1"},
 
       # logger and sentry
       {:logger_sentry, "~> 0.2"},
       {:sentry, "~> 7.0"},
 
-      # recon
-      {:recon, "~> 2.3"},
-      {:recon_ex, "~> 0.9.1"},
-
       # utility belt
-      {:utility_belt, github: "arcblock/utility_belt", tag: "v0.12.0"},
+      {:utility_belt, github: "arcblock/utility_belt", tag: "v0.15.0"},
 
       # dev & test
       {:credo, "~> 1.0", only: [:dev, :test], runtime: false},
