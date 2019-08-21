@@ -41,7 +41,7 @@ defmodule OcapRpc.MixProject do
       {:decimal, "~> 1.6"},
       {:hexate, ">= 0.6.0"},
       {:proper_case, "~> 1.3"},
-      {:recase, "~> 0.4"},
+      {:recase, "~> 0.6"},
       {:yaml_elixir, "~> 2.1"},
 
       # http client
@@ -59,7 +59,7 @@ defmodule OcapRpc.MixProject do
       {:sentry, "~> 7.0"},
 
       # utility belt
-      {:utility_belt, github: "arcblock/utility_belt", tag: "v0.15.0"},
+      {:utility_belt, "~> 0.16"},
 
       # dev & test
       {:credo, "~> 1.0", only: [:dev, :test], runtime: false},
