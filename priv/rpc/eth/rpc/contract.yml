@@ -18,6 +18,6 @@ public:
     args: ["token", "from", "to", "num_blocks", "block_offset"]
     result: transaction
   - name: transfer
-    desc: Transfer ERC20 token
-    args: ["contract", "nonce", "gas_price", "gas_limit", "to", "value", "private_key"]
+    desc: "Transfer ERC20 token. Supported options are :nonce, :gas_price, :gas_limit"
+    args: ["contract", "private_key", "to", "value", "opts"]
     method: eth_erc20_transfer

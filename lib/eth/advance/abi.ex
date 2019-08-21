@@ -27,7 +27,7 @@ defmodule OcapRpc.Internal.EthABI do
   end
 
   # Parse input for transaction
-  def parse_input(%{input: input, receipt_status: receipt_status} = tx) do
+  def parse_input(%{input: input, receipt_status: receipt_status}) do
     input
     |> slice_input()
     |> decode_input(receipt_status == 1)

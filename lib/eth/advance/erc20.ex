@@ -13,26 +13,22 @@ defmodule OcapRpc.Internal.Erc20 do
     ctxc: "ea11755ae41d889ceec39a63e6ff75a02bc1c00d"
   }
 
-  def transfer(contract, nonce, gas_price, gas_limit, to, value, private_key) do
+  def transfer(contract, private_key, to, value, opts) do
     contract_addr = Map.get(@contract_addrs, contract, contract)
     receiver = Utils.hex_to_binary(to)
-    # According to existing data, it never uses more than 29117 gas when calling this API.
-    gas_limit = gas_limit || 30_000
 
     input =
       "transfer(address,uint256)"
       |> ABI.encode([receiver, value])
       |> Base.encode16(case: :lower)
 
-    EthTransaction.send_transaction(
-      nonce,
-      gas_price,
-      gas_limit,
-      contract_addr,
-      0,
-      input,
-      private_key
-    )
+    opts =
+      opts
+      # According to existing data, it never uses more than 29117 gas when calling this API.
+      |> Keyword.put_new(:gas_limit, 30_000)
+      |> Keyword.put(:input, input)
+
+    EthTransaction.send_transaction(private_key, contract_addr, 0, opts)
   end
 
   def balance_of(nil, _), do: 0
