@@ -33,3 +33,8 @@ public:
     desc: get account details by address
     method: eth_account_get_by_address
     args: ["address", "block_number"]
+  - name: get_next_nonce
+    desc: Returns next available nonce for transaction from given account. Includes pending block and transaction queue.
+    method: parity_nextNonce
+    args: ["address"]
+    result: "&to_int(_)"

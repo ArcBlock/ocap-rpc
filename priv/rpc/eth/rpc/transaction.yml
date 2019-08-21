@@ -35,7 +35,10 @@ public:
     method: eth_signTransaction
     args: ["tx_obj"]
     result: sign_result
-
+  - name: send_transaction
+    desc: "Composes, signs and broadcasts a transaction. Supported options: :input, :nonce, :gas_price, :gas_limit"
+    method: eth_tx_send_transaction
+    args: ["private_key", "to", "value", "opts"]
   - name: trace
     desc: trace a transaction by its hash
     method: trace_transaction

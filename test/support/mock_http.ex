@@ -5,7 +5,7 @@ defmodule OcapRpcTest.MockHttp do
 
   alias OcapRpc.Converter
 
-  @abt_addr "0xB98d4C97425d9908E66E53A6fDf673ACcA0BE986"
+  @abt_addr "0xb98d4c97425d9908e66e53a6fdf673acca0be986"
 
   def post(data) do
     data = Jason.decode!(data, keys: :atoms)

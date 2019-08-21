@@ -51,6 +51,7 @@ defmodule OcapRpc.MixProject do
       # Ethereum related deps
       {:abi, git: "https://github.com/arcblock/abi.git", tag: "master", optional: true},
       # {:abi, path: "/Users/peiling/Documents/GitHub/ArcBlock/abi"},
+      {:ex_rlp, "~> 0.5.1"},
 
       # logger and sentry
       {:logger_sentry, "~> 0.2"},

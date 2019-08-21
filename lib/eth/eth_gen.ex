@@ -2,13 +2,14 @@ defmodule OcapRpc.Internal.EthCodeGen do
   @moduledoc """
   Ethereum specific code generator
   """
-  alias OcapRpc.Internal.{Erc20, EthAccount, EthRpc, Extractor, Parser}
+  alias OcapRpc.Internal.{Erc20, EthAccount, EthRpc, EthTransaction, Extractor, Parser}
 
   alias UtilityBelt.CodeGen.DynamicModule
   require DynamicModule
 
   @erc20_contract "eth_erc20_"
   @account "eth_account_"
+  @tx "eth_tx_"
   @get_tx "eth_getTransactionBy"
   @get_block "eth_getBlockBy"
 
@@ -21,6 +22,10 @@ defmodule OcapRpc.Internal.EthCodeGen do
       String.starts_with?(method, @account) ->
         method = normalize_method(method, @account)
         quote_advance_call(name, args, EthAccount, method, result, opts)
+
+      String.starts_with?(method, @tx) ->
+        method = normalize_method(method, @tx)
+        quote_advance_call(name, args, EthTransaction, method, result, opts)
 
       String.starts_with?(method, @get_tx) ->
         quote_rpc_call(name, args, method, result, [{:action, :transaction} | opts])
