@@ -16,6 +16,8 @@ defmodule OcapRpc.Internal.Erc20 do
   def transfer(contract, nonce, gas_price, gas_limit, to, value, private_key) do
     contract_addr = Map.get(@contract_addrs, contract, contract)
     receiver = Utils.hex_to_binary(to)
+    # According to existing data, it never uses more than 29117 gas when calling this API.
+    gas_limit = gas_limit || 30_000
 
     input =
       "transfer(address,uint256)"

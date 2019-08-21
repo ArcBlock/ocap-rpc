@@ -57,17 +57,10 @@ defmodule OcapRpc.Internal.EthTransaction.Helper do
     # when computing the hash of a transaction for purposes of signing or recovering,
     # instead of hashing only the first six elements (ie. nonce, gasprice, startgas, to, value, data),
     # hash nine elements, with v replaced by CHAIN_ID, r = 0 and s = 0
-    new_transaction(
-      nonce,
-      gas_price,
-      gas_limit,
-      to,
-      value,
-      input,
-      @chain_ids[:ethereum_mainnet],
-      0,
-      0
-    )
+    chain_id = @chain_ids[:ethereum_mainnet]
+
+    nonce
+    |> new_transaction(gas_price, gas_limit, to, value, input, chain_id, 0, 0)
     |> ExRLP.encode()
     |> Keccak.kec()
   end
@@ -89,7 +82,8 @@ defmodule OcapRpc.Internal.EthTransaction.Helper do
   def get_raw_transaction(nonce, gas_price, gas_limit, to, value, input, v, r, s) do
     recovery_id = get_recovery_id(v)
 
-    new_transaction(nonce, gas_price, gas_limit, to, value, input, recovery_id, r, s)
+    nonce
+    |> new_transaction(gas_price, gas_limit, to, value, input, recovery_id, r, s)
     |> ExRLP.encode()
     |> Base.encode16(case: :lower)
   end
