@@ -1,5 +1,9 @@
-## 0.14.2 (August 20, 2019)
+## 0.14.3 (August 20, 2019)
   - Supports sending ethereum transaction.
+
+## 0.14.2 (August 15, 2019)
+  - fix tests
+  - Fix the problem caused by ethereum/abi not being able to decode input data with extra bytes.
 
 ## 0.14.1 (November 29, 2018)
   - delete distillery and make abi optional

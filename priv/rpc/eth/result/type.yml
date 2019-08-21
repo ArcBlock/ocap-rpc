@@ -58,6 +58,7 @@
     - cumulative_gas_used: "&to_int(_)"
     - hash: "&strip(_)"
     - input: "&strip(_)"
+    - receipt_status: "&to_recepit_status(status)"
     - input_plain: "&get_input_plain(*)"
     - nonce: "&to_int(_)"
     - public_key: "&strip(_)"
@@ -77,7 +78,6 @@
     - traces: @trace
     - tx_type: "&get_tx_type(*)"
     - time: "&milli_to_date(timestamp)"
-    - receipt_status: "&to_recepit_status(status)"
     - trace_status: "&calc_tx_status(*)"
     - fees: "&get_tx_fees(*)"
 
