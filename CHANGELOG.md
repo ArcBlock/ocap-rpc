@@ -1,3 +1,6 @@
+## 0.14.5 (October 10, 2019)
+  - Add compose transaction and transfer
+
 ## 0.14.4 (August 21, 2019)
   - Update deps version
 
