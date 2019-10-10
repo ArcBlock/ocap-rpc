@@ -8,16 +8,23 @@ defmodule OcapRpc.Internal.EthTransaction do
   alias OcapRpc.Internal.EthTransaction.Helper
 
   @doc """
-  Signs and then broadcasts the transaction, returns the transaction hash.
+  Compose and sign a transaction, returns the raw transaction.
   """
-  def send_transaction(private_key, to, value, opts \\ []) do
+  def compose_transaction(private_key, to, value, opts \\ []) do
     nonce = get_next_nonce(private_key, opts)
     gas_price = get_gas_price(opts)
     gas_limit = get_gas_limit(opts)
     input = Keyword.get(opts, :input, nil)
 
-    nonce
-    |> get_raw_transaction(gas_price, gas_limit, to, value, input, private_key)
+    get_raw_transaction(nonce, gas_price, gas_limit, to, value, input, private_key)
+  end
+
+  @doc """
+  Signs and then broadcasts the transaction, returns the transaction hash.
+  """
+  def send_transaction(private_key, to, value, opts \\ []) do
+    private_key
+    |> compose_transaction(to, value, opts)
     |> Transaction.send_raw()
   end
 
