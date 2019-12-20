@@ -1,3 +1,6 @@
+## 0.15.0 (December 20, 2019)
+  - Add APIs to return unsigned transaction and ERC20 transfer.
+
 ## 0.14.5 (October 10, 2019)
   - Add compose transaction and transfer
 
