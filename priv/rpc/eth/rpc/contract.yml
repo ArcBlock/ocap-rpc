@@ -22,6 +22,10 @@ public:
     args: ["contract", "private_key", "to", "value", "opts"]
     method: eth_erc20_transfer
   - name: compose_transfer
-    desc: "Composes and signs a ER20 transaction and returns the raw transaction. Supported options are :nonce, :gas_price, :gas_limit"
+    desc: "Composes and signs a ERC20 transaction and returns the raw transaction. Supported options are :nonce, :gas_price, :gas_limit"
     args: ["contract", "private_key", "to", "value", "opts"]
     method: eth_erc20_compose_transfer
+  - name: get_transfer_to_sign
+    desc: "Composes a ERC20 transaction to sign and returns the raw transaction. Supported options are :nonce, :gas_price, :gas_limit"
+    args: ["contract", "from", "to", "value", "opts"]
+    method: eth_erc20_get_transfer_to_sign
