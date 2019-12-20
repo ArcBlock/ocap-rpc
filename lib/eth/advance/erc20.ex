@@ -14,6 +14,24 @@ defmodule OcapRpc.Internal.Erc20 do
     ctxc: "ea11755ae41d889ceec39a63e6ff75a02bc1c00d"
   }
 
+  def get_transfer_to_sign(contract, from, to, value, opts \\ []) do
+    contract_addr = Map.get(@contract_addrs, contract, contract)
+    receiver = Utils.hex_to_binary(to)
+
+    input =
+      "transfer(address,uint256)"
+      |> ABI.encode([receiver, value])
+      |> Base.encode16(case: :lower)
+
+    opts =
+      opts
+      # According to existing data, it never uses more than 29117 gas when calling this API.
+      |> Keyword.put_new(:gas_limit, 30_000)
+      |> Keyword.put(:input, input)
+
+    EthTransaction.get_transaction_to_sign(from, contract_addr, 0, opts)
+  end
+
   def compose_transfer(contract, private_key, to, value, opts \\ []) do
     contract_addr = Map.get(@contract_addrs, contract, contract)
     receiver = Utils.hex_to_binary(to)

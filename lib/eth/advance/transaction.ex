@@ -8,6 +8,17 @@ defmodule OcapRpc.Internal.EthTransaction do
   alias OcapRpc.Internal.EthTransaction.Helper
 
   @doc """
+  Composes a transaction to sign.
+  """
+  def get_transaction_to_sign(from, to, value, opts \\ []) do
+    nonce = Account.get_next_nonce(from)
+    gas_price = get_gas_price(opts)
+    gas_limit = get_gas_limit(opts)
+    input = Keyword.get(opts, :input, nil)
+    Helper.get_transaction_to_sign(nonce, gas_price, gas_limit, to, value, input)
+  end
+
+  @doc """
   Compose and sign a transaction, returns the raw transaction.
   """
   def compose_transaction(private_key, to, value, opts \\ []) do
@@ -31,7 +42,7 @@ defmodule OcapRpc.Internal.EthTransaction do
   defp get_raw_transaction(nonce, gas_price, gas_limit, to, value, input, private_key) do
     {_signature, r, s, v} =
       nonce
-      |> Helper.get_transaction_to_sign(gas_price, gas_limit, to, value, input)
+      |> Helper.get_transaction_digest_to_sign(gas_price, gas_limit, to, value, input)
       |> Helper.get_signature(private_key)
 
     "0x" <> Helper.get_raw_transaction(nonce, gas_price, gas_limit, to, value, input, v, r, s)
@@ -54,6 +65,7 @@ defmodule OcapRpc.Internal.EthTransaction do
   defp get_gas_price(opts) do
     case Keyword.get(opts, :gas_price, nil) do
       nil -> Chain.gas_price()
+      0 -> Chain.gas_price()
       gas_price -> gas_price
     end
   end

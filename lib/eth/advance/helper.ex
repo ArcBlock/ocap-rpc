@@ -44,6 +44,23 @@ defmodule OcapRpc.Internal.EthTransaction.Helper do
   @doc """
   Gets the digest of the transaction to sign.
   """
+  @spec get_transaction_digest_to_sign(
+          integer(),
+          integer(),
+          integer(),
+          String.t(),
+          integer(),
+          String.t()
+        ) :: binary()
+  def get_transaction_digest_to_sign(nonce, gas_price, gas_limit, to, value, input) do
+    nonce
+    |> get_transaction_to_sign(gas_price, gas_limit, to, value, input)
+    |> Keccak.kec()
+  end
+
+  @doc """
+  Gets the transaction to sign.
+  """
   @spec get_transaction_to_sign(
           integer(),
           integer(),
@@ -62,7 +79,6 @@ defmodule OcapRpc.Internal.EthTransaction.Helper do
     nonce
     |> new_transaction(gas_price, gas_limit, to, value, input, chain_id, 0, 0)
     |> ExRLP.encode()
-    |> Keccak.kec()
   end
 
   @doc """
