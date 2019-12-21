@@ -11,7 +11,7 @@ defmodule OcapRpc.Internal.EthTransaction do
   Composes a transaction to sign.
   """
   def get_transaction_to_sign(from, to, value, opts \\ []) do
-    nonce = Account.get_next_nonce(from)
+    nonce = get_nonce_by_address(from, opts)
     gas_price = get_gas_price(opts)
     gas_limit = get_gas_limit(opts)
     input = Keyword.get(opts, :input, nil)
@@ -22,7 +22,7 @@ defmodule OcapRpc.Internal.EthTransaction do
   Compose and sign a transaction, returns the raw transaction.
   """
   def compose_transaction(private_key, to, value, opts \\ []) do
-    nonce = get_next_nonce(private_key, opts)
+    nonce = get_nonce_by_sk(private_key, opts)
     gas_price = get_gas_price(opts)
     gas_limit = get_gas_limit(opts)
     input = Keyword.get(opts, :input, nil)
@@ -48,17 +48,16 @@ defmodule OcapRpc.Internal.EthTransaction do
     "0x" <> Helper.get_raw_transaction(nonce, gas_price, gas_limit, to, value, input, v, r, s)
   end
 
-  defp get_next_nonce(private_key, opts) do
-    nonce = Keyword.get(opts, :nonce, nil)
+  defp get_nonce_by_sk(private_key, opts) do
+    private_key
+    |> Helper.get_address_from_private_key()
+    |> get_nonce_by_address(opts)
+  end
 
-    case nonce do
-      nil ->
-        private_key
-        |> Helper.get_address_from_private_key()
-        |> Account.get_next_nonce()
-
-      _ ->
-        nonce
+  defp get_nonce_by_address(address, opts) do
+    case Keyword.get(opts, :nonce, nil) do
+      nil -> Account.get_next_nonce(address)
+      nonce -> nonce
     end
   end
 
