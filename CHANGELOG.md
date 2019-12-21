@@ -1,3 +1,6 @@
+## 0.15.1 (December 20, 2019)
+  - Fix nonce issue.
+
 ## 0.15.0 (December 20, 2019)
   - Add APIs to return unsigned transaction and ERC20 transfer.
 
