@@ -1,3 +1,6 @@
+## 0.15.2 (December 30, 2019)
+  - Make sure the RPC return nil if the tx is not persisted on chain.
+
 ## 0.15.1 (December 20, 2019)
   - Fix nonce issue.
 
